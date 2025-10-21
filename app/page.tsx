@@ -2,81 +2,114 @@
 
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
+import { Navbar } from "@/components/navbar"
+
+// Constants
+const SCROLL_DELAY = 900
+const SCROLL_DURATION = 900
+const SECTIONS = ["intro", "work", "thoughts", "footer"]
+const SECTION_NAMES: Record<string, string> = {
+  intro: "Home",
+  work: "Work",
+  thoughts: "Thoughts",
+  footer: "Contact",
+}
 
 export default function Home() {
   const [isDark, setIsDark] = useState(true)
   const [activeSection, setActiveSection] = useState("")
   const lastScrollTimeRef = useRef(0)
   const sectionsRef = useRef<Map<string, HTMLElement | null>>(new Map())
-  const scrollTimeoutRef = useRef<NodeJS.Timeout>()
   const currentYear = new Date().getFullYear()
+
+  const smoothScrollTo = (element: HTMLElement, duration = SCROLL_DURATION) => {
+    const startPosition = window.scrollY
+    const targetPosition = element.offsetTop
+    const distance = targetPosition - startPosition
+    let start: number | null = null
+
+    const easeInOutCubic = (t: number) => {
+      return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2
+    }
+
+    const animation = (currentTime: number) => {
+      if (start === null) start = currentTime
+      const elapsed = currentTime - start
+      const progress = Math.min(elapsed / duration, 1)
+      const ease = easeInOutCubic(progress)
+
+      window.scrollTo(0, startPosition + distance * ease)
+
+      if (progress < 1) {
+        requestAnimationFrame(animation)
+      }
+    }
+
+    requestAnimationFrame(animation)
+  }
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", isDark)
   }, [isDark])
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
+    const sectionName = SECTION_NAMES[activeSection] || "Home"
+    document.title = `edgarcnp.dev | ${sectionName}`
+  }, [activeSection])
+
+  useEffect(() => {
+    const fadeInObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add("animate-fade-in-up")
+            entry.target.classList.remove("animate-fade-out-down")
             setActiveSection(entry.target.id)
           }
         })
       },
-      { threshold: 0.3, rootMargin: "0px 0px -20% 0px" },
+      { threshold: 0.3, rootMargin: "-50% 0px -50% 0px" },
+    )
+
+    const fadeOutObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) {
+            entry.target.classList.remove("animate-fade-in-up")
+            entry.target.classList.add("animate-fade-out-down")
+          }
+        })
+      },
+      { threshold: 0.3, rootMargin: "20% 0px 20% 0px" },
     )
 
     sectionsRef.current.forEach((section) => {
-      if (section) observer.observe(section)
+      if (section) {
+        fadeInObserver.observe(section)
+        fadeOutObserver.observe(section)
+      }
     })
 
-    return () => observer.disconnect()
+    return () => {
+      fadeInObserver.disconnect()
+      fadeOutObserver.disconnect()
+    }
   }, [])
 
   useEffect(() => {
-    const scrollDelay = 900
-    const smoothScrollTo = (element: HTMLElement, duration = 1000) => {
-      const startPosition = window.scrollY
-      const targetPosition = element.offsetTop
-      const distance = targetPosition - startPosition
-      let start: number | null = null
-
-      const easeInOutCubic = (t: number) => {
-        return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2
-      }
-
-      const animation = (currentTime: number) => {
-        if (start === null) start = currentTime
-        const elapsed = currentTime - start
-        const progress = Math.min(elapsed / duration, 1)
-        const ease = easeInOutCubic(progress)
-
-        window.scrollTo(0, startPosition + distance * ease)
-
-        if (progress < 1) {
-          requestAnimationFrame(animation)
-        }
-      }
-
-      requestAnimationFrame(animation)
-    }
-
     const handleWheel = (e: WheelEvent) => {
       const now = Date.now()
 
-      if (now - lastScrollTimeRef.current < scrollDelay) {
+      if (now - lastScrollTimeRef.current < SCROLL_DELAY) {
         e.preventDefault()
         return
       }
 
-      const sections = ["intro", "work", "thoughts", "footer"]
-      const currentIndex = sections.indexOf(activeSection)
+      const currentIndex = SECTIONS.indexOf(activeSection)
       let nextIndex = currentIndex
 
       if (e.deltaY > 0) {
-        nextIndex = Math.min(currentIndex + 1, sections.length - 1)
+        nextIndex = Math.min(currentIndex + 1, SECTIONS.length - 1)
       } else {
         nextIndex = Math.max(currentIndex - 1, 0)
       }
@@ -85,26 +118,50 @@ export default function Home() {
         e.preventDefault()
         lastScrollTimeRef.current = now
 
-        const targetSection = document.getElementById(sections[nextIndex])
+        const targetSection = document.getElementById(SECTIONS[nextIndex])
         if (targetSection) {
-          smoothScrollTo(targetSection, 900)
+          smoothScrollTo(targetSection)
+        }
+      }
+    }
 
-          if (scrollTimeoutRef.current) {
-            clearTimeout(scrollTimeoutRef.current)
-          }
-          scrollTimeoutRef.current = setTimeout(() => {
-            // Reset for next scroll
-          }, scrollDelay)
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== "PageUp" && e.key !== "PageDown") {
+        return
+      }
+
+      const now = Date.now()
+
+      if (now - lastScrollTimeRef.current < SCROLL_DELAY) {
+        e.preventDefault()
+        return
+      }
+
+      const currentIndex = SECTIONS.indexOf(activeSection)
+      let nextIndex = currentIndex
+
+      if (e.key === "PageDown") {
+        nextIndex = Math.min(currentIndex + 1, SECTIONS.length - 1)
+      } else if (e.key === "PageUp") {
+        nextIndex = Math.max(currentIndex - 1, 0)
+      }
+
+      if (nextIndex !== currentIndex) {
+        e.preventDefault()
+        lastScrollTimeRef.current = now
+
+        const targetSection = document.getElementById(SECTIONS[nextIndex])
+        if (targetSection) {
+          smoothScrollTo(targetSection)
         }
       }
     }
 
     window.addEventListener("wheel", handleWheel, { passive: false })
+    window.addEventListener("keydown", handleKeyDown)
     return () => {
       window.removeEventListener("wheel", handleWheel)
-      if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current)
-      }
+      window.removeEventListener("keydown", handleKeyDown)
     }
   }, [activeSection])
 
@@ -118,53 +175,35 @@ export default function Home() {
     }
   }
 
+  const handleNavigation = (sectionId: string) => {
+    lastScrollTimeRef.current = Date.now()
+    const targetSection = document.getElementById(sectionId)
+    if (targetSection) {
+      smoothScrollTo(targetSection)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-background text-foreground relative overflow-x-hidden">
+      <Navbar activeSection={activeSection} isDark={isDark} onThemeToggle={toggleTheme} onNavigate={handleNavigation} />
+
       <nav className="fixed left-8 top-1/2 -translate-y-1/2 z-10 hidden lg:block">
         <div className="flex flex-col gap-4">
-          {["intro", "work", "thoughts", "footer"].map((section) => (
+          {SECTIONS.map((section) => (
             <button
               key={section}
-              onClick={() => {
-                lastScrollTimeRef.current = Date.now()
-                const targetSection = document.getElementById(section)
-                if (targetSection) {
-                  const startPosition = window.scrollY
-                  const targetPosition = targetSection.offsetTop
-                  const distance = targetPosition - startPosition
-                  let start: number | null = null
-
-                  const easeInOutCubic = (t: number) => {
-                    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2
-                  }
-
-                  const animation = (currentTime: number) => {
-                    if (start === null) start = currentTime
-                    const elapsed = currentTime - start
-                    const progress = Math.min(elapsed / 900, 1)
-                    const ease = easeInOutCubic(progress)
-
-                    window.scrollTo(0, startPosition + distance * ease)
-
-                    if (progress < 1) {
-                      requestAnimationFrame(animation)
-                    }
-                  }
-
-                  requestAnimationFrame(animation)
-                }
-              }}
+              onClick={() => handleNavigation(section)}
               className={`w-2 h-8 rounded-full transition-all duration-500 ${
                 activeSection === section ? "bg-foreground" : "bg-muted-foreground/30 hover:bg-muted-foreground/60"
               }`}
-              aria-label={`Navigate to ${section}`}
+              aria-label={`Navigate to ${SECTION_NAMES[section]}`}
             />
           ))}
         </div>
       </nav>
 
       <main className="max-w-4xl mx-auto px-6 sm:px-8 lg:px-16">
-        <header id="intro" ref={setSectionRef("intro")} className="h-screen flex items-center opacity-0">
+        <header id="intro" ref={setSectionRef("intro")} className="h-screen flex items-center opacity-0 scroll-mt-20">
           <div className="grid lg:grid-cols-5 gap-12 sm:gap-16 w-full">
             <div className="lg:col-span-3 space-y-6 sm:space-y-8">
               <div className="space-y-3 sm:space-y-2">
@@ -206,7 +245,7 @@ export default function Home() {
               </div>
 
               <div className="space-y-4">
-                <div className="text-sm text-muted-foreground font-mono">FOCUS</div>
+                <div className="text-sm text-muted-foreground font-mono">AREA OF EXPERTISE</div>
                 <div className="flex flex-wrap gap-2">
                   {[
                     "Rust",
@@ -234,10 +273,10 @@ export default function Home() {
           </div>
         </header>
 
-        <section id="work" ref={setSectionRef("work")} className="h-screen flex items-center opacity-0">
+        <section id="work" ref={setSectionRef("work")} className="h-screen flex items-center opacity-0 scroll-mt-20">
           <div className="w-full space-y-12 sm:space-y-16">
             <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-              <h2 className="text-3xl sm:text-4xl font-light">Selected Work</h2>
+              <h2 className="text-3xl sm:text-4xl font-light">The Work Log</h2>
               <div className="text-sm text-muted-foreground font-mono">2021 — Present</div>
             </div>
 
@@ -300,7 +339,11 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="thoughts" ref={setSectionRef("thoughts")} className="h-screen flex items-center opacity-0">
+        <section
+          id="thoughts"
+          ref={setSectionRef("thoughts")}
+          className="h-screen flex items-center opacity-0 scroll-mt-20"
+        >
           <div className="w-full space-y-12 sm:space-y-16">
             <h2 className="text-3xl sm:text-4xl font-light">Recent Thoughts</h2>
 
@@ -370,7 +413,7 @@ export default function Home() {
           </div>
         </section>
 
-        <footer id="footer" ref={setSectionRef("footer")} className="h-screen flex items-center opacity-0">
+        <footer id="footer" ref={setSectionRef("footer")} className="h-screen flex items-center opacity-0 scroll-mt-20">
           <div className="w-full space-y-12 sm:space-y-16">
             <div className="grid lg:grid-cols-2 gap-12 sm:gap-16">
               <div className="space-y-6 sm:space-y-8">
@@ -384,10 +427,10 @@ export default function Home() {
 
                   <div className="space-y-4">
                     <Link
-                      href="mailto:edgarcnp@proton.me"
+                      href="mailto:me@edgarcnp.dev"
                       className="group flex items-center gap-3 text-foreground hover:text-muted-foreground transition-colors duration-300"
                     >
-                      <span className="text-base sm:text-lg">edgarcnp@proton.me</span>
+                      <span className="text-base sm:text-lg">me@edgarcnp.dev</span>
                       <svg
                         className="w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-300"
                         fill="none"
@@ -413,8 +456,8 @@ export default function Home() {
                   {[
                     { name: "GitHub", handle: "@edgarcnp", url: "https://github.com/edgarcnp" },
                     { name: "Codeberg", handle: "@edgarcnp", url: "https://codeberg.org/edgarcnp" },
-                    { name: "Codeberg", handle: "@edgarcnp", url: "#" },
-                    { name: "LinkedIn", handle: "felixmacaspac", url: "#" },
+                    { name: "𝕏", handle: "@edgarcnp", url: "https://x.com/edgarcnp" },
+                    { name: "LinkedIn", handle: "Edgar Christian", url: "#" },
                   ].map((social) => (
                     <Link
                       key={social.name}
@@ -469,7 +512,10 @@ export default function Home() {
                   )}
                 </button>
 
-                <button className="group p-3 rounded-lg border border-border hover:border-muted-foreground/50 transition-all duration-300">
+                <button
+                  className="group p-3 rounded-lg border border-border hover:border-muted-foreground/50 transition-all duration-300"
+                  aria-label="Open chat"
+                >
                   <svg
                     className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors duration-300"
                     fill="none"
