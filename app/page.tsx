@@ -9,6 +9,7 @@ export default function Home() {
   const lastScrollTimeRef = useRef(0)
   const sectionsRef = useRef<Map<string, HTMLElement | null>>(new Map())
   const scrollTimeoutRef = useRef<NodeJS.Timeout>()
+  const currentYear = new Date().getFullYear()
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", isDark)
@@ -167,7 +168,7 @@ export default function Home() {
           <div className="grid lg:grid-cols-5 gap-12 sm:gap-16 w-full">
             <div className="lg:col-span-3 space-y-6 sm:space-y-8">
               <div className="space-y-3 sm:space-y-2">
-                <div className="text-sm text-muted-foreground font-mono tracking-wider">PORTFOLIO / 2025</div>
+                <div className="text-sm text-muted-foreground font-mono tracking-wider">PORTFOLIO / {currentYear}</div>
                 <h1 className="text-5xl sm:text-6xl lg:text-7xl font-light tracking-tight">
                   Edgar
                   <br />
@@ -253,7 +254,8 @@ export default function Home() {
                   year: "2022 - 2025",
                   role: "Network Engineer",
                   company: "PT. Efrat Sinergi Indonesia",
-                  description: "Designed and implemented robust, fault-tolerant, and highly available network infrastructure supporting mission-critical systems and services, ensuring scalability, reliability, and maximum uptime.",
+                  description:
+                    "Designed and implemented robust, fault-tolerant, and highly available network infrastructure supporting mission-critical systems and services, ensuring scalability, reliability, and maximum uptime.",
                   tech: ["Cisco", "Cisco IOS", "Python"],
                 },
                 {
@@ -433,7 +435,9 @@ export default function Home() {
 
             <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 sm:gap-8 pt-12 sm:pt-16 border-t border-border">
               <div className="space-y-2">
-                <div className="text-sm text-muted-foreground">© 2025 Edgar Christian. All rights reserved.</div>
+                <div className="text-sm text-muted-foreground">
+                  © {currentYear} Edgar Christian. All rights reserved.
+                </div>
               </div>
 
               <div className="flex items-center gap-4">
