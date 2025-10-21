@@ -35,7 +35,32 @@ export default function Home() {
   }, [])
 
   useEffect(() => {
-    const scrollDelay = 150
+    const scrollDelay = 900
+    const smoothScrollTo = (element: HTMLElement, duration = 1000) => {
+      const startPosition = window.scrollY
+      const targetPosition = element.offsetTop
+      const distance = targetPosition - startPosition
+      let start: number | null = null
+
+      const easeInOutCubic = (t: number) => {
+        return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2
+      }
+
+      const animation = (currentTime: number) => {
+        if (start === null) start = currentTime
+        const elapsed = currentTime - start
+        const progress = Math.min(elapsed / duration, 1)
+        const ease = easeInOutCubic(progress)
+
+        window.scrollTo(0, startPosition + distance * ease)
+
+        if (progress < 1) {
+          requestAnimationFrame(animation)
+        }
+      }
+
+      requestAnimationFrame(animation)
+    }
 
     const handleWheel = (e: WheelEvent) => {
       const now = Date.now()
@@ -61,7 +86,7 @@ export default function Home() {
 
         const targetSection = document.getElementById(sections[nextIndex])
         if (targetSection) {
-          targetSection.scrollIntoView({ behavior: "smooth" })
+          smoothScrollTo(targetSection, 900)
 
           if (scrollTimeoutRef.current) {
             clearTimeout(scrollTimeoutRef.current)
@@ -101,7 +126,32 @@ export default function Home() {
               key={section}
               onClick={() => {
                 lastScrollTimeRef.current = Date.now()
-                document.getElementById(section)?.scrollIntoView({ behavior: "smooth" })
+                const targetSection = document.getElementById(section)
+                if (targetSection) {
+                  const startPosition = window.scrollY
+                  const targetPosition = targetSection.offsetTop
+                  const distance = targetPosition - startPosition
+                  let start: number | null = null
+
+                  const easeInOutCubic = (t: number) => {
+                    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2
+                  }
+
+                  const animation = (currentTime: number) => {
+                    if (start === null) start = currentTime
+                    const elapsed = currentTime - start
+                    const progress = Math.min(elapsed / 900, 1)
+                    const ease = easeInOutCubic(progress)
+
+                    window.scrollTo(0, startPosition + distance * ease)
+
+                    if (progress < 1) {
+                      requestAnimationFrame(animation)
+                    }
+                  }
+
+                  requestAnimationFrame(animation)
+                }
               }}
               className={`w-2 h-8 rounded-full transition-all duration-500 ${
                 activeSection === section ? "bg-foreground" : "bg-muted-foreground/30 hover:bg-muted-foreground/60"
@@ -187,7 +237,7 @@ export default function Home() {
           <div className="w-full space-y-12 sm:space-y-16">
             <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
               <h2 className="text-3xl sm:text-4xl font-light">Selected Work</h2>
-              <div className="text-sm text-muted-foreground font-mono">2019 — 2025</div>
+              <div className="text-sm text-muted-foreground font-mono">2021 — Present</div>
             </div>
 
             <div className="space-y-8 sm:space-y-12">
@@ -197,13 +247,13 @@ export default function Home() {
                   role: "Freelance Software Engineer",
                   company: "Self-Employed",
                   description: "Built performant dashboard websites for project management and team collaboration.",
-                  tech: ["Python", "GraphQL", "Django"],
+                  tech: ["Python", "GraphQL", "Django", "Rust", "Axum", "Dioxus"],
                 },
                 {
                   year: "2022 - 2025",
                   role: "Network Engineer",
                   company: "PT. Efrat Sinergi Indonesia",
-                  description: "Developed payment infrastructure and merchant-facing dashboard features.",
+                  description: "Designed and implemented robust, fault-tolerant, and highly available network infrastructure supporting mission-critical systems and services, ensuring scalability, reliability, and maximum uptime.",
                   tech: ["Cisco", "Cisco IOS", "Python"],
                 },
                 {
