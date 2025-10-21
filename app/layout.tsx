@@ -12,10 +12,10 @@ const geist = Geist({
 export const metadata: Metadata = {
   title: "Edgar Christian - Embedded Engineer",
   description: "Embedded Engineer from Indonesia with 5+ years of experience.",
+  generator: "v0.app",
   icons: {
     icon: "/e-icon.ico",
   },
-    generator: 'v0.app'
 }
 
 export default function RootLayout({
