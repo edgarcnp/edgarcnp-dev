@@ -35,7 +35,7 @@ export default function Home() {
   }, [])
 
   useEffect(() => {
-    const scrollDelay = 800
+    const scrollDelay = 150
 
     const handleWheel = (e: WheelEvent) => {
       const now = Date.now()
