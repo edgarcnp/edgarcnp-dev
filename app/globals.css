@@ -36,7 +36,8 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 
-  /* Add smooth transition for theme changes */
+  /* Transition progress for smooth theme changes */
+  --transition-progress: 0;
   color-scheme: light;
 }
 
@@ -123,22 +124,69 @@
   }
 
   html {
-    /* Add smooth transition for all color properties during theme switch */
-    transition: background-color 0.4s ease, color 0.4s ease;
+    /* Smooth gradient transitions for theme changes */
+    transition: 
+      background-color 1.2s cubic-bezier(0.4, 0, 0.2, 1),
+      color 1.2s cubic-bezier(0.4, 0, 0.2, 1),
+      border-color 1.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   body {
     @apply bg-background text-foreground;
+    transition: 
+      background-color 1.2s cubic-bezier(0.4, 0, 0.2, 1),
+      color 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Smooth transitions for all elements */
+  * {
+    transition: 
+      background-color 1.2s cubic-bezier(0.4, 0, 0.2, 1),
+      color 1.2s cubic-bezier(0.4, 0, 0.2, 1),
+      border-color 1.2s cubic-bezier(0.4, 0, 0.2, 1),
+      box-shadow 1.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
 
 @layer utilities {
   .animate-fade-in-up {
     animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 1 !important;
   }
 
   .animate-fade-out-down {
     animation: fade-out-down 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  /* Theme transition utilities */
+  .theme-transitioning {
+    transition: 
+      background-color 2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      color 2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      border-color 2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      box-shadow 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+  }
+
+  .theme-transitioning * {
+    transition: 
+      background-color 2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      color 2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      border-color 2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      box-shadow 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+  }
+
+  /* Enhanced transitions for specific elements */
+  .theme-transitioning nav,
+  .theme-transitioning button,
+  .theme-transitioning .navbar,
+  .theme-transitioning header,
+  .theme-transitioning section,
+  .theme-transitioning footer {
+    transition: 
+      background-color 2.2s cubic-bezier(0.23, 1, 0.32, 1),
+      color 2.2s cubic-bezier(0.23, 1, 0.32, 1),
+      border-color 2.2s cubic-bezier(0.23, 1, 0.32, 1),
+      box-shadow 2.2s cubic-bezier(0.23, 1, 0.32, 1) !important;
   }
 
   @keyframes fade-in-up {
@@ -161,5 +209,107 @@
       opacity: 0;
       transform: translateY(24px);
     }
+  }
+
+  /* Gradient overlay during theme transitions */
+  .theme-transitioning::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(0, 0, 0, 0.1) 50%,
+      rgba(255, 255, 255, 0.1) 100%
+    );
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.3;
+    animation: gradient-pulse 2s ease-in-out;
+  }
+
+  @keyframes gradient-pulse {
+    0%, 100% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 0.3;
+    }
+  }
+
+  /* Theme toggle button animations */
+  .theme-transitioning button[aria-label*="Switch"] {
+    transform: scale(0.95);
+    transition: transform 0.2s ease-in-out;
+  }
+
+  .theme-transitioning button[aria-label*="Switch"]:hover {
+    transform: scale(1.05);
+  }
+
+  /* Enhanced theme toggle animations */
+  @keyframes sun-rotate {
+    0% {
+      transform: rotate(0deg) scale(1);
+    }
+    50% {
+      transform: rotate(180deg) scale(0.8);
+    }
+    100% {
+      transform: rotate(360deg) scale(1);
+    }
+  }
+
+  @keyframes moon-fade {
+    0% {
+      opacity: 0;
+      transform: rotate(180deg) scale(0.5);
+    }
+    50% {
+      opacity: 0.5;
+      transform: rotate(90deg) scale(0.8);
+    }
+    100% {
+      opacity: 1;
+      transform: rotate(0deg) scale(1);
+    }
+  }
+
+  @keyframes ripple-effect {
+    0% {
+      transform: scale(0);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 0;
+    }
+  }
+
+  /* Theme toggle button hover effects */
+  .theme-toggle-button {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .theme-toggle-button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s ease, height 0.3s ease;
+  }
+
+  .theme-toggle-button:hover::before {
+    width: 100%;
+    height: 100%;
   }
 }

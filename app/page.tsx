@@ -1,7 +1,8 @@
 "use client"
 
 import Link from "next/link"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, useCallback } from "react"
+import { useTheme } from "next-themes"
 import { Navbar } from "@/components/navbar"
 
 // Constants
@@ -16,11 +17,15 @@ const SECTION_NAMES: Record<string, string> = {
 }
 
 export default function Home() {
-  const [isDark, setIsDark] = useState(true)
+  const { theme, setTheme, resolvedTheme } = useTheme()
   const [activeSection, setActiveSection] = useState("")
   const lastScrollTimeRef = useRef(0)
   const sectionsRef = useRef<Map<string, HTMLElement | null>>(new Map())
   const currentYear = new Date().getFullYear()
+  const [mounted, setMounted] = useState(false)
+  
+  // Use resolvedTheme for more reliable theme detection
+  const isDark = mounted ? (resolvedTheme === "dark") : true // Default to dark during SSR
 
   const smoothScrollTo = (element: HTMLElement, duration = SCROLL_DURATION) => {
     const startPosition = window.scrollY
@@ -49,8 +54,28 @@ export default function Home() {
   }
 
   useEffect(() => {
-    document.documentElement.classList.toggle("dark", isDark)
-  }, [isDark])
+    // Set mounted to true after component mounts
+    setMounted(true)
+    
+    // Ensure the theme is properly set on the HTML element
+    if (resolvedTheme) {
+      document.documentElement.classList.toggle('dark', resolvedTheme === 'dark')
+    }
+  }, [resolvedTheme])
+
+  useEffect(() => {
+    // Make the first section visible immediately on load
+    const timeoutId = setTimeout(() => {
+      const firstSection = document.getElementById("intro")
+      if (firstSection) {
+        firstSection.classList.add("animate-fade-in-up")
+        firstSection.classList.remove("opacity-0")
+        setActiveSection("intro")
+      }
+    }, 200)
+
+    return () => clearTimeout(timeoutId)
+  }, [])
 
   useEffect(() => {
     const sectionName = SECTION_NAMES[activeSection] || "Home"
@@ -68,7 +93,7 @@ export default function Home() {
           }
         })
       },
-      { threshold: 0.3, rootMargin: "-50% 0px -50% 0px" },
+      { threshold: 0.1, rootMargin: "-10% 0px -10% 0px" },
     )
 
     const fadeOutObserver = new IntersectionObserver(
@@ -80,17 +105,21 @@ export default function Home() {
           }
         })
       },
-      { threshold: 0.3, rootMargin: "20% 0px 20% 0px" },
+      { threshold: 0.1, rootMargin: "10% 0px 10% 0px" },
     )
 
-    sectionsRef.current.forEach((section) => {
-      if (section) {
-        fadeInObserver.observe(section)
-        fadeOutObserver.observe(section)
-      }
-    })
+    // Use a timeout to ensure DOM elements are ready
+    const timeoutId = setTimeout(() => {
+      sectionsRef.current.forEach((section) => {
+        if (section) {
+          fadeInObserver.observe(section)
+          fadeOutObserver.observe(section)
+        }
+      })
+    }, 100)
 
     return () => {
+      clearTimeout(timeoutId)
       fadeInObserver.disconnect()
       fadeOutObserver.disconnect()
     }
@@ -165,9 +194,18 @@ export default function Home() {
     }
   }, [activeSection])
 
-  const toggleTheme = () => {
-    setIsDark(!isDark)
-  }
+  const toggleTheme = useCallback(() => {
+    // Add transitioning class to enable smooth transitions
+    document.documentElement.classList.add('theme-transitioning')
+    
+    // Set the new theme
+    setTheme(resolvedTheme === "dark" ? "light" : "dark")
+    
+    // Remove transitioning class after transition completes
+    setTimeout(() => {
+      document.documentElement.classList.remove('theme-transitioning')
+    }, 2000) // Slightly longer to ensure smooth completion
+  }, [resolvedTheme, setTheme])
 
   const setSectionRef = (id: string) => (el: HTMLElement | null) => {
     if (el) {
@@ -181,6 +219,64 @@ export default function Home() {
     if (targetSection) {
       smoothScrollTo(targetSection)
     }
+  }
+
+  // Don't render until mounted to prevent hydration mismatch
+  if (!mounted) {
+    return (
+      <div className="min-h-screen bg-background text-foreground relative overflow-x-hidden">
+        <div className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-4 pointer-events-none">
+          <div className="pointer-events-auto backdrop-blur bg-background/40 shadow-md rounded-full px-2 py-2 border border-border">
+            <div className="flex items-center gap-1 sm:gap-2">
+              <div className="hidden sm:flex items-center gap-1">
+                <div className="px-3 py-0 rounded-full text-xs sm:text-sm font-semibold text-muted-foreground">Home</div>
+                <div className="px-3 py-0 rounded-full text-xs sm:text-sm font-semibold text-muted-foreground">Work</div>
+                <div className="px-3 py-0 rounded-full text-xs sm:text-sm font-semibold text-muted-foreground">Thoughts</div>
+                <div className="px-3 py-0 rounded-full text-xs sm:text-sm font-semibold text-muted-foreground">Contact</div>
+              </div>
+              <div className="hidden sm:block w-px h-6 bg-muted-foreground/30" />
+              <div className="flex-shrink-0 px-2 py-1 rounded-full flex items-center justify-center">
+                <svg className="w-4 h-4 text-muted-foreground" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        <main className="max-w-4xl mx-auto px-6 sm:px-8 lg:px-16">
+          <header className="h-screen flex items-center">
+            <div className="grid lg:grid-cols-5 gap-12 sm:gap-16 w-full">
+              <div className="lg:col-span-3 space-y-6 sm:space-y-8">
+                <div className="space-y-3 sm:space-y-2">
+                  <div className="text-sm text-muted-foreground font-mono tracking-wider">PORTFOLIO / {currentYear}</div>
+                  <h1 className="text-5xl sm:text-6xl lg:text-7xl font-light tracking-tight">
+                    Edgar
+                    <br />
+                    <span className="text-muted-foreground">Christian</span>
+                  </h1>
+                </div>
+                <div className="space-y-6 max-w-md">
+                  <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed">
+                    <span className="text-foreground">Embedded Engineer</span> crafting digital experiences at the
+                    intersection of
+                    <span className="text-foreground"> design</span>,<span className="text-foreground"> technology</span>,
+                    and
+                    <span className="text-foreground"> user experience</span>.
+                  </p>
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 text-sm text-muted-foreground">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                      Available for work
+                    </div>
+                    <div>Remote - Indonesia</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </header>
+        </main>
+      </div>
+    )
   }
 
   return (
