@@ -16,6 +16,24 @@ const SECTION_NAMES: Record<string, string> = {
   footer: "Contact",
 }
 
+// Availability status - change this to switch status indicators
+const AVAILABILITY_STATUS = "busy" // Options: "available" | "busy" | "dnd"
+
+const STATUS_CONFIG = {
+  available: {
+    color: "bg-green-500",
+    text: "Available for work"
+  },
+  busy: {
+    color: "bg-yellow-500", 
+    text: "Busy with projects"
+  },
+  dnd: {
+    color: "bg-red-500",
+    text: "Not available"
+  }
+} as const
+
 export default function Home() {
   const { theme, setTheme, resolvedTheme } = useTheme()
   const [activeSection, setActiveSection] = useState("")
@@ -62,6 +80,28 @@ export default function Home() {
       document.documentElement.classList.toggle('dark', resolvedTheme === 'dark')
     }
   }, [resolvedTheme])
+
+  // Global smooth scroll handler for all anchor links
+  useEffect(() => {
+    const handleAnchorClick = (e: Event) => {
+      const target = e.target as HTMLElement
+      const link = target.closest('a[href^="#"]') as HTMLAnchorElement
+      
+      if (link && link.getAttribute('href') !== '#') {
+        e.preventDefault()
+        const targetId = link.getAttribute('href')?.substring(1)
+        if (targetId) {
+          const targetElement = document.getElementById(targetId)
+          if (targetElement) {
+            smoothScrollTo(targetElement)
+          }
+        }
+      }
+    }
+
+    document.addEventListener('click', handleAnchorClick)
+    return () => document.removeEventListener('click', handleAnchorClick)
+  }, [])
 
   useEffect(() => {
     // Make the first section visible immediately on load
@@ -265,8 +305,8 @@ export default function Home() {
                   </p>
                   <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 text-sm text-muted-foreground">
                     <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                      Available for work
+                      <div className={`w-2 h-2 ${STATUS_CONFIG[AVAILABILITY_STATUS].color} rounded-full animate-pulse`}></div>
+                      {STATUS_CONFIG[AVAILABILITY_STATUS].text}
                     </div>
                     <div>Remote - Indonesia</div>
                   </div>
@@ -322,8 +362,8 @@ export default function Home() {
 
                 <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 text-sm text-muted-foreground">
                   <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                    Available for work
+                    <div className={`w-2 h-2 ${STATUS_CONFIG[AVAILABILITY_STATUS].color} rounded-full animate-pulse`}></div>
+                    {STATUS_CONFIG[AVAILABILITY_STATUS].text}
                   </div>
                   <div>Remote - Indonesia</div>
                 </div>
@@ -632,7 +672,8 @@ export default function Home() {
         </footer>
       </main>
 
-      <div className="fixed bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background via-background/80 to-transparent pointer-events-none"></div>
+      <div className="fixed top-0 left-0 right-0 h-24 gradient-overlay-top pointer-events-none"></div>
+      <div className="fixed bottom-0 left-0 right-0 h-24 gradient-overlay-bottom pointer-events-none"></div>
     </div>
   )
 }

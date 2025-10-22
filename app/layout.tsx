@@ -11,9 +11,9 @@ const geist = Geist({
 })
 
 export const metadata: Metadata = {
-  title: "Edgar Christian - Embedded Engineer",
-  description: "Embedded Engineer from Indonesia with 5+ years of experience.",
-  generator: "v0.app",
+  title: "edgarcnp.dev",
+  description: "Personal Website of Edgar Christian",
+  generator: "Next.js",
   icons: {
     icon: "/e-icon.ico",
   },
@@ -26,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={geist.variable} suppressHydrationWarning>
-      <body className="font-sans antialiased">
+      <body className="font-sans antialiased" suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

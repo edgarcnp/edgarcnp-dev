@@ -46,12 +46,18 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
           isScrolled ? "backdrop-blur-sm bg-background/50 shadow-lg" : "backdrop-blur bg-background/40 shadow-md"
         } rounded-full px-2 py-2`}
         style={{
-          border: `1px solid ${isDark ? "rgba(255, 255, 255, 0.15)" : "rgba(0, 0, 0, 0.1)"}`,
-          background: isDark ? "rgba(0, 0, 0, 0.4)" : "rgba(255, 255, 255, 0.6)",
-          backdropFilter: "blur(8px)",
+          // Gradient border effect using background with padding-box
+          border: `1px solid transparent`,
+          background: isDark 
+            ? `linear-gradient(white, white) padding-box, linear-gradient(to center, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1)) border-box`
+            : `linear-gradient(black, black) padding-box, linear-gradient(to center, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.1)) border-box`,
+          // Dark mode/light mode backgrounds per previous accepted settings
+          backgroundColor: isDark ? "rgba(255, 255, 255, 0.01)" : "rgba(0, 0, 0, 0.05)",
+          backdropFilter: "blur(4px)",
+          WebkitBackdropFilter: "blur(4px)",
           boxShadow: isDark
-            ? "0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1)"
-            : "0 8px 32px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.5)",
+            ? "0 0 4px rgba(255, 255, 255, 0.025), inset 0 0 1px 2.5px rgba(255, 255, 255, 0.075)"
+            : "0 0 4px rgba(0, 0, 0, 0.025), inset 0 0 1px 2.5px rgba(0, 0, 0, 0.075)",
         }}
       >
         <div className="flex items-center gap-1 sm:gap-2">
