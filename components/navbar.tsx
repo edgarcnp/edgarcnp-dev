@@ -88,7 +88,7 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
               className="sm:hidden flex-shrink-0 px-2 py-1 rounded-full hover:bg-white/10 transition-all duration-300 flex items-center justify-center group"
               aria-label="Toggle mobile menu"
             >
-              <div className="relative w-3.5 h-3.5">
+              <div className="relative w-3.5 h-3.5 translate-y-[0.06rem]">
                 <span
                   className={`absolute top-0 left-0 w-full h-0.5 bg-current transition-all duration-300 ease-in-out ${
                     isMobileMenuOpen ? 'rotate-45 translate-y-1.25' : 'translate-y-0'

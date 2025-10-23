@@ -80,6 +80,10 @@ module.exports = {
       animation: {
         'fade-in-up': 'fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
         'fade-out-down': 'fade-out-down 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+        'loader-spin': 'loader-spin 1s linear infinite',
+        'loader-pulse': 'loader-pulse 2s ease-in-out infinite',
+        'loader-bounce': 'loader-bounce 1.2s ease-in-out infinite',
+        'loader-fade-in': 'loader-fade-in 0.6s ease-out forwards',
       },
     },
   },

@@ -4,6 +4,7 @@ import Link from "next/link"
 import { useEffect, useRef, useState, useCallback } from "react"
 import { useTheme } from "next-themes"
 import { Navbar } from "@/components/navbar"
+import { Loader } from "@/components/loader"
 
 // Constants
 const SCROLL_DELAY = 300
@@ -42,6 +43,7 @@ export default function Home() {
   const currentYear = new Date().getFullYear()
   const [mounted, setMounted] = useState(false)
   const [isTouchDevice, setIsTouchDevice] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   
   // Use resolvedTheme for more reliable theme detection
   const isDark = mounted && resolvedTheme ? (resolvedTheme === "dark") : true // Default to dark during SSR
@@ -312,9 +314,15 @@ export default function Home() {
     }
   }
 
+  const handleLoadComplete = useCallback(() => {
+    setIsLoading(false)
+  }, [])
+
   return (
-    <div className="min-h-screen bg-background text-foreground relative overflow-x-hidden">
-      <Navbar activeSection={activeSection} isDark={isDark} onThemeToggle={toggleTheme} onNavigate={handleNavigation} />
+    <>
+      {isLoading && <Loader onLoadComplete={handleLoadComplete} />}
+      <div className={`min-h-screen bg-background text-foreground relative overflow-x-hidden transition-opacity duration-500 ${isLoading ? 'opacity-0' : 'opacity-100'}`}>
+        <Navbar activeSection={activeSection} isDark={isDark} onThemeToggle={toggleTheme} onNavigate={handleNavigation} />
 
       <nav className="fixed left-8 top-1/2 -translate-y-1/2 z-10 hidden lg:block">
         <div className="flex flex-col gap-4">
@@ -641,7 +649,8 @@ export default function Home() {
                   )}
                 </button>
 
-                <button
+                {/* Button Template */}
+                {/* <button
                   className="group p-3 rounded-lg border border-border hover:border-muted-foreground/50 transition-all duration-300"
                   aria-label="Open chat"
                 >
@@ -658,15 +667,16 @@ export default function Home() {
                       d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
                     />
                   </svg>
-                </button>
+                </button> */}
               </div>
             </div>
           </div>
         </footer>
       </main>
 
-      <div className="fixed top-0 left-0 right-0 h-24 gradient-overlay-top pointer-events-none"></div>
-      <div className="fixed bottom-0 left-0 right-0 h-24 gradient-overlay-bottom pointer-events-none"></div>
-    </div>
+        <div className="fixed top-0 left-0 right-0 h-24 gradient-overlay-top pointer-events-none"></div>
+        <div className="fixed bottom-0 left-0 right-0 h-24 gradient-overlay-bottom pointer-events-none"></div>
+      </div>
+    </>
   )
 }
