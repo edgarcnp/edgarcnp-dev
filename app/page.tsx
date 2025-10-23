@@ -6,8 +6,8 @@ import { useTheme } from "next-themes"
 import { Navbar } from "@/components/navbar"
 
 // Constants
-const SCROLL_DELAY = 900
-const SCROLL_DURATION = 900
+const SCROLL_DELAY = 300
+const SCROLL_DURATION = 600
 const SECTIONS = ["intro", "work", "thoughts", "footer"]
 const SECTION_NAMES: Record<string, string> = {
   intro: "Home",
@@ -41,9 +41,10 @@ export default function Home() {
   const sectionsRef = useRef<Map<string, HTMLElement | null>>(new Map())
   const currentYear = new Date().getFullYear()
   const [mounted, setMounted] = useState(false)
+  const [isTouchDevice, setIsTouchDevice] = useState(false)
   
   // Use resolvedTheme for more reliable theme detection
-  const isDark = mounted ? (resolvedTheme === "dark") : true // Default to dark during SSR
+  const isDark = mounted && resolvedTheme ? (resolvedTheme === "dark") : true // Default to dark during SSR
 
   const smoothScrollTo = (element: HTMLElement, duration = SCROLL_DURATION) => {
     const startPosition = window.scrollY
@@ -61,7 +62,10 @@ export default function Home() {
       const progress = Math.min(elapsed / duration, 1)
       const ease = easeInOutCubic(progress)
 
-      window.scrollTo(0, startPosition + distance * ease)
+      window.scrollTo({
+        top: startPosition + distance * ease,
+        behavior: 'auto'
+      })
 
       if (progress < 1) {
         requestAnimationFrame(animation)
@@ -71,15 +75,22 @@ export default function Home() {
     requestAnimationFrame(animation)
   }
 
+
   useEffect(() => {
     // Set mounted to true after component mounts
     setMounted(true)
+    
+    // Detect if device supports touch (mobile/tablet)
+    const touchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
+    setIsTouchDevice(touchDevice)
     
     // Ensure the theme is properly set on the HTML element
     if (resolvedTheme) {
       document.documentElement.classList.toggle('dark', resolvedTheme === 'dark')
     }
+    
   }, [resolvedTheme])
+
 
   // Global smooth scroll handler for all anchor links
   useEffect(() => {
@@ -93,7 +104,7 @@ export default function Home() {
         if (targetId) {
           const targetElement = document.getElementById(targetId)
           if (targetElement) {
-            smoothScrollTo(targetElement)
+            targetElement.scrollIntoView({ behavior: 'smooth' })
           }
         }
       }
@@ -108,14 +119,20 @@ export default function Home() {
     const timeoutId = setTimeout(() => {
       const firstSection = document.getElementById("intro")
       if (firstSection) {
-        firstSection.classList.add("animate-fade-in-up")
-        firstSection.classList.remove("opacity-0")
-        setActiveSection("intro")
+        if (isTouchDevice) {
+          // For touch devices, just set active section
+          setActiveSection("intro")
+        } else {
+          // For desktop, add animation classes
+          firstSection.classList.add("animate-fade-in-up")
+          firstSection.classList.remove("opacity-0")
+          setActiveSection("intro")
+        }
       }
     }, 200)
 
     return () => clearTimeout(timeoutId)
-  }, [])
+  }, [isTouchDevice])
 
   useEffect(() => {
     const sectionName = SECTION_NAMES[activeSection] || "Home"
@@ -123,6 +140,29 @@ export default function Home() {
   }, [activeSection])
 
   useEffect(() => {
+    // For mobile/tablet devices, use simple scroll-based section detection
+    if (isTouchDevice) {
+      const handleScroll = () => {
+        const sections = SECTIONS.map(id => document.getElementById(id)).filter(Boolean) as HTMLElement[]
+        const scrollPosition = window.scrollY + window.innerHeight / 2
+
+        for (let i = sections.length - 1; i >= 0; i--) {
+          const section = sections[i]
+          if (section && section.offsetTop <= scrollPosition) {
+            setActiveSection(section.id)
+            break
+          }
+        }
+      }
+
+      window.addEventListener('scroll', handleScroll)
+      handleScroll() // Initial call
+
+      return () => {
+        window.removeEventListener('scroll', handleScroll)
+      }
+    }
+
     const fadeInObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -163,9 +203,14 @@ export default function Home() {
       fadeInObserver.disconnect()
       fadeOutObserver.disconnect()
     }
-  }, [])
+  }, [isTouchDevice])
 
   useEffect(() => {
+    // Only enable magnetic scroll on desktop devices (non-touch)
+    if (isTouchDevice) {
+      return
+    }
+
     const handleWheel = (e: WheelEvent) => {
       const now = Date.now()
 
@@ -232,7 +277,7 @@ export default function Home() {
       window.removeEventListener("wheel", handleWheel)
       window.removeEventListener("keydown", handleKeyDown)
     }
-  }, [activeSection])
+  }, [activeSection, isTouchDevice])
 
   const toggleTheme = useCallback(() => {
     // Add transitioning class to enable smooth transitions
@@ -254,69 +299,17 @@ export default function Home() {
   }
 
   const handleNavigation = (sectionId: string) => {
-    lastScrollTimeRef.current = Date.now()
     const targetSection = document.getElementById(sectionId)
     if (targetSection) {
-      smoothScrollTo(targetSection)
+      if (isTouchDevice) {
+        // Use native smooth scrolling for mobile/tablet
+        targetSection.scrollIntoView({ behavior: 'smooth' })
+      } else {
+        // Use custom smooth scrolling for desktop
+        lastScrollTimeRef.current = Date.now()
+        smoothScrollTo(targetSection)
+      }
     }
-  }
-
-  // Don't render until mounted to prevent hydration mismatch
-  if (!mounted) {
-    return (
-      <div className="min-h-screen bg-background text-foreground relative overflow-x-hidden">
-        <div className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-4 pointer-events-none">
-          <div className="pointer-events-auto backdrop-blur bg-background/40 shadow-md rounded-full px-2 py-2 border border-border">
-            <div className="flex items-center gap-1 sm:gap-2">
-              <div className="hidden sm:flex items-center gap-1">
-                <div className="px-3 py-0 rounded-full text-xs sm:text-sm font-semibold text-muted-foreground">Home</div>
-                <div className="px-3 py-0 rounded-full text-xs sm:text-sm font-semibold text-muted-foreground">Work</div>
-                <div className="px-3 py-0 rounded-full text-xs sm:text-sm font-semibold text-muted-foreground">Thoughts</div>
-                <div className="px-3 py-0 rounded-full text-xs sm:text-sm font-semibold text-muted-foreground">Contact</div>
-              </div>
-              <div className="hidden sm:block w-px h-6 bg-muted-foreground/30" />
-              <div className="flex-shrink-0 px-2 py-1 rounded-full flex items-center justify-center">
-                <svg className="w-4 h-4 text-muted-foreground" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-                </svg>
-              </div>
-            </div>
-          </div>
-        </div>
-        <main className="max-w-4xl mx-auto px-6 sm:px-8 lg:px-16">
-          <header className="h-screen flex items-center">
-            <div className="grid lg:grid-cols-5 gap-12 sm:gap-16 w-full">
-              <div className="lg:col-span-3 space-y-6 sm:space-y-8">
-                <div className="space-y-3 sm:space-y-2">
-                  <div className="text-sm text-muted-foreground font-mono tracking-wider">PORTFOLIO / {currentYear}</div>
-                  <h1 className="text-5xl sm:text-6xl lg:text-7xl font-light tracking-tight">
-                    Edgar
-                    <br />
-                    <span className="text-muted-foreground">Christian</span>
-                  </h1>
-                </div>
-                <div className="space-y-6 max-w-md">
-                  <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed">
-                    <span className="text-foreground">Embedded Engineer</span> crafting digital experiences at the
-                    intersection of
-                    <span className="text-foreground"> design</span>,<span className="text-foreground"> technology</span>,
-                    and
-                    <span className="text-foreground"> user experience</span>.
-                  </p>
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 text-sm text-muted-foreground">
-                    <div className="flex items-center gap-2">
-                      <div className={`w-2 h-2 ${STATUS_CONFIG[AVAILABILITY_STATUS].color} rounded-full animate-pulse`}></div>
-                      {STATUS_CONFIG[AVAILABILITY_STATUS].text}
-                    </div>
-                    <div>Remote - Indonesia</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </header>
-        </main>
-      </div>
-    )
   }
 
   return (
@@ -339,20 +332,20 @@ export default function Home() {
       </nav>
 
       <main className="max-w-4xl mx-auto px-6 sm:px-8 lg:px-16">
-        <header id="intro" ref={setSectionRef("intro")} className="h-screen flex items-center opacity-0 scroll-mt-20">
-          <div className="grid lg:grid-cols-5 gap-12 sm:gap-16 w-full">
+        <header id="intro" ref={setSectionRef("intro")} className={`${isTouchDevice ? 'min-h-screen' : 'h-screen'} flex items-center scroll-mt-20 py-24 sm:py-20 ${isTouchDevice ? 'opacity-100' : 'opacity-0'}`}>
+          <div className="grid lg:grid-cols-5 gap-8 sm:gap-12 lg:gap-16 w-full">
             <div className="lg:col-span-3 space-y-6 sm:space-y-8">
               <div className="space-y-3 sm:space-y-2">
-                <div className="text-sm text-muted-foreground font-mono tracking-wider">PORTFOLIO / {currentYear}</div>
-                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-light tracking-tight">
+                <div className="text-xs sm:text-sm text-muted-foreground font-mono tracking-wider">PORTFOLIO / {currentYear}</div>
+                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light tracking-tight leading-tight">
                   Edgar
                   <br />
                   <span className="text-muted-foreground">Christian</span>
                 </h1>
               </div>
 
-              <div className="space-y-6 max-w-md">
-                <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed">
+              <div className="space-y-4 sm:space-y-6 max-w-md">
+                <p className="text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed">
                   <span className="text-foreground">Embedded Engineer</span> crafting digital experiences at the
                   intersection of
                   <span className="text-foreground"> design</span>,<span className="text-foreground"> technology</span>,
@@ -372,16 +365,16 @@ export default function Home() {
 
             <div className="lg:col-span-2 flex flex-col justify-end space-y-6 sm:space-y-8 mt-8 lg:mt-0">
               <div className="space-y-4">
-                <div className="text-sm text-muted-foreground font-mono">CURRENTLY</div>
+                <div className="text-xs sm:text-sm text-muted-foreground font-mono">CURRENTLY</div>
                 <div className="space-y-2">
-                  <div className="text-foreground">Network Engineer</div>
-                  <div className="text-muted-foreground">@ PT. Efrat Sinergi Indonesia</div>
+                  <div className="text-base sm:text-lg text-foreground">Network Engineer</div>
+                  <div className="text-sm sm:text-base text-muted-foreground">@ PT. Efrat Sinergi Indonesia</div>
                   <div className="text-xs text-muted-foreground">2021 — Present</div>
                 </div>
               </div>
 
               <div className="space-y-4">
-                <div className="text-sm text-muted-foreground font-mono">AREA OF EXPERTISE</div>
+                <div className="text-xs sm:text-sm text-muted-foreground font-mono">AREA OF EXPERTISE</div>
                 <div className="flex flex-wrap gap-2">
                   {[
                     "Rust",
@@ -398,7 +391,7 @@ export default function Home() {
                   ].map((skill) => (
                     <span
                       key={skill}
-                      className="px-3 py-1 text-xs border border-border rounded-full hover:border-muted-foreground/50 transition-colors duration-300"
+                      className="px-2 sm:px-3 py-1 text-xs border border-border rounded-full hover:border-muted-foreground/50 transition-colors duration-300"
                     >
                       {skill}
                     </span>
@@ -409,14 +402,14 @@ export default function Home() {
           </div>
         </header>
 
-        <section id="work" ref={setSectionRef("work")} className="h-screen flex items-center opacity-0 scroll-mt-20">
-          <div className="w-full space-y-12 sm:space-y-16">
+        <section id="work" ref={setSectionRef("work")} className={`${isTouchDevice ? 'min-h-screen' : 'h-screen'} flex items-center scroll-mt-20 py-16 sm:py-20 ${isTouchDevice ? 'opacity-100' : 'opacity-0'} ${isTouchDevice ? 'mt-4' : ''}`}>
+          <div className="w-full space-y-8 sm:space-y-12 lg:space-y-16">
             <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-              <h2 className="text-3xl sm:text-4xl font-light">The Work Log</h2>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-light">The Work Log</h2>
               <div className="text-sm text-muted-foreground font-mono">2021 — Present</div>
             </div>
 
-            <div className="space-y-8 sm:space-y-12">
+            <div className="space-y-6 sm:space-y-8 lg:space-y-12">
               {[
                 {
                   year: "2023 - Present",
@@ -443,23 +436,23 @@ export default function Home() {
               ].map((job, index) => (
                 <div
                   key={index}
-                  className="group grid lg:grid-cols-12 gap-4 sm:gap-8 py-6 sm:py-8 border-b border-border transition-colors duration-500"
+                  className="group grid lg:grid-cols-12 gap-4 sm:gap-6 lg:gap-8 py-4 sm:py-6 lg:py-8 border-b border-border transition-colors duration-500"
                 >
-                  <div className="lg:col-span-2">
-                    <div className="text-xl sm:text-2xl font-light text-muted-foreground group-hover:text-foreground transition-colors duration-500">
+                  <div className="lg:col-span-2 mb-2 lg:mb-0">
+                    <div className="text-lg sm:text-xl lg:text-2xl font-light text-muted-foreground group-hover:text-foreground transition-colors duration-500">
                       {job.year}
                     </div>
                   </div>
 
-                  <div className="lg:col-span-6 space-y-3">
+                  <div className="lg:col-span-6 space-y-2 sm:space-y-3">
                     <div>
-                      <h3 className="text-lg sm:text-xl font-medium">{job.role}</h3>
-                      <div className="text-muted-foreground">{job.company}</div>
+                      <h3 className="text-base sm:text-lg lg:text-xl font-medium">{job.role}</h3>
+                      <div className="text-sm sm:text-base text-muted-foreground">{job.company}</div>
                     </div>
-                    <p className="text-muted-foreground leading-relaxed max-w-lg">{job.description}</p>
+                    <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-lg">{job.description}</p>
                   </div>
 
-                  <div className="lg:col-span-4 flex flex-wrap gap-2 lg:justify-end mt-2 lg:mt-0">
+                  <div className="lg:col-span-4 flex flex-wrap gap-1 sm:gap-2 lg:justify-end mt-2 lg:mt-0">
                     {job.tech.map((tech) => (
                       <span
                         key={tech}
@@ -478,12 +471,12 @@ export default function Home() {
         <section
           id="thoughts"
           ref={setSectionRef("thoughts")}
-          className="h-screen flex items-center opacity-0 scroll-mt-20"
+          className={`${isTouchDevice ? 'min-h-screen' : 'h-screen'} flex items-center scroll-mt-20 py-16 sm:py-20 ${isTouchDevice ? 'opacity-100' : 'opacity-0'} ${isTouchDevice ? 'mt-4' : ''}`}
         >
-          <div className="w-full space-y-12 sm:space-y-16">
-            <h2 className="text-3xl sm:text-4xl font-light">Recent Thoughts</h2>
+          <div className="w-full space-y-8 sm:space-y-12 lg:space-y-16">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-light">Recent Thoughts</h2>
 
-            <div className="grid gap-6 sm:gap-8 lg:grid-cols-2">
+            <div className="grid gap-4 sm:gap-6 lg:gap-8 lg:grid-cols-2">
               {[
                 {
                   title: "The Future of Web Development",
@@ -512,19 +505,19 @@ export default function Home() {
               ].map((post, index) => (
                 <article
                   key={index}
-                  className="group p-6 sm:p-8 border border-border rounded-lg hover:border-muted-foreground/50 transition-all duration-500 hover:shadow-lg cursor-pointer"
+                  className="group p-4 sm:p-6 lg:p-8 border border-border rounded-lg hover:border-muted-foreground/50 transition-all duration-500 hover:shadow-lg cursor-pointer"
                 >
-                  <div className="space-y-4">
+                  <div className="space-y-3 sm:space-y-4">
                     <div className="flex items-center justify-between text-xs text-muted-foreground font-mono">
                       <span>{post.date}</span>
                       <span>{post.readTime}</span>
                     </div>
 
-                    <h3 className="text-lg sm:text-xl font-medium group-hover:text-muted-foreground transition-colors duration-300">
+                    <h3 className="text-base sm:text-lg lg:text-xl font-medium group-hover:text-muted-foreground transition-colors duration-300">
                       {post.title}
                     </h3>
 
-                    <p className="text-muted-foreground leading-relaxed">{post.excerpt}</p>
+                    <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">{post.excerpt}</p>
 
                     <div className="flex items-center gap-2 text-sm text-muted-foreground group-hover:text-foreground transition-colors duration-300">
                       <span>Read more</span>
@@ -549,7 +542,7 @@ export default function Home() {
           </div>
         </section>
 
-        <footer id="footer" ref={setSectionRef("footer")} className="h-screen flex items-center opacity-0 scroll-mt-20">
+        <footer id="footer" ref={setSectionRef("footer")} className={`${isTouchDevice ? 'min-h-screen' : 'h-screen'} flex items-center scroll-mt-20 py-16 sm:py-20 ${isTouchDevice ? 'opacity-100' : 'opacity-0'} ${isTouchDevice ? 'mt-4' : ''}`}>
           <div className="w-full space-y-12 sm:space-y-16">
             <div className="grid lg:grid-cols-2 gap-12 sm:gap-16">
               <div className="space-y-6 sm:space-y-8">

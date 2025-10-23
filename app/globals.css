@@ -141,6 +141,9 @@
       background-color 1.2s cubic-bezier(0.4, 0, 0.2, 1),
       color 1.2s cubic-bezier(0.4, 0, 0.2, 1),
       border-color 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Ensure smooth touch scrolling on mobile */
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: none;
   }
 
   body {
@@ -148,6 +151,9 @@
     transition: 
       background-color 1.2s cubic-bezier(0.4, 0, 0.2, 1),
       color 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Ensure smooth touch scrolling on mobile */
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: none;
   }
 
   /* Smooth transitions for all elements */
@@ -157,6 +163,15 @@
       color 1.2s cubic-bezier(0.4, 0, 0.2, 1),
       border-color 1.2s cubic-bezier(0.4, 0, 0.2, 1),
       box-shadow 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Ensure smooth touch scrolling on mobile devices */
+  @media (hover: none) and (pointer: coarse) {
+    html, body {
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: none;
+      scroll-behavior: smooth;
+    }
   }
 }
 
@@ -169,6 +184,7 @@
   .animate-fade-out-down {
     animation: fade-out-down 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
+
 
   /* Theme transition utilities */
   .theme-transitioning {
@@ -222,6 +238,18 @@
       transform: translateY(24px);
     }
   }
+
+  @keyframes slideInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
 
   /* Gradient overlay during theme transitions */
   .theme-transitioning::before {
