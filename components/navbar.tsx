@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 
 interface NavbarProps {
-  activeSection: string
-  isDark: boolean
-  onThemeToggle: () => void
-  onNavigate: (section: string) => void
+  activeSection: string;
+  isDark: boolean;
+  onThemeToggle: () => void;
+  onNavigate: (section: string) => void;
 }
 
 const NAVBAR_SECTIONS = [
@@ -14,66 +14,75 @@ const NAVBAR_SECTIONS = [
   { id: "work", label: "Work" },
   { id: "thoughts", label: "Thoughts" },
   { id: "footer", label: "Contact" },
-]
+];
 
-export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: NavbarProps) {
-  const [isScrolled, setIsScrolled] = useState(false)
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [isAnimating, setIsAnimating] = useState(false)
+export function Navbar({
+  activeSection,
+  isDark,
+  onThemeToggle,
+  onNavigate,
+}: NavbarProps) {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
-    let throttleTimer: NodeJS.Timeout | null = null
+    let throttleTimer: NodeJS.Timeout | null = null;
 
     const handleScroll = () => {
-      if (throttleTimer) return
+      if (throttleTimer) return;
 
-      setIsScrolled(window.scrollY > 10)
+      setIsScrolled(window.scrollY > 10);
 
       throttleTimer = setTimeout(() => {
-        throttleTimer = null
-      }, 100)
-    }
+        throttleTimer = null;
+      }, 100);
+    };
 
-    window.addEventListener("scroll", handleScroll)
+    window.addEventListener("scroll", handleScroll);
     return () => {
-      window.removeEventListener("scroll", handleScroll)
-      if (throttleTimer) clearTimeout(throttleTimer)
-    }
-  }, [])
+      window.removeEventListener("scroll", handleScroll);
+      if (throttleTimer) clearTimeout(throttleTimer);
+    };
+  }, []);
 
   const handleMobileNavigation = (sectionId: string) => {
-    onNavigate(sectionId)
-    closeMobileMenu()
-  }
+    onNavigate(sectionId);
+    closeMobileMenu();
+  };
 
   const closeMobileMenu = () => {
-    setIsMobileMenuOpen(false)
-    setIsAnimating(true)
+    setIsMobileMenuOpen(false);
+    setIsAnimating(true);
     setTimeout(() => {
-      setIsAnimating(false)
-    }, 300)
-  }
+      setIsAnimating(false);
+    }, 300);
+  };
 
   const openMobileMenu = () => {
-    setIsMobileMenuOpen(true)
-    setIsAnimating(false)
-  }
+    setIsMobileMenuOpen(true);
+    setIsAnimating(false);
+  };
 
   return (
     <>
       <nav className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-2 pointer-events-none">
         <div
           className={`pointer-events-auto transition-all duration-300 ${
-            isScrolled ? "backdrop-blur-sm bg-background/50 shadow-lg" : "backdrop-blur bg-background/40 shadow-md"
+            isScrolled
+              ? "backdrop-blur-sm bg-background/50 shadow-lg"
+              : "backdrop-blur bg-background/40 shadow-md"
           } rounded-full px-2 py-2`}
           style={{
             // Gradient border effect using background with padding-box
             border: `1px solid transparent`,
-            background: isDark 
+            background: isDark
               ? `linear-gradient(white, white) padding-box, linear-gradient(to center, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1)) border-box`
               : `linear-gradient(black, black) padding-box, linear-gradient(to center, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.1)) border-box`,
             // Dark mode/light mode backgrounds per previous accepted settings
-            backgroundColor: isDark ? "rgba(255, 255, 255, 0.01)" : "rgba(0, 0, 0, 0.05)",
+            backgroundColor: isDark
+              ? "rgba(255, 255, 255, 0.01)"
+              : "rgba(0, 0, 0, 0.05)",
             backdropFilter: "blur(4px)",
             WebkitBackdropFilter: "blur(4px)",
             boxShadow: isDark
@@ -84,24 +93,30 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
           <div className="flex items-center gap-1 sm:gap-2">
             {/* Mobile Menu Button */}
             <button
-              onClick={() => isMobileMenuOpen ? closeMobileMenu() : openMobileMenu()}
+              onClick={() =>
+                isMobileMenuOpen ? closeMobileMenu() : openMobileMenu()
+              }
               className="sm:hidden flex-shrink-0 px-2 py-1 rounded-full hover:bg-white/10 transition-all duration-300 flex items-center justify-center group"
               aria-label="Toggle mobile menu"
             >
               <div className="relative w-3.5 h-3.5 translate-y-[0.06rem]">
                 <span
                   className={`absolute top-0 left-0 w-full h-0.5 bg-current transition-all duration-300 ease-in-out ${
-                    isMobileMenuOpen ? 'rotate-45 translate-y-1.25' : 'translate-y-0'
+                    isMobileMenuOpen
+                      ? "rotate-45 translate-y-1.25"
+                      : "translate-y-0"
                   }`}
                 />
                 <span
                   className={`absolute top-1.25 left-0 w-full h-0.5 bg-current transition-all duration-300 ease-in-out ${
-                    isMobileMenuOpen ? 'opacity-0' : 'opacity-100'
+                    isMobileMenuOpen ? "opacity-0" : "opacity-100"
                   }`}
                 />
                 <span
                   className={`absolute top-2.5 left-0 w-full h-0.5 bg-current transition-all duration-300 ease-in-out ${
-                    isMobileMenuOpen ? '-rotate-45 -translate-y-1.25' : 'translate-y-0'
+                    isMobileMenuOpen
+                      ? "-rotate-45 -translate-y-1.25"
+                      : "translate-y-0"
                   }`}
                 />
               </div>
@@ -114,7 +129,9 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
                   key={section.id}
                   onClick={() => onNavigate(section.id)}
                   className={`px-3 py-0 rounded-full text-xs sm:text-sm font-semibold transition-all duration-300 leading-none -translate-y-[0.05rem] ${
-                    activeSection === section.id ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+                    activeSection === section.id
+                      ? "text-foreground"
+                      : "text-muted-foreground hover:text-foreground"
                   }`}
                   aria-label={`Navigate to ${section.label}`}
                 >
@@ -151,7 +168,9 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
             <div
               className="hidden sm:block w-px h-6"
               style={{
-                backgroundColor: isDark ? "rgba(255, 255, 255, 0.15)" : "rgba(0, 0, 0, 0.15)",
+                backgroundColor: isDark
+                  ? "rgba(255, 255, 255, 0.15)"
+                  : "rgba(0, 0, 0, 0.15)",
               }}
             />
 
@@ -192,28 +211,35 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
       {/* Mobile Menu Overlay */}
       {(isMobileMenuOpen || isAnimating) && (
         <div className="fixed inset-0 z-40 sm:hidden">
-          <div 
+          <div
             className={`fixed inset-0 bg-background/80 backdrop-blur-sm transition-opacity duration-300 ${
-              isMobileMenuOpen && !isAnimating ? 'opacity-100' : 'opacity-0'
+              isMobileMenuOpen && !isAnimating ? "opacity-100" : "opacity-0"
             }`}
             onClick={closeMobileMenu}
           />
-          <div className={`fixed top-16 left-4 right-4 bg-background/95 backdrop-blur-md border border-border rounded-2xl shadow-2xl transition-all duration-300 transform ${
-            isMobileMenuOpen && !isAnimating ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-4 opacity-0 scale-95'
-          }`}>
+          <div
+            className={`fixed top-16 left-4 right-4 bg-background/95 backdrop-blur-md border border-border rounded-2xl shadow-2xl transition-all duration-300 transform ${
+              isMobileMenuOpen && !isAnimating
+                ? "translate-y-0 opacity-100 scale-100"
+                : "translate-y-4 opacity-0 scale-95"
+            }`}
+          >
             <div className="p-4 space-y-2">
               {NAVBAR_SECTIONS.map((section, index) => (
                 <button
                   key={section.id}
                   onClick={() => handleMobileNavigation(section.id)}
                   className={`w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-all duration-300 transform ${
-                    activeSection === section.id 
-                      ? "text-foreground bg-muted scale-105" 
+                    activeSection === section.id
+                      ? "text-foreground bg-muted scale-105"
                       : "text-muted-foreground hover:text-foreground hover:bg-muted/50 hover:scale-105"
                   }`}
                   style={{
                     animationDelay: `${index * 50}ms`,
-                    animation: isMobileMenuOpen && !isAnimating ? 'slideInUp 0.3s ease-out forwards' : 'none'
+                    animation:
+                      isMobileMenuOpen && !isAnimating
+                        ? "slideInUp 0.3s ease-out forwards"
+                        : "none",
                   }}
                 >
                   {section.label}
@@ -226,7 +252,10 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
                 className="flex items-center gap-2 w-full text-left px-4 py-3 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all duration-300 transform hover:scale-105"
                 style={{
                   animationDelay: `${NAVBAR_SECTIONS.length * 50}ms`,
-                  animation: isMobileMenuOpen && !isAnimating ? 'slideInUp 0.3s ease-out forwards' : 'none'
+                  animation:
+                    isMobileMenuOpen && !isAnimating
+                      ? "slideInUp 0.3s ease-out forwards"
+                      : "none",
                 }}
               >
                 Status
@@ -249,5 +278,5 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
         </div>
       )}
     </>
-  )
+  );
 }
