@@ -5,6 +5,7 @@ import { useEffect, useRef, useState, useCallback } from "react"
 import { useTheme } from "next-themes"
 import { Navbar } from "@/components/navbar"
 import { Loader } from "@/components/loader"
+import { ClientOnly } from "@/components/client-only"
 
 // Constants
 const SCROLL_DELAY = 300
@@ -40,7 +41,7 @@ export default function Home() {
     const [activeSection, setActiveSection] = useState("")
     const lastScrollTimeRef = useRef(0)
     const sectionsRef = useRef<Map<string, HTMLElement | null>>(new Map())
-    const currentYear = new Date().getFullYear()
+    const [currentYear, setCurrentYear] = useState<number | null>(null)
     const [mounted, setMounted] = useState(false)
     const [isTouchDevice, setIsTouchDevice] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
@@ -82,6 +83,9 @@ export default function Home() {
         // Set mounted to true after component mounts
         setMounted(true)
 
+        // Set current year after mount to ensure consistency
+        setCurrentYear(new Date().getFullYear())
+
         // Detect if device supports touch (mobile/tablet)
         const touchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
         setIsTouchDevice(touchDevice)
@@ -94,24 +98,26 @@ export default function Home() {
 
     // Global smooth scroll handler for all anchor links
     useEffect(() => {
-        const handleAnchorClick = (e: Event) => {
-            const target = e.target as HTMLElement
-            const link = target.closest('a[href^="#"]') as HTMLAnchorElement
+        if (typeof window !== 'undefined') {
+            const handleAnchorClick = (e: Event) => {
+                const target = e.target as HTMLElement
+                const link = target.closest('a[href^="#"]') as HTMLAnchorElement
 
-            if (link && link.getAttribute('href') !== '#') {
-                e.preventDefault()
-                const targetId = link.getAttribute('href')?.substring(1)
-                if (targetId) {
-                    const targetElement = document.getElementById(targetId)
-                    if (targetElement) {
-                        targetElement.scrollIntoView({ behavior: 'smooth' })
+                if (link && link.getAttribute('href') !== '#') {
+                    e.preventDefault()
+                    const targetId = link.getAttribute('href')?.substring(1)
+                    if (targetId) {
+                        const targetElement = document.getElementById(targetId)
+                        if (targetElement) {
+                            targetElement.scrollIntoView({ behavior: 'smooth' })
+                        }
                     }
                 }
             }
-        }
 
-        document.addEventListener('click', handleAnchorClick)
-        return () => document.removeEventListener('click', handleAnchorClick)
+            document.addEventListener('click', handleAnchorClick)
+            return () => document.removeEventListener('click', handleAnchorClick)
+        }
     }, [])
 
     useEffect(() => {
@@ -291,15 +297,17 @@ export default function Home() {
     }
 
     const handleNavigation = (sectionId: string) => {
-        const targetSection = document.getElementById(sectionId)
-        if (targetSection) {
-            if (isTouchDevice) {
-                // Use native smooth scrolling for mobile/tablet
-                targetSection.scrollIntoView({ behavior: 'smooth' })
-            } else {
-                // Use custom smooth scrolling for desktop
-                lastScrollTimeRef.current = Date.now()
-                smoothScrollTo(targetSection)
+        if (typeof window !== 'undefined') {
+            const targetSection = document.getElementById(sectionId)
+            if (targetSection) {
+                if (isTouchDevice) {
+                    // Use native smooth scrolling for mobile/tablet
+                    targetSection.scrollIntoView({ behavior: 'smooth' })
+                } else {
+                    // Use custom smooth scrolling for desktop
+                    lastScrollTimeRef.current = Date.now()
+                    smoothScrollTo(targetSection)
+                }
             }
         }
     }
@@ -333,7 +341,7 @@ export default function Home() {
                         <div className="grid lg:grid-cols-5 gap-8 sm:gap-12 lg:gap-16 w-full">
                             <div className="lg:col-span-3 space-y-6 sm:space-y-8">
                                 <div className="space-y-3 sm:space-y-2">
-                                    <div className="text-xs sm:text-sm text-muted-foreground font-mono tracking-wider">PORTFOLIO / {currentYear}</div>
+                                    <div className="text-xs sm:text-sm text-muted-foreground font-mono tracking-wider">PORTFOLIO / {currentYear || new Date().getFullYear()}</div>
                                     <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light tracking-tight leading-tight">
                                         Edgar
                                         <br />
@@ -605,7 +613,7 @@ export default function Home() {
                             <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 sm:gap-8 pt-12 sm:pt-16 border-t border-border">
                                 <div className="space-y-2">
                                     <div className="text-sm text-muted-foreground">
-                                        © {currentYear} Edgar Christian. All rights reserved.
+                                        © {currentYear || new Date().getFullYear()} Edgar Christian. All rights reserved.
                                     </div>
                                 </div>
 
