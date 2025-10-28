@@ -280,17 +280,8 @@ export default function Home() {
     }, [activeSection, isTouchDevice])
 
     const toggleTheme = useCallback(() => {
-        // Add transitioning class to enable smooth transitions
-        document.documentElement.classList.add('theme-transitioning')
-
-        // Set the new theme
+        // Set the new theme - transitions are handled by explicit CSS rules
         setTheme(resolvedTheme === "dark" ? "light" : "dark")
-
-        // Remove transitioning class after transition completes
-        // Use 1200ms to match the base transition duration
-        setTimeout(() => {
-            document.documentElement.classList.remove('theme-transitioning')
-        }, 1200) // Match the base CSS transition duration
     }, [resolvedTheme, setTheme])
 
     const setSectionRef = (id: string) => (el: HTMLElement | null) => {
@@ -320,7 +311,7 @@ export default function Home() {
     return (
         <>
             {isLoading && <Loader onLoadComplete={handleLoadComplete} />}
-            <div className={`min-h-screen bg-background text-foreground relative overflow-x-hidden transition-opacity duration-500 ${isLoading ? 'opacity-0' : 'opacity-100'}`}>
+            <div className={`min-h-screen bg-background text-foreground relative overflow-x-hidden transition-theme main-background-container ${isLoading ? 'opacity-0' : 'opacity-100'}`}>
                 <Navbar activeSection={activeSection} isDark={isDark} onThemeToggle={toggleTheme} onNavigate={handleNavigation} />
 
                 <nav className="fixed left-8 top-1/2 -translate-y-1/2 z-10 hidden lg:block">
@@ -329,7 +320,7 @@ export default function Home() {
                             <button
                                 key={section}
                                 onClick={() => handleNavigation(section)}
-                                className={`w-2 h-8 rounded-full transition-all duration-500 ${activeSection === section ? "bg-foreground" : "bg-muted-foreground/30 hover:bg-muted-foreground/60"
+                                className={`w-2 h-8 rounded-full transition-theme ${activeSection === section ? "bg-foreground" : "bg-muted-foreground/30 hover:bg-muted-foreground/60"
                                     }`}
                                 aria-label={`Navigate to ${SECTION_NAMES[section]}`}
                             />
@@ -397,7 +388,7 @@ export default function Home() {
                                         ].map((skill) => (
                                             <span
                                                 key={skill}
-                                                className="px-2 sm:px-3 py-1 text-xs border border-border rounded-full hover:border-muted-foreground/50 transition-colors duration-300"
+                                                className="px-2 sm:px-3 py-1 text-xs border border-border rounded-full hover:border-muted-foreground/50 transition-theme"
                                             >
                                                 {skill}
                                             </span>
@@ -442,10 +433,10 @@ export default function Home() {
                                 ].map((job, index) => (
                                     <div
                                         key={index}
-                                        className="group grid lg:grid-cols-12 gap-4 sm:gap-6 lg:gap-8 py-4 sm:py-6 lg:py-8 border-b border-border transition-colors duration-500"
+                                        className="group grid lg:grid-cols-12 gap-4 sm:gap-6 lg:gap-8 py-4 sm:py-6 lg:py-8 border-b border-border transition-theme"
                                     >
                                         <div className="lg:col-span-2 mb-2 lg:mb-0">
-                                            <div className="text-lg sm:text-xl lg:text-2xl font-light text-muted-foreground group-hover:text-foreground transition-colors duration-500">
+                                            <div className="text-lg sm:text-xl lg:text-2xl font-light text-muted-foreground group-hover:text-foreground transition-theme">
                                                 {job.year}
                                             </div>
                                         </div>
@@ -462,7 +453,7 @@ export default function Home() {
                                             {job.tech.map((tech) => (
                                                 <span
                                                     key={tech}
-                                                    className="px-2 py-1 text-xs text-muted-foreground rounded group-hover:border-muted-foreground/50 transition-colors duration-500"
+                                                    className="px-2 py-1 text-xs text-muted-foreground rounded group-hover:border-muted-foreground/50 transition-theme"
                                                 >
                                                     {tech}
                                                 </span>
@@ -511,7 +502,7 @@ export default function Home() {
                                 ].map((post, index) => (
                                     <article
                                         key={index}
-                                        className="group p-4 sm:p-6 lg:p-8 border border-border rounded-lg hover:border-muted-foreground/50 transition-all duration-500 hover:shadow-lg cursor-pointer"
+                                        className="group p-4 sm:p-6 lg:p-8 border border-border rounded-lg hover:border-muted-foreground/50 transition-theme hover:shadow-lg cursor-pointer"
                                     >
                                         <div className="space-y-3 sm:space-y-4">
                                             <div className="flex items-center justify-between text-xs text-muted-foreground font-mono">
@@ -519,16 +510,16 @@ export default function Home() {
                                                 <span>{post.readTime}</span>
                                             </div>
 
-                                            <h3 className="text-base sm:text-lg lg:text-xl font-medium group-hover:text-muted-foreground transition-colors duration-300">
+                                            <h3 className="text-base sm:text-lg lg:text-xl font-medium group-hover:text-muted-foreground transition-theme">
                                                 {post.title}
                                             </h3>
 
                                             <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">{post.excerpt}</p>
 
-                                            <div className="flex items-center gap-2 text-sm text-muted-foreground group-hover:text-foreground transition-colors duration-300">
+                                            <div className="flex items-center gap-2 text-sm text-muted-foreground group-hover:text-foreground transition-theme">
                                                 <span>Read more</span>
                                                 <svg
-                                                    className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300"
+                                                    className="w-4 h-4 transform group-hover:translate-x-1 transition-theme"
                                                     fill="none"
                                                     stroke="currentColor"
                                                     viewBox="0 0 24 24"
@@ -563,11 +554,11 @@ export default function Home() {
                                         <div className="space-y-4">
                                             <Link
                                                 href="mailto:me@edgarcnp.dev"
-                                                className="group flex items-center gap-3 text-foreground hover:text-muted-foreground transition-colors duration-300"
+                                                className="group flex items-center gap-3 text-foreground hover:text-muted-foreground transition-theme"
                                             >
                                                 <span className="text-base sm:text-lg">me@edgarcnp.dev</span>
                                                 <svg
-                                                    className="w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-300"
+                                                    className="w-5 h-5 transform group-hover:translate-x-1 transition-theme"
                                                     fill="none"
                                                     stroke="currentColor"
                                                     viewBox="0 0 24 24"
@@ -597,10 +588,10 @@ export default function Home() {
                                             <Link
                                                 key={social.name}
                                                 href={social.url}
-                                                className="group p-4 border border-border rounded-lg hover:border-muted-foreground/50 transition-all duration-300 hover:shadow-sm"
+                                                className="group p-4 border border-border rounded-lg hover:border-muted-foreground/50 transition-theme hover:shadow-sm"
                                             >
                                                 <div className="space-y-2">
-                                                    <div className="text-foreground group-hover:text-muted-foreground transition-colors duration-300">
+                                                    <div className="text-foreground group-hover:text-muted-foreground transition-theme">
                                                         {social.name}
                                                     </div>
                                                     <div className="text-sm text-muted-foreground">{social.handle}</div>
@@ -621,12 +612,12 @@ export default function Home() {
                                 <div className="flex items-center gap-4">
                                     <button
                                         onClick={toggleTheme}
-                                        className="group p-3 rounded-lg border border-border hover:border-muted-foreground/50 transition-all duration-300"
+                                        className="group p-3 rounded-lg border border-border hover:border-muted-foreground/50 transition-theme"
                                         aria-label="Toggle theme"
                                     >
                                         {isDark ? (
                                             <svg
-                                                className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors duration-300"
+                                                className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-theme"
                                                 fill="currentColor"
                                                 viewBox="0 0 20 20"
                                             >
@@ -638,7 +629,7 @@ export default function Home() {
                                             </svg>
                                         ) : (
                                             <svg
-                                                className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors duration-300"
+                                                className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-theme"
                                                 fill="currentColor"
                                                 viewBox="0 0 20 20"
                                             >

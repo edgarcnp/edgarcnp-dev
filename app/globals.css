@@ -138,9 +138,9 @@
     html {
         /* Smooth gradient transitions for theme changes */
         transition:
-            background-color 1.2s cubic-bezier(0.4, 0, 0.2, 1),
-            color 1.2s cubic-bezier(0.4, 0, 0.2, 1),
-            border-color 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            background-color 1s cubic-bezier(0.4, 0, 0.2, 1),
+            color 1s cubic-bezier(0.4, 0, 0.2, 1),
+            border-color 1s cubic-bezier(0.4, 0, 0.2, 1);
         /* Ensure smooth touch scrolling on mobile */
         -webkit-overflow-scrolling: touch;
         overscroll-behavior: none;
@@ -148,21 +148,16 @@
 
     body {
         @apply bg-background text-foreground;
-        transition:
-            background-color 1.2s cubic-bezier(0.4, 0, 0.2, 1),
-            color 1.2s cubic-bezier(0.4, 0, 0.2, 1);
         /* Ensure smooth touch scrolling on mobile */
         -webkit-overflow-scrolling: touch;
         overscroll-behavior: none;
     }
 
-    /* Smooth transitions for all elements */
+    /* Simple universal transitions for smooth theme changes */
     * {
-        transition:
-            background-color 1.2s cubic-bezier(0.4, 0, 0.2, 1),
-            color 1.2s cubic-bezier(0.4, 0, 0.2, 1),
-            border-color 1.2s cubic-bezier(0.4, 0, 0.2, 1),
-            box-shadow 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: color 1s cubic-bezier(0.4, 0, 0.2, 1),
+            background-color 1s cubic-bezier(0.4, 0, 0.2, 1),
+            border-color 1s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     /* Ensure smooth touch scrolling on mobile devices */
@@ -187,36 +182,19 @@
         animation: fade-out-down 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
-
-    /* Theme transition utilities - using same duration as base for consistency */
-    .theme-transitioning {
-        transition:
-            background-color 1.2s cubic-bezier(0.4, 0, 0.2, 1),
-            color 1.2s cubic-bezier(0.4, 0, 0.2, 1),
-            border-color 1.2s cubic-bezier(0.4, 0, 0.2, 1),
-            box-shadow 1.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    /* Custom transition utilities for consistency */
+    .transition-theme {
+        transition: color 1s cubic-bezier(0.4, 0, 0.2, 1),
+            background-color 1s cubic-bezier(0.4, 0, 0.2, 1),
+            border-color 1s cubic-bezier(0.4, 0, 0.2, 1),
+            box-shadow 1s cubic-bezier(0.4, 0, 0.2, 1),
+            transform 1s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .theme-transitioning * {
-        transition:
-            background-color 1.2s cubic-bezier(0.4, 0, 0.2, 1),
-            color 1.2s cubic-bezier(0.4, 0, 0.2, 1),
-            border-color 1.2s cubic-bezier(0.4, 0, 0.2, 1),
-            box-shadow 1.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    }
-
-    /* Enhanced transitions for specific elements - consistent timing */
-    .theme-transitioning nav,
-    .theme-transitioning button,
-    .theme-transitioning .navbar,
-    .theme-transitioning header,
-    .theme-transitioning section,
-    .theme-transitioning footer {
-        transition:
-            background-color 1.2s cubic-bezier(0.4, 0, 0.2, 1),
-            color 1.2s cubic-bezier(0.4, 0, 0.2, 1),
-            border-color 1.2s cubic-bezier(0.4, 0, 0.2, 1),
-            box-shadow 1.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    /* Main container background transition like gradient overlays */
+    .main-background-container {
+        background-color: var(--background);
+        transition: background-color 1s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     @keyframes fade-in-up {
@@ -289,7 +267,7 @@
     /* Theme toggle button animations */
     .theme-transitioning button[aria-label*="Switch"] {
         transform: scale(0.95);
-        transition: transform 0.2s ease-in-out;
+        transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .theme-transitioning button[aria-label*="Switch"]:hover {
@@ -470,7 +448,7 @@
         background: rgba(255, 255, 255, 0.1);
         border-radius: 50%;
         transform: translate(-50%, -50%);
-        transition: width 0.3s ease, height 0.3s ease;
+        transition: width 1s cubic-bezier(0.4, 0, 0.2, 1), height 1s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .theme-toggle-button:hover::before {
@@ -483,13 +461,13 @@
         background-color: var(--background);
         mask: linear-gradient(to bottom, black 0%, black 50%, transparent 100%);
         -webkit-mask: linear-gradient(to bottom, black 0%, black 50%, transparent 100%);
-        transition: background-color 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: background-color 1s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .gradient-overlay-bottom {
         background-color: var(--background);
         mask: linear-gradient(to top, black 0%, black 50%, transparent 100%);
         -webkit-mask: linear-gradient(to top, black 0%, black 50%, transparent 100%);
-        transition: background-color 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: background-color 1s cubic-bezier(0.4, 0, 0.2, 1);
     }
 }
