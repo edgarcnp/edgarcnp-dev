@@ -7,10 +7,10 @@
 ## 📦 Getting Started
 
 # Install dependencies
-npm install
+pnpm install
 
 # Run development server
-npm run dev
+pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000) to view the portfolio.
 
