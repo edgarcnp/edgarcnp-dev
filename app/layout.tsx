@@ -5,38 +5,38 @@ import { ThemeProvider } from "@/components/theme-provider"
 import "./globals.css"
 
 const geist = Geist({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-geist",
+    subsets: ["latin"],
+    display: "swap",
+    variable: "--font-geist",
 })
 
 export const metadata: Metadata = {
-  title: "edgarcnp.dev",
-  description: "Personal Website of Edgar Christian",
-  generator: "Next.js",
-  icons: {
-    icon: "/e-icon.ico",
-  },
+    title: "edgarcnp.dev",
+    description: "Personal Website of Edgar Christian",
+    generator: "Next.js",
+    icons: {
+        icon: "/e-icon.ico",
+    },
 }
 
 export default function RootLayout({
-  children,
+    children,
 }: Readonly<{
-  children: React.ReactNode
+    children: React.ReactNode
 }>) {
-  return (
-    <html lang="en" className={geist.variable} suppressHydrationWarning>
-      <body className="font-sans antialiased" suppressHydrationWarning>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem={false}
-          disableTransitionOnChange={false}
-          storageKey="edgarcnp-theme"
-        >
-          {children}
-        </ThemeProvider>
-      </body>
-    </html>
-  )
+    return (
+        <html lang="en" className={geist.variable} suppressHydrationWarning>
+            <body className="font-sans antialiased" suppressHydrationWarning>
+                <ThemeProvider
+                    attribute="class"
+                    defaultTheme="dark"
+                    enableSystem={false}
+                    disableTransitionOnChange={false}
+                    storageKey="edgarcnp-theme"
+                >
+                    {children}
+                </ThemeProvider>
+            </body>
+        </html>
+    )
 }
