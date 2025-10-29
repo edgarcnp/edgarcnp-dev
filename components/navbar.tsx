@@ -84,20 +84,20 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
                         {/* Mobile Menu Button */}
                         <button
                             onClick={() => isMobileMenuOpen ? closeMobileMenu() : openMobileMenu()}
-                            className="sm:hidden flex-shrink-0 px-2 py-1 rounded-full hover:bg-white/10 transition-theme flex items-center justify-center group"
+                            className="sm:hidden flex-shrink-0 px-2 py-1 rounded-full hover:bg-white/10 transition-theme flex items-center justify-center group text-muted-foreground hover:text-foreground"
                             aria-label="Toggle mobile menu"
                         >
                             <div className="relative w-3.5 h-3.5 translate-y-[0.06rem]">
                                 <span
-                                    className={`absolute top-0 left-0 w-full h-0.5 bg-current transition-transform duration-500 ease-in-out ${isMobileMenuOpen ? 'rotate-45 translate-y-1.25' : 'translate-y-0'
+                                    className={`absolute top-0 left-0 w-full h-0.5 bg-current transition-all duration-500 ease-in-out ${isMobileMenuOpen ? 'rotate-45 translate-y-1.25' : 'translate-y-0'
                                         }`}
                                 />
                                 <span
-                                    className={`absolute top-1.25 left-0 w-full h-0.5 bg-current transition-opacity duration-500 ease-in-out ${isMobileMenuOpen ? 'opacity-0' : 'opacity-100'
+                                    className={`absolute top-1.25 left-0 w-full h-0.5 bg-current transition-all duration-500 ease-in-out ${isMobileMenuOpen ? 'opacity-0' : 'opacity-100'
                                         }`}
                                 />
                                 <span
-                                    className={`absolute top-2.5 left-0 w-full h-0.5 bg-current transition-transform duration-500 ease-in-out ${isMobileMenuOpen ? '-rotate-45 -translate-y-1.25' : 'translate-y-0'
+                                    className={`absolute top-2.5 left-0 w-full h-0.5 bg-current transition-all duration-500 ease-in-out ${isMobileMenuOpen ? '-rotate-45 -translate-y-1.25' : 'translate-y-0'
                                         }`}
                                 />
                             </div>
@@ -153,11 +153,11 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
                         {/* Theme Toggle Button */}
                         <button
                             onClick={onThemeToggle}
-                            className="flex-shrink-0 px-2 py-1 rounded-full hover:bg-white/10 transition-theme flex items-center justify-center group"
+                            className="flex-shrink-0 px-2 py-1 rounded-full hover:bg-white/10 transition-theme flex items-center justify-center group text-muted-foreground hover:text-foreground"
                             aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
                         >
                             <svg
-                                className="w-4 h-4 text-muted-foreground hover:text-foreground"
+                                className="w-4 h-4"
                                 fill="currentColor"
                                 viewBox="0 0 24 24"
                             >

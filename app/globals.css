@@ -206,6 +206,26 @@
             transform 1s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
+    /* Ensure text colors transition properly during theme changes */
+    .text-foreground,
+    .text-muted-foreground {
+        transition: color 1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .group:hover .group-hover\:text-foreground {
+        transition: color 1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .group:hover .group-hover\:text-muted-foreground {
+        transition: color 1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Ensure hover states also transition properly with theme changes */
+    .hover\:text-foreground:hover,
+    .hover\:text-muted-foreground:hover {
+        transition: color 1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
     /* Main container background transition like gradient overlays */
     .main-background-container {
         background-color: var(--background);
