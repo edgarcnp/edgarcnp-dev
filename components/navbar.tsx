@@ -89,15 +89,15 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
                         >
                             <div className="relative w-3.5 h-3.5 translate-y-[0.06rem]">
                                 <span
-                                    className={`absolute top-0 left-0 w-full h-0.5 bg-current transition-theme ${isMobileMenuOpen ? 'rotate-45 translate-y-1.25' : 'translate-y-0'
+                                    className={`absolute top-0 left-0 w-full h-0.5 bg-current transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'rotate-45 translate-y-1.25' : 'translate-y-0'
                                         }`}
                                 />
                                 <span
-                                    className={`absolute top-1.25 left-0 w-full h-0.5 bg-current transition-theme ${isMobileMenuOpen ? 'opacity-0' : 'opacity-100'
+                                    className={`absolute top-1.25 left-0 w-full h-0.5 bg-current transition-opacity duration-300 ease-in-out ${isMobileMenuOpen ? 'opacity-0' : 'opacity-100'
                                         }`}
                                 />
                                 <span
-                                    className={`absolute top-2.5 left-0 w-full h-0.5 bg-current transition-theme ${isMobileMenuOpen ? '-rotate-45 -translate-y-1.25' : 'translate-y-0'
+                                    className={`absolute top-2.5 left-0 w-full h-0.5 bg-current transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? '-rotate-45 -translate-y-1.25' : 'translate-y-0'
                                         }`}
                                 />
                             </div>
@@ -184,62 +184,54 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
                 </div>
             </nav>
 
-            {/* Mobile Menu Overlay */}
-            {(isMobileMenuOpen || isAnimating) && (
-                <div className="fixed inset-0 z-40 sm:hidden">
-                    <div
-                        className={`fixed inset-0 bg-background/80 backdrop-blur-sm transition-theme ${isMobileMenuOpen && !isAnimating ? 'opacity-100' : 'opacity-0'
-                            }`}
-                        onClick={closeMobileMenu}
-                    />
-                    <div className={`fixed top-16 left-4 right-4 bg-background/95 backdrop-blur-md border border-border rounded-2xl shadow-2xl transition-theme transform ${isMobileMenuOpen && !isAnimating ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-4 opacity-0 scale-95'
-                        }`}>
-                        <div className="p-4 space-y-2">
-                            {NAVBAR_SECTIONS.map((section, index) => (
-                                <button
-                                    key={section.id}
-                                    onClick={() => handleMobileNavigation(section.id)}
-                                    className={`w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-theme transform ${activeSection === section.id
-                                        ? "text-foreground bg-muted scale-105"
-                                        : "text-muted-foreground hover:text-foreground hover:bg-muted/50 hover:scale-105"
-                                        }`}
-                                    style={{
-                                        animationDelay: `${index * 50}ms`,
-                                        animation: isMobileMenuOpen && !isAnimating ? 'slideInUp 0.3s ease-out forwards' : 'none'
-                                    }}
-                                >
-                                    {section.label}
-                                </button>
-                            ))}
-                            <a
-                                href="https://status.edgarcnp.dev"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center gap-2 w-full text-left px-4 py-3 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-theme transform hover:scale-105"
-                                style={{
-                                    animationDelay: `${NAVBAR_SECTIONS.length * 50}ms`,
-                                    animation: isMobileMenuOpen && !isAnimating ? 'slideInUp 0.3s ease-out forwards' : 'none'
-                                }}
+            {/* Mobile Menu Overlay - Always in DOM for smooth animations */}
+            <div className={`fixed inset-0 z-40 sm:hidden ${isMobileMenuOpen || isAnimating ? 'opacity-100' : 'opacity-0 pointer-events-none'}`} style={{ visibility: isMobileMenuOpen || isAnimating ? 'visible' : 'hidden' }}>
+                <div
+                    className={`fixed inset-0 bg-background/80 backdrop-blur-sm transition-opacity duration-300 ease-out ${isMobileMenuOpen ? 'opacity-100' : 'opacity-0'
+                        }`}
+                    onClick={closeMobileMenu}
+                />
+                <div
+                    className={`fixed top-16 left-4 right-4 bg-background/95 backdrop-blur-md border border-border rounded-2xl shadow-2xl transition-all duration-300 ease-out ${isMobileMenuOpen ? 'translate-y-0 opacity-100 scale-100' : '-translate-y-2 opacity-0 scale-95'
+                        }`}
+                >
+                    <div className="p-4 space-y-2">
+                        {NAVBAR_SECTIONS.map((section, index) => (
+                            <button
+                                key={section.id}
+                                onClick={() => handleMobileNavigation(section.id)}
+                                className={`w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-theme ${activeSection === section.id
+                                    ? "text-foreground bg-accent font-semibold"
+                                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                                    }`}
                             >
-                                Status
-                                <svg
-                                    className="w-3 h-3"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                                    />
-                                </svg>
-                            </a>
-                        </div>
+                                {section.label}
+                            </button>
+                        ))}
+                        <a
+                            href="https://status.edgarcnp.dev"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 w-full text-left px-4 py-3 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-theme"
+                        >
+                            Status
+                            <svg
+                                className="w-3 h-3"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                                />
+                            </svg>
+                        </a>
                     </div>
                 </div>
-            )}
+            </div>
         </>
     )
 }
