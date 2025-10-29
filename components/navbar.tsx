@@ -89,15 +89,15 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
                         >
                             <div className="relative w-3.5 h-3.5 translate-y-[0.06rem]">
                                 <span
-                                    className={`absolute top-0 left-0 w-full h-0.5 bg-current transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'rotate-45 translate-y-1.25' : 'translate-y-0'
+                                    className={`absolute top-0 left-0 w-full h-0.5 bg-current transition-transform duration-500 ease-in-out ${isMobileMenuOpen ? 'rotate-45 translate-y-1.25' : 'translate-y-0'
                                         }`}
                                 />
                                 <span
-                                    className={`absolute top-1.25 left-0 w-full h-0.5 bg-current transition-opacity duration-300 ease-in-out ${isMobileMenuOpen ? 'opacity-0' : 'opacity-100'
+                                    className={`absolute top-1.25 left-0 w-full h-0.5 bg-current transition-opacity duration-500 ease-in-out ${isMobileMenuOpen ? 'opacity-0' : 'opacity-100'
                                         }`}
                                 />
                                 <span
-                                    className={`absolute top-2.5 left-0 w-full h-0.5 bg-current transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? '-rotate-45 -translate-y-1.25' : 'translate-y-0'
+                                    className={`absolute top-2.5 left-0 w-full h-0.5 bg-current transition-transform duration-500 ease-in-out ${isMobileMenuOpen ? '-rotate-45 -translate-y-1.25' : 'translate-y-0'
                                         }`}
                                 />
                             </div>
@@ -153,32 +153,24 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
                         {/* Theme Toggle Button */}
                         <button
                             onClick={onThemeToggle}
-                            className="flex-shrink-0 px-2 py-1 rounded-full hover:bg-white/10 transition-theme flex items-center justify-center"
+                            className="flex-shrink-0 px-2 py-1 rounded-full hover:bg-white/10 transition-theme flex items-center justify-center group"
                             aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
                         >
-                            {isDark ? (
-                                <svg
-                                    className="w-4 h-4 text-muted-foreground hover:text-foreground transition-theme"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                    aria-hidden="true"
-                                >
-                                    <path
-                                        fillRule="evenodd"
-                                        d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-                                        clipRule="evenodd"
-                                    />
-                                </svg>
-                            ) : (
-                                <svg
-                                    className="w-4 h-4 text-muted-foreground hover:text-foreground transition-theme"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                    aria-hidden="true"
-                                >
-                                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-                                </svg>
-                            )}
+                            <svg
+                                className="w-4 h-4 text-muted-foreground hover:text-foreground"
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                {/* Sun rays that rotate and scale to form moon */}
+                                <g className={`transition-all duration-1000 ease-in-out origin-center ${isDark ? 'opacity-0 scale-0 rotate-180' : 'opacity-100 scale-100 rotate-0'}`}>
+                                    <circle cx="12" cy="12" r="3" />
+                                    <path d="M12 5L12 3M12 21L12 19M5 12L3 12M21 12L19 12M16.95 7.05L18.36 5.64M18.36 18.36L16.95 16.95M7.05 16.95L5.64 18.36M5.64 5.64L7.05 7.05" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                                </g>
+                                {/* Moon shape that appears when sun rays disappear */}
+                                <g className={`transition-all duration-1000 ease-in-out origin-center ${isDark ? 'opacity-100 scale-100 rotate-0' : 'opacity-0 scale-0 -rotate-180'}`}>
+                                    <path d="M9.5 5a7.5 7.5 0 0 0 8.5 8.5A7.5 7.5 0 1 1 9.5 5z" />
+                                </g>
+                            </svg>
                         </button>
                     </div>
                 </div>
