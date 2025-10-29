@@ -84,7 +84,7 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
                         {/* Mobile Menu Button */}
                         <button
                             onClick={() => isMobileMenuOpen ? closeMobileMenu() : openMobileMenu()}
-                            className="sm:hidden flex-shrink-0 px-2 py-1 rounded-full hover:bg-white/10 transition-theme flex items-center justify-center group text-muted-foreground hover:text-foreground"
+                            className="sm:hidden flex-shrink-0 px-2 py-1 rounded-full hover:bg-white/10 transition-theme flex items-center justify-center group text-foreground"
                             aria-label="Toggle mobile menu"
                         >
                             <div className="relative w-3.5 h-3.5 translate-y-[0.06rem]">
@@ -153,11 +153,11 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
                         {/* Theme Toggle Button */}
                         <button
                             onClick={onThemeToggle}
-                            className="flex-shrink-0 px-2 py-1 rounded-full hover:bg-white/10 transition-theme flex items-center justify-center group text-muted-foreground hover:text-foreground"
+                            className="flex-shrink-0 px-2 py-1 rounded-full hover:bg-white/10 transition-theme flex items-center justify-center group text-foreground"
                             aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
                         >
                             <svg
-                                className="w-4 h-4"
+                                className="w-4 h-4 transition-colors duration-1000 ease-in-out"
                                 fill="currentColor"
                                 viewBox="0 0 24 24"
                             >

@@ -617,11 +617,11 @@ export default function Home() {
                                 <div className="flex items-center gap-4">
                                     <button
                                         onClick={toggleTheme}
-                                        className="group p-3 rounded-lg border border-border hover:border-muted-foreground/50 transition-theme text-muted-foreground hover:text-foreground"
+                                        className="group p-3 rounded-lg border border-border hover:border-muted-foreground/50 transition-theme text-muted-foreground"
                                         aria-label="Toggle theme"
                                     >
                                         <svg
-                                            className="w-4 h-4"
+                                            className="w-4 h-4 transition-colors duration-1000 ease-in-out"
                                             fill="currentColor"
                                             viewBox="0 0 20 20"
                                         >
