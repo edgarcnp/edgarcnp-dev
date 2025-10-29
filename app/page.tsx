@@ -6,35 +6,12 @@ import { useTheme } from "next-themes"
 import { Navbar } from "@/components/navbar"
 import { Loader } from "@/components/loader"
 import { ClientOnly } from "@/components/client-only"
-
-// Constants
-const SCROLL_DELAY = 300
-const SCROLL_DURATION = 600
-const SECTIONS = ["intro", "work", "thoughts", "footer"]
-const SECTION_NAMES: Record<string, string> = {
-    intro: "Home",
-    work: "Work",
-    thoughts: "Thoughts",
-    footer: "Contact",
-}
+import { smoothScrollTo } from "@/lib/scroll-utils"
+import { useThemeDetection } from "@/lib/theme-utils"
+import { NAVIGATION, AVAILABILITY_STATUS, STATUS_CONFIG } from "@/lib/constants"
 
 // Availability status - change this to switch status indicators
-const AVAILABILITY_STATUS = "busy" // Options: "available" | "busy" | "dnd"
-
-const STATUS_CONFIG = {
-    available: {
-        color: "bg-green-500",
-        text: "Available for work"
-    },
-    busy: {
-        color: "bg-yellow-500",
-        text: "Busy with projects"
-    },
-    dnd: {
-        color: "bg-red-500",
-        text: "Not available"
-    }
-} as const
+const CURRENT_AVAILABILITY_STATUS: keyof typeof STATUS_CONFIG = "busy" // Options: "available" | "busy" | "dnd"
 
 export default function Home() {
     const { theme, setTheme, resolvedTheme } = useTheme()
@@ -42,47 +19,14 @@ export default function Home() {
     const lastScrollTimeRef = useRef(0)
     const sectionsRef = useRef<Map<string, HTMLElement | null>>(new Map())
     const [currentYear, setCurrentYear] = useState<number | null>(null)
-    const [mounted, setMounted] = useState(false)
     const [isTouchDevice, setIsTouchDevice] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
 
-    // Use resolvedTheme for more reliable theme detection
-    const isDark = mounted && resolvedTheme ? (resolvedTheme === "dark") : true // Default to dark during SSR
-
-    const smoothScrollTo = (element: HTMLElement, duration = SCROLL_DURATION) => {
-        const startPosition = window.scrollY
-        const targetPosition = element.offsetTop
-        const distance = targetPosition - startPosition
-        let start: number | null = null
-
-        const easeInOutCubic = (t: number) => {
-            return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2
-        }
-
-        const animation = (currentTime: number) => {
-            if (start === null) start = currentTime
-            const elapsed = currentTime - start
-            const progress = Math.min(elapsed / duration, 1)
-            const ease = easeInOutCubic(progress)
-
-            window.scrollTo({
-                top: startPosition + distance * ease,
-                behavior: 'auto'
-            })
-
-            if (progress < 1) {
-                requestAnimationFrame(animation)
-            }
-        }
-
-        requestAnimationFrame(animation)
-    }
+    // Use custom hook for theme detection
+    const { isDark, mounted } = useThemeDetection('dark') // Default to dark during SSR
 
 
     useEffect(() => {
-        // Set mounted to true after component mounts
-        setMounted(true)
-
         // Set current year after mount to ensure consistency
         setCurrentYear(new Date().getFullYear())
 
@@ -92,6 +36,25 @@ export default function Home() {
 
         // Don't manually toggle the dark class - let next-themes handle it
         // This prevents conflicts with the theme provider's own class management
+
+        // Determine initial active section based on current scroll position
+        const updateActiveSectionOnLoad = () => {
+            const sections = NAVIGATION.SECTIONS.map(id => document.getElementById(id)).filter(Boolean) as HTMLElement[]
+            const scrollPosition = window.scrollY + window.innerHeight / 2
+
+            for (let i = sections.length - 1; i >= 0; i--) {
+                const section = sections[i]
+                if (section && section.offsetTop <= scrollPosition) {
+                    setActiveSection(section.id)
+                    break
+                }
+            }
+        }
+
+        // Update active section after a short delay to ensure DOM is ready
+        const timer = setTimeout(updateActiveSectionOnLoad, 100)
+
+        return () => clearTimeout(timer)
 
     }, [])
 
@@ -121,18 +84,34 @@ export default function Home() {
     }, [])
 
     useEffect(() => {
-        // Make the first section visible immediately on load
+        // Set the active section based on current scroll position
         const timeoutId = setTimeout(() => {
+            const sections = NAVIGATION.SECTIONS.map(id => document.getElementById(id)).filter(Boolean) as HTMLElement[]
+            const scrollPosition = window.scrollY + (window.innerHeight / 2)
+
+            // Find which section is currently in view
+            let currentSectionId = "intro" // Default to intro if no section is found
+
+            for (let i = sections.length - 1; i >= 0; i--) {
+                const section = sections[i]
+                if (section && section.offsetTop <= scrollPosition) {
+                    currentSectionId = section.id
+                    break
+                }
+            }
+
             const firstSection = document.getElementById("intro")
             if (firstSection) {
                 if (isTouchDevice) {
-                    // For touch devices, just set active section
-                    setActiveSection("intro")
+                    // For touch devices, set the current section based on scroll position
+                    setActiveSection(currentSectionId)
                 } else {
-                    // For desktop, add animation classes
-                    firstSection.classList.add("animate-fade-in-up")
-                    firstSection.classList.remove("opacity-0")
-                    setActiveSection("intro")
+                    // For desktop, add animation classes to the first section if it's in view
+                    if (currentSectionId === "intro") {
+                        firstSection.classList.add("animate-fade-in-up")
+                        firstSection.classList.remove("opacity-0")
+                    }
+                    setActiveSection(currentSectionId)
                 }
             }
         }, 200)
@@ -141,7 +120,7 @@ export default function Home() {
     }, [isTouchDevice])
 
     useEffect(() => {
-        const sectionName = SECTION_NAMES[activeSection] || "Home"
+        const sectionName = NAVIGATION.SECTION_NAMES[activeSection as keyof typeof NAVIGATION.SECTION_NAMES] || "Home"
         document.title = `edgarcnp.dev | ${sectionName}`
     }, [activeSection])
 
@@ -149,7 +128,7 @@ export default function Home() {
         // For mobile/tablet devices, use simple scroll-based section detection
         if (isTouchDevice) {
             const handleScroll = () => {
-                const sections = SECTIONS.map(id => document.getElementById(id)).filter(Boolean) as HTMLElement[]
+                const sections = NAVIGATION.SECTIONS.map(id => document.getElementById(id)).filter(Boolean) as HTMLElement[]
                 const scrollPosition = window.scrollY + window.innerHeight / 2
 
                 for (let i = sections.length - 1; i >= 0; i--) {
@@ -196,8 +175,30 @@ export default function Home() {
 
         // Use a timeout to ensure DOM elements are ready
         const timeoutId = setTimeout(() => {
+            // First, determine the current section based on scroll position
+            const sections = NAVIGATION.SECTIONS.map(id => document.getElementById(id)).filter(Boolean) as HTMLElement[]
+            const scrollPosition = window.scrollY + (window.innerHeight / 2)
+
+            // Find which section is currently in view
+            let currentSectionId = "intro" // Default to intro if no section is found
+
+            for (let i = sections.length - 1; i >= 0; i--) {
+                const section = sections[i]
+                if (section && section.offsetTop <= scrollPosition) {
+                    currentSectionId = section.id
+                    break
+                }
+            }
+            setActiveSection(currentSectionId)
+
+            // Then set up the observers
             sectionsRef.current.forEach((section) => {
                 if (section) {
+                    // Add animation classes to the current section if it's already in view
+                    if (section.id === currentSectionId) {
+                        section.classList.add("animate-fade-in-up")
+                        section.classList.remove("opacity-0")
+                    }
                     fadeInObserver.observe(section)
                     fadeOutObserver.observe(section)
                 }
@@ -220,16 +221,16 @@ export default function Home() {
         const handleWheel = (e: WheelEvent) => {
             const now = Date.now()
 
-            if (now - lastScrollTimeRef.current < SCROLL_DELAY) {
+            if (now - lastScrollTimeRef.current < NAVIGATION.SCROLL_DELAY) {
                 e.preventDefault()
                 return
             }
 
-            const currentIndex = SECTIONS.indexOf(activeSection)
+            const currentIndex = NAVIGATION.SECTIONS.indexOf(activeSection)
             let nextIndex = currentIndex
 
             if (e.deltaY > 0) {
-                nextIndex = Math.min(currentIndex + 1, SECTIONS.length - 1)
+                nextIndex = Math.min(currentIndex + 1, NAVIGATION.SECTIONS.length - 1)
             } else {
                 nextIndex = Math.max(currentIndex - 1, 0)
             }
@@ -238,9 +239,9 @@ export default function Home() {
                 e.preventDefault()
                 lastScrollTimeRef.current = now
 
-                const targetSection = document.getElementById(SECTIONS[nextIndex])
+                const targetSection = document.getElementById(NAVIGATION.SECTIONS[nextIndex])
                 if (targetSection) {
-                    smoothScrollTo(targetSection)
+                    smoothScrollTo(targetSection, { duration: NAVIGATION.SCROLL_DURATION })
                 }
             }
         }
@@ -252,16 +253,16 @@ export default function Home() {
 
             const now = Date.now()
 
-            if (now - lastScrollTimeRef.current < SCROLL_DELAY) {
+            if (now - lastScrollTimeRef.current < NAVIGATION.SCROLL_DELAY) {
                 e.preventDefault()
                 return
             }
 
-            const currentIndex = SECTIONS.indexOf(activeSection)
+            const currentIndex = NAVIGATION.SECTIONS.indexOf(activeSection)
             let nextIndex = currentIndex
 
             if (e.key === "PageDown") {
-                nextIndex = Math.min(currentIndex + 1, SECTIONS.length - 1)
+                nextIndex = Math.min(currentIndex + 1, NAVIGATION.SECTIONS.length - 1)
             } else if (e.key === "PageUp") {
                 nextIndex = Math.max(currentIndex - 1, 0)
             }
@@ -270,9 +271,9 @@ export default function Home() {
                 e.preventDefault()
                 lastScrollTimeRef.current = now
 
-                const targetSection = document.getElementById(SECTIONS[nextIndex])
+                const targetSection = document.getElementById(NAVIGATION.SECTIONS[nextIndex])
                 if (targetSection) {
-                    smoothScrollTo(targetSection)
+                    smoothScrollTo(targetSection, { duration: NAVIGATION.SCROLL_DURATION })
                 }
             }
         }
@@ -306,7 +307,7 @@ export default function Home() {
                 } else {
                     // Use custom smooth scrolling for desktop
                     lastScrollTimeRef.current = Date.now()
-                    smoothScrollTo(targetSection)
+                    smoothScrollTo(targetSection, { duration: NAVIGATION.SCROLL_DURATION })
                 }
             }
         }
@@ -324,13 +325,13 @@ export default function Home() {
 
                 <nav className="fixed left-8 top-1/2 -translate-y-1/2 z-10 hidden lg:block">
                     <div className="flex flex-col gap-4">
-                        {SECTIONS.map((section) => (
+                        {NAVIGATION.SECTIONS.map((section) => (
                             <button
                                 key={section}
                                 onClick={() => handleNavigation(section)}
                                 className={`w-2 h-8 rounded-full transition-theme ${activeSection === section ? "bg-foreground" : "bg-muted-foreground/30 hover:bg-muted-foreground/60"
                                     }`}
-                                aria-label={`Navigate to ${SECTION_NAMES[section]}`}
+                                aria-label={`Navigate to ${NAVIGATION.SECTION_NAMES[section as keyof typeof NAVIGATION.SECTION_NAMES]}`}
                             />
                         ))}
                     </div>
@@ -360,8 +361,8 @@ export default function Home() {
 
                                     <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 text-sm text-muted-foreground">
                                         <div className="flex items-center gap-2">
-                                            <div className={`w-2 h-2 ${STATUS_CONFIG[AVAILABILITY_STATUS].color} rounded-full animate-pulse`}></div>
-                                            {STATUS_CONFIG[AVAILABILITY_STATUS].text}
+                                            <div className={`w-2 h-2 ${STATUS_CONFIG[CURRENT_AVAILABILITY_STATUS].color} rounded-full animate-pulse`}></div>
+                                            {STATUS_CONFIG[CURRENT_AVAILABILITY_STATUS].text}
                                         </div>
                                         <div>Remote - Indonesia</div>
                                     </div>

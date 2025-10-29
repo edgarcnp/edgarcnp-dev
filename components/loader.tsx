@@ -1,23 +1,16 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useTheme } from "next-themes"
+import { useThemeDetection } from "@/lib/theme-utils"
 
 interface LoaderProps {
     onLoadComplete: () => void
 }
 
 export function Loader({ onLoadComplete }: LoaderProps) {
-    const { resolvedTheme } = useTheme()
+    const { isDark } = useThemeDetection('dark') // Default to dark for loader
     const [progress, setProgress] = useState(0)
     const [isVisible, setIsVisible] = useState(true)
-    const [mounted, setMounted] = useState(false)
-
-    useEffect(() => {
-        setMounted(true)
-    }, [])
-
-    const isDark = mounted && resolvedTheme ? resolvedTheme === "dark" : false
 
     useEffect(() => {
         // Simulate loading progress
