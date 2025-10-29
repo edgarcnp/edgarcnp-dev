@@ -192,7 +192,7 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
                     onClick={closeMobileMenu}
                 />
                 <div
-                    className={`fixed top-16 left-4 right-4 bg-background/95 backdrop-blur-md border border-border rounded-2xl shadow-2xl transition-all duration-300 ease-out ${isMobileMenuOpen ? 'translate-y-0 opacity-100 scale-100' : '-translate-y-2 opacity-0 scale-95'
+                    className={`fixed top-16 left-4 right-4 bg-background/95 backdrop-blur-md border border-border rounded-2xl shadow-2xl transition-theme ${isMobileMenuOpen ? 'translate-y-0 opacity-100 scale-100' : '-translate-y-2 opacity-0 scale-95'
                         }`}
                 >
                     <div className="p-4 space-y-2">
