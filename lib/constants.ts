@@ -19,6 +19,7 @@ export const AVAILABILITY_STATUS = {
 } as const;
 
 export type AvailabilityStatus = keyof typeof AVAILABILITY_STATUS;
+export type SectionName = typeof NAVIGATION.SECTIONS[number];
 
 // Status configuration
 export const STATUS_CONFIG = {

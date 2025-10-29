@@ -28,6 +28,10 @@ export const smoothScrollTo = (
     const startPosition = window.scrollY;
     const targetPosition = element.offsetTop;
     const distance = targetPosition - startPosition;
+
+    // Early return if no distance to scroll
+    if (Math.abs(distance) < 1) return;
+
     let start: number | null = null;
 
     const animation = (currentTime: number) => {

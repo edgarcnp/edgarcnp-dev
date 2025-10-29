@@ -22,12 +22,5 @@ export const useThemeDetection = (defaultTheme: 'dark' | 'light' = 'dark'): UseT
         setIsDark(currentIsDark);
     }, [resolvedTheme, mounted, defaultTheme]);
 
-    // Update isDark when resolvedTheme changes
-    useEffect(() => {
-        if (mounted) {
-            setIsDark(resolvedTheme === 'dark');
-        }
-    }, [resolvedTheme, mounted]);
-
     return { isDark, mounted };
 };

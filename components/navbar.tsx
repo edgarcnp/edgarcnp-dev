@@ -14,7 +14,7 @@ const NAVBAR_SECTIONS = [
     { id: "work", label: "Work" },
     { id: "thoughts", label: "Thoughts" },
     { id: "footer", label: "Contact" },
-]
+] as const
 
 export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: NavbarProps) {
     const [isScrolled, setIsScrolled] = useState(false)
@@ -39,7 +39,7 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
             window.removeEventListener("scroll", handleScroll)
             if (throttleTimer) clearTimeout(throttleTimer)
         }
-    }, [])
+    }, []) // Dependency array is correct as no dependencies change
 
     const handleMobileNavigation = (sectionId: string) => {
         onNavigate(sectionId)
@@ -200,8 +200,8 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
                                     key={section.id}
                                     onClick={() => handleMobileNavigation(section.id)}
                                     className={`w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-theme transform ${activeSection === section.id
-                                            ? "text-foreground bg-muted scale-105"
-                                            : "text-muted-foreground hover:text-foreground hover:bg-muted/50 hover:scale-105"
+                                        ? "text-foreground bg-muted scale-105"
+                                        : "text-muted-foreground hover:text-foreground hover:bg-muted/50 hover:scale-105"
                                         }`}
                                     style={{
                                         animationDelay: `${index * 50}ms`,

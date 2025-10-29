@@ -5,16 +5,15 @@ import { useEffect, useRef, useState, useCallback } from "react"
 import { useTheme } from "next-themes"
 import { Navbar } from "@/components/navbar"
 import { Loader } from "@/components/loader"
-import { ClientOnly } from "@/components/client-only"
 import { smoothScrollTo } from "@/lib/scroll-utils"
 import { useThemeDetection } from "@/lib/theme-utils"
-import { NAVIGATION, AVAILABILITY_STATUS, STATUS_CONFIG } from "@/lib/constants"
+import { NAVIGATION, STATUS_CONFIG } from "@/lib/constants"
 
 // Availability status - change this to switch status indicators
 const CURRENT_AVAILABILITY_STATUS: keyof typeof STATUS_CONFIG = "busy" // Options: "available" | "busy" | "dnd"
 
 export default function Home() {
-    const { theme, setTheme, resolvedTheme } = useTheme()
+    const { setTheme, resolvedTheme } = useTheme()
     const [activeSection, setActiveSection] = useState("")
     const lastScrollTimeRef = useRef(0)
     const sectionsRef = useRef<Map<string, HTMLElement | null>>(new Map())
@@ -23,7 +22,7 @@ export default function Home() {
     const [isLoading, setIsLoading] = useState(true)
 
     // Use custom hook for theme detection
-    const { isDark, mounted } = useThemeDetection('dark') // Default to dark during SSR
+    const { isDark } = useThemeDetection('dark') // Default to dark during SSR
 
 
     useEffect(() => {
@@ -33,9 +32,6 @@ export default function Home() {
         // Detect if device supports touch (mobile/tablet)
         const touchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
         setIsTouchDevice(touchDevice)
-
-        // Don't manually toggle the dark class - let next-themes handle it
-        // This prevents conflicts with the theme provider's own class management
 
         // Determine initial active section based on current scroll position
         const updateActiveSectionOnLoad = () => {
@@ -382,7 +378,7 @@ export default function Home() {
                                 <div className="space-y-4">
                                     <div className="text-xs sm:text-sm text-muted-foreground font-mono">AREA OF EXPERTISE</div>
                                     <div className="flex flex-wrap gap-2">
-                                        {[
+                                        {([
                                             "Rust",
                                             "C/C++",
                                             "Python",
@@ -394,7 +390,7 @@ export default function Home() {
                                             "Embedded System",
                                             "IoT",
                                             "FPGA",
-                                        ].map((skill) => (
+                                        ] as const).map((skill) => (
                                             <span
                                                 key={skill}
                                                 className="px-2 sm:px-3 py-1 text-xs border border-border rounded-full hover:border-muted-foreground/50 transition-theme"
@@ -416,7 +412,7 @@ export default function Home() {
                             </div>
 
                             <div className="space-y-6 sm:space-y-8 lg:space-y-12">
-                                {[
+                                {([
                                     {
                                         year: "2023 - Present",
                                         role: "Freelance Software Engineer",
@@ -439,9 +435,9 @@ export default function Home() {
                                         description: "Helping a team of network engineers designing internal networks for small businesses.",
                                         tech: ["Cisco", "Cisco IOS", "Python"],
                                     },
-                                ].map((job, index) => (
+                                ] as const).map((job, index) => (
                                     <div
-                                        key={index}
+                                        key={`${job.year}-${job.role}`}
                                         className="group grid lg:grid-cols-12 gap-4 sm:gap-6 lg:gap-8 py-4 sm:py-6 lg:py-8 border-b border-border transition-theme"
                                     >
                                         <div className="lg:col-span-2 mb-2 lg:mb-0">
@@ -483,7 +479,7 @@ export default function Home() {
                             <h2 className="text-2xl sm:text-3xl md:text-4xl font-light">Recent Thoughts</h2>
 
                             <div className="grid gap-4 sm:gap-6 lg:gap-8 lg:grid-cols-2">
-                                {[
+                                {([
                                     {
                                         title: "The Future of Web Development",
                                         excerpt: "Exploring how AI and automation are reshaping the way we build for the web.",
@@ -508,9 +504,9 @@ export default function Home() {
                                         date: "Sep 2024",
                                         readTime: "4 min",
                                     },
-                                ].map((post, index) => (
+                                ] as const).map((post, index) => (
                                     <article
-                                        key={index}
+                                        key={`${post.date}-${post.title}`}
                                         className="group p-4 sm:p-6 lg:p-8 border border-border rounded-lg hover:border-muted-foreground/50 transition-theme hover:shadow-lg cursor-pointer"
                                     >
                                         <div className="space-y-3 sm:space-y-4">
@@ -588,12 +584,12 @@ export default function Home() {
                                     <div className="text-sm text-muted-foreground font-mono">ELSEWHERE</div>
 
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                        {[
+                                        {([
                                             { name: "GitHub", handle: "@edgarcnp", url: "https://github.com/edgarcnp" },
                                             { name: "Codeberg", handle: "@edgarcnp", url: "https://codeberg.org/edgarcnp" },
                                             { name: "𝕏", handle: "@edgarcnp", url: "https://x.com/edgarcnp" },
                                             { name: "LinkedIn", handle: "Edgar Christian", url: "#" },
-                                        ].map((social) => (
+                                        ] as const).map((social) => (
                                             <Link
                                                 key={social.name}
                                                 href={social.url}
