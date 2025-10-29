@@ -201,9 +201,10 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
                                 key={section.id}
                                 onClick={() => handleMobileNavigation(section.id)}
                                 className={`w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-theme ${activeSection === section.id
-                                    ? "text-foreground bg-accent font-semibold"
+                                    ? "text-foreground bg-muted font-semibold"
                                     : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
                                     }`}
+                                style={activeSection === section.id && !isDark ? { backgroundColor: 'oklch(0.9 0 0)' } : {}}
                             >
                                 {section.label}
                             </button>
