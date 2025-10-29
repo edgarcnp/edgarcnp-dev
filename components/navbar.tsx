@@ -187,7 +187,7 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
             {/* Mobile Menu Overlay - Always in DOM for smooth animations */}
             <div className={`fixed inset-0 z-40 sm:hidden ${isMobileMenuOpen || isAnimating ? 'opacity-100' : 'opacity-0 pointer-events-none'}`} style={{ visibility: isMobileMenuOpen || isAnimating ? 'visible' : 'hidden' }}>
                 <div
-                    className={`fixed inset-0 bg-background/80 backdrop-blur-sm transition-opacity duration-300 ease-out ${isMobileMenuOpen ? 'opacity-100' : 'opacity-0'
+                    className={`fixed inset-0 bg-background/80 backdrop-blur-sm transition-theme ${isMobileMenuOpen ? 'opacity-100' : 'opacity-0'
                         }`}
                     onClick={closeMobileMenu}
                 />
