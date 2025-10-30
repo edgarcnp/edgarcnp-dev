@@ -1,12 +1,13 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { type SectionName } from "@/lib/constants"
 
 interface NavbarProps {
-    activeSection: string
+    activeSection: SectionName
     isDark: boolean
     onThemeToggle: () => void
-    onNavigate: (section: string) => void
+    onNavigate: (section: SectionName) => void
 }
 
 const NAVBAR_SECTIONS = [
@@ -22,10 +23,11 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
     const [isAnimating, setIsAnimating] = useState(false)
 
     useEffect(() => {
+        let isMounted = true;
         let throttleTimer: NodeJS.Timeout | null = null
 
         const handleScroll = () => {
-            if (throttleTimer) return
+            if (throttleTimer || !isMounted) return
 
             setIsScrolled(window.scrollY > 10)
 
@@ -36,6 +38,7 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
 
         window.addEventListener("scroll", handleScroll)
         return () => {
+            isMounted = false;
             window.removeEventListener("scroll", handleScroll)
             if (throttleTimer) clearTimeout(throttleTimer)
         }

@@ -25,6 +25,11 @@ export default function Home() {
     const { isDark } = useThemeDetection('dark') // Default to dark during SSR
 
 
+    // Helper function to get all valid navigation sections
+    const getNavigationSections = useCallback((): HTMLElement[] => {
+        return NAVIGATION.SECTIONS.map(id => document.getElementById(id)).filter(Boolean) as HTMLElement[]
+    }, []);
+
     useEffect(() => {
         // Set current year after mount to ensure consistency
         setCurrentYear(new Date().getFullYear())
@@ -35,7 +40,7 @@ export default function Home() {
 
         // Determine initial active section based on current scroll position
         const updateActiveSectionOnLoad = () => {
-            const sections = NAVIGATION.SECTIONS.map(id => document.getElementById(id)).filter(Boolean) as HTMLElement[]
+            const sections = getNavigationSections()
             const scrollPosition = window.scrollY + window.innerHeight / 2
 
             for (let i = sections.length - 1; i >= 0; i--) {
@@ -54,7 +59,7 @@ export default function Home() {
 
         return () => clearTimeout(timer)
 
-    }, [])
+    }, [getNavigationSections])
 
 
     // Global smooth scroll handler for all anchor links
@@ -84,7 +89,7 @@ export default function Home() {
     useEffect(() => {
         // Set the active section based on current scroll position
         const timeoutId = setTimeout(() => {
-            const sections = NAVIGATION.SECTIONS.map(id => document.getElementById(id)).filter(Boolean) as HTMLElement[]
+            const sections = getNavigationSections()
             const scrollPosition = window.scrollY + (window.innerHeight / 2)
 
             // Find which section is currently in view
@@ -119,7 +124,7 @@ export default function Home() {
         }, 200)
 
         return () => clearTimeout(timeoutId)
-    }, [isTouchDevice])
+    }, [getNavigationSections, isTouchDevice])
 
     useEffect(() => {
         const sectionName = NAVIGATION.SECTION_NAMES[activeSection as keyof typeof NAVIGATION.SECTION_NAMES] || "Home"
@@ -130,7 +135,7 @@ export default function Home() {
         // For mobile/tablet devices, use simple scroll-based section detection
         if (isTouchDevice) {
             const handleScroll = () => {
-                const sections = NAVIGATION.SECTIONS.map(id => document.getElementById(id)).filter(Boolean) as HTMLElement[]
+                const sections = getNavigationSections()
                 const scrollPosition = window.scrollY + window.innerHeight / 2
 
                 for (let i = sections.length - 1; i >= 0; i--) {
@@ -182,7 +187,7 @@ export default function Home() {
         // Use a timeout to ensure DOM elements are ready
         const timeoutId = setTimeout(() => {
             // First, determine the current section based on scroll position
-            const sections = NAVIGATION.SECTIONS.map(id => document.getElementById(id)).filter(Boolean) as HTMLElement[]
+            const sections = getNavigationSections()
             const scrollPosition = window.scrollY + (window.innerHeight / 2)
 
             // Find which section is currently in view
@@ -218,7 +223,7 @@ export default function Home() {
             fadeInObserver.disconnect()
             fadeOutObserver.disconnect()
         }
-    }, [isTouchDevice])
+    }, [getNavigationSections, isTouchDevice])
 
     useEffect(() => {
         // Only enable magnetic scroll on desktop devices (non-touch)
@@ -292,7 +297,7 @@ export default function Home() {
             window.removeEventListener("wheel", handleWheel)
             window.removeEventListener("keydown", handleKeyDown)
         }
-    }, [activeSection, isTouchDevice])
+    }, [activeSection, isTouchDevice])  // Note: No need to add getNavigationSections here since it's not used in this effect
 
     const toggleTheme = useCallback(() => {
         // Set the new theme - transitions are handled by explicit CSS rules
@@ -628,53 +633,44 @@ export default function Home() {
 
                                 <div className="flex items-center gap-4">
                                     <button
-                                        onClick={toggleTheme}
-                                        className="group p-3 rounded-lg border border-border hover:border-muted-foreground/50 transition-theme text-muted-foreground"
-                                        aria-label="Toggle theme"
+                                        onClick={() => { window.location.href = 'mailto:me@edgarcnp.dev'; }}
+                                        className="group p-3 rounded-lg border border-border hover:border-muted-foreground/50 transition-all duration-300"
+                                        aria-label="Open chat"
                                     >
                                         <svg
-                                            className="w-4 h-4"
-                                            viewBox="0 0 32 32"
+                                            className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors duration-300"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
                                         >
-                                            {/* Sun rays that rotate and scale to form moon */}
-                                            <g className={`transition-all duration-1000 ease-in-out origin-center ${isDark ? 'opacity-0 scale-0 rotate-180' : 'opacity-100 scale-100 rotate-0'}`}>
-                                                <circle cx="16" cy="16" r="4" className="text-foreground" fill="currentColor" />
-                                                <path d="M16 6L16 4M16 28L16 26M6 16L4 16M28 16L26 16M22.6 9.4L24.48 7.52M24.48 24.48L22.6 22.6M9.4 22.6L7.52 24.48M7.52 7.52L9.4 9.4" className="text-foreground" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                                            </g>
-                                            {/* Moon shape that appears when sun rays disappear */}
-                                            <g className={`transition-all duration-1000 ease-in-out origin-center ${isDark ? 'opacity-100 scale-100 rotate-0' : 'opacity-0 scale-0 -rotate-180'}`}>
-                                                <defs>
-                                                    <mask id="moon-mask">
-                                                        <g transform="rotate(-30, 16, 16)">
-                                                            <rect width="32" height="32" fill="white" />
-                                                            <ellipse cx="22" cy="16" rx="10" ry="14" fill="black" />
-                                                        </g>
-                                                    </mask>
-                                                </defs>
-                                                <circle cx="16" cy="16" r="14" className="text-foreground" fill="currentColor" mask="url(#moon-mask)" />
-                                            </g>
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={2}
+                                                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                                            />
                                         </svg>
                                     </button>
 
                                     {/* Button Template */}
                                     {/* <button
-                  className="group p-3 rounded-lg border border-border hover:border-muted-foreground/50 transition-all duration-300"
-                  aria-label="Open chat"
-                >
-                  <svg
-                    className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors duration-300"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                    />
-                  </svg>
-                </button> */}
+                                    className="group p-3 rounded-lg border border-border hover:border-muted-foreground/50 transition-all duration-300"
+                                    aria-label="Open chat"
+                                    >
+                                    <svg
+                                        className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors duration-300"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                                        />
+                                    </svg>
+                                    </button> */}
                                 </div>
                             </div>
                         </div>
