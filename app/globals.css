@@ -211,6 +211,8 @@
         background-color: var(--muted);
     }
 
+
+
     .animate-fade-out-down {
         animation: fade-out-down 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
