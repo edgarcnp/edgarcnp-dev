@@ -31,6 +31,9 @@ export default function Home() {
     }, []);
 
     useEffect(() => {
+        // Set the title to "edgarcnp.dev" during loading
+        document.title = "edgarcnp.dev"
+
         // Set current year after mount to ensure consistency
         setCurrentYear(new Date().getFullYear())
 
@@ -127,9 +130,15 @@ export default function Home() {
     }, [getNavigationSections, isTouchDevice])
 
     useEffect(() => {
-        const sectionName = NAVIGATION.SECTION_NAMES[activeSection as keyof typeof NAVIGATION.SECTION_NAMES] || "Home"
-        document.title = `edgarcnp.dev | ${sectionName}`
-    }, [activeSection])
+        if (isLoading) {
+            // During loading, set the title to just "edgarcnp.dev"
+            document.title = "edgarcnp.dev"
+        } else {
+            // After loading, set the title to "edgarcnp.dev | *Section*"
+            const sectionName = NAVIGATION.SECTION_NAMES[activeSection as keyof typeof NAVIGATION.SECTION_NAMES] || "Home"
+            document.title = `edgarcnp.dev | ${sectionName}`
+        }
+    }, [activeSection, isLoading])
 
     useEffect(() => {
         // For mobile/tablet devices, use simple scroll-based section detection
@@ -328,7 +337,10 @@ export default function Home() {
 
     const handleLoadComplete = useCallback(() => {
         setIsLoading(false)
-    }, [])
+        // Update title to include section name after loading completes
+        const sectionName = NAVIGATION.SECTION_NAMES[activeSection as keyof typeof NAVIGATION.SECTION_NAMES] || "Home"
+        document.title = `edgarcnp.dev | ${sectionName}`
+    }, [activeSection])
 
     return (
         <>
