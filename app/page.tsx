@@ -7,14 +7,14 @@ import { Navbar } from "@/components/navbar"
 import { Loader } from "@/components/loader"
 import { smoothScrollTo } from "@/lib/scroll-utils"
 import { useThemeDetection } from "@/lib/theme-utils"
-import { NAVIGATION, STATUS_CONFIG } from "@/lib/constants"
+import { NAVIGATION, STATUS_CONFIG, type SectionName } from "@/lib/constants"
 
 // Availability status - change this to switch status indicators
 const CURRENT_AVAILABILITY_STATUS: keyof typeof STATUS_CONFIG = "busy" // Options: "available" | "busy" | "dnd"
 
 export default function Home() {
     const { setTheme, resolvedTheme } = useTheme()
-    const [activeSection, setActiveSection] = useState("")
+    const [activeSection, setActiveSection] = useState<SectionName>("intro")
     const lastScrollTimeRef = useRef(0)
     const sectionsRef = useRef<Map<string, HTMLElement | null>>(new Map())
     const [currentYear, setCurrentYear] = useState<number | null>(null)
@@ -41,7 +41,9 @@ export default function Home() {
             for (let i = sections.length - 1; i >= 0; i--) {
                 const section = sections[i]
                 if (section && section.offsetTop <= scrollPosition) {
-                    setActiveSection(section.id)
+                    if (NAVIGATION.SECTIONS.includes(section.id as SectionName)) {
+                        setActiveSection(section.id as SectionName)
+                    }
                     break
                 }
             }
@@ -100,14 +102,18 @@ export default function Home() {
             if (firstSection) {
                 if (isTouchDevice) {
                     // For touch devices, set the current section based on scroll position
-                    setActiveSection(currentSectionId)
+                    if (NAVIGATION.SECTIONS.includes(currentSectionId as SectionName)) {
+                        setActiveSection(currentSectionId as SectionName)
+                    }
                 } else {
                     // For desktop, add animation classes to the first section if it's in view
                     if (currentSectionId === "intro") {
                         firstSection.classList.add("animate-fade-in-up")
                         firstSection.classList.remove("opacity-0")
                     }
-                    setActiveSection(currentSectionId)
+                    if (NAVIGATION.SECTIONS.includes(currentSectionId as SectionName)) {
+                        setActiveSection(currentSectionId as SectionName)
+                    }
                 }
             }
         }, 200)
@@ -130,7 +136,9 @@ export default function Home() {
                 for (let i = sections.length - 1; i >= 0; i--) {
                     const section = sections[i]
                     if (section && section.offsetTop <= scrollPosition) {
-                        setActiveSection(section.id)
+                        if (NAVIGATION.SECTIONS.includes(section.id as SectionName)) {
+                            setActiveSection(section.id as SectionName)
+                        }
                         break
                     }
                 }
@@ -150,7 +158,9 @@ export default function Home() {
                     if (entry.isIntersecting) {
                         entry.target.classList.add("animate-fade-in-up")
                         entry.target.classList.remove("animate-fade-out-down")
-                        setActiveSection(entry.target.id)
+                        if (NAVIGATION.SECTIONS.includes(entry.target.id as SectionName)) {
+                            setActiveSection(entry.target.id as SectionName)
+                        }
                     }
                 })
             },
@@ -185,7 +195,9 @@ export default function Home() {
                     break
                 }
             }
-            setActiveSection(currentSectionId)
+            if (NAVIGATION.SECTIONS.includes(currentSectionId as SectionName)) {
+                setActiveSection(currentSectionId as SectionName)
+            }
 
             // Then set up the observers
             sectionsRef.current.forEach((section) => {
