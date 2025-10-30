@@ -10,7 +10,7 @@ interface LoaderProps {
 export function Loader({ onLoadComplete }: LoaderProps) {
     const { isDark } = useThemeDetection('dark') // Default to dark for loader
     const [progress, setProgress] = useState(0)
-    const [isVisible, setIsVisible] = useState(true)
+    const [shouldRender, setShouldRender] = useState(true)
 
     useEffect(() => {
         // Simulate loading progress
@@ -29,13 +29,12 @@ export function Loader({ onLoadComplete }: LoaderProps) {
             setProgress(100)
             clearInterval(progressInterval)
 
-            // Wait a bit for the progress bar to complete, then hide loader
             setTimeout(() => {
-                setIsVisible(false)
+                setShouldRender(false)
                 setTimeout(() => {
                     onLoadComplete()
-                }, 500) // Fade out duration
-            }, 300)
+                }, 1000) // Duration of fade out transition
+            }, 1000)
         }
 
         // Check if page is already loaded
@@ -57,10 +56,8 @@ export function Loader({ onLoadComplete }: LoaderProps) {
         }
     }, [onLoadComplete])
 
-    if (!isVisible) return null
-
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background transition-opacity duration-500">
+        <div className={`fixed inset-0 z-50 flex items-center justify-center bg-background transition-opacity duration-500 ${shouldRender ? 'opacity-100' : 'opacity-0'}`}>
             {/* Background pattern */}
             <div className="absolute inset-0 opacity-5">
                 <div className="absolute inset-0 bg-gradient-to-br from-foreground/10 via-transparent to-foreground/5"></div>
