@@ -44,7 +44,7 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
         }
     }, []) // Dependency array is correct as no dependencies change
 
-    const handleMobileNavigation = (sectionId: string) => {
+    const handleMobileNavigation = (sectionId: SectionName) => {
         onNavigate(sectionId)
         closeMobileMenu()
     }
@@ -194,7 +194,7 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
                     onClick={closeMobileMenu}
                 />
                 <div
-                    className={`fixed top-16 left-4 right-4 bg-background/95 backdrop-blur-md border border-border rounded-2xl shadow-2xl transition-theme ${isMobileMenuOpen ? 'translate-y-0 opacity-100 scale-100' : '-translate-y-2 opacity-0 scale-95'
+                    className={`fixed top-16 left-4 right-4 bg-background/95 backdrop-blur-md border border-border rounded-2xl shadow-2xl transition-theme ${isMobileMenuOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-100'
                         }`}
                     style={{
                         transitionProperty: 'transform, opacity, color, background-color, border-color, box-shadow',
