@@ -20,7 +20,6 @@ const NAVBAR_SECTIONS = [
 export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: NavbarProps) {
     const [isScrolled, setIsScrolled] = useState(false)
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-    const [isAnimating, setIsAnimating] = useState(false)
 
     useEffect(() => {
         let isMounted = true;
@@ -51,20 +50,15 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
 
     const closeMobileMenu = () => {
         setIsMobileMenuOpen(false)
-        setIsAnimating(true)
-        setTimeout(() => {
-            setIsAnimating(false)
-        }, 300)
     }
 
     const openMobileMenu = () => {
         setIsMobileMenuOpen(true)
-        setIsAnimating(false)
     }
 
     return (
         <>
-            <nav className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-2 pointer-events-none">
+            <nav className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-2 pointer-events-none transition-theme">
                 <div
                     className={`pointer-events-auto transition-theme ${isScrolled ? "backdrop-blur-sm bg-background/50 shadow-lg" : "backdrop-blur bg-background/40 shadow-md"
                         } rounded-full px-2 py-2`}
@@ -92,15 +86,15 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
                         >
                             <div className="relative w-3.5 h-3.5 translate-y-[0.06rem]">
                                 <span
-                                    className={`absolute top-0 left-0 w-full h-0.5 bg-current transition-all duration-500 ease-in-out ${isMobileMenuOpen ? 'rotate-45 translate-y-1.25' : 'translate-y-0'
+                                    className={`absolute top-0 left-0 w-full h-0.5 bg-current transition-all duration-300 ease-in-out ${isMobileMenuOpen ? 'rotate-45 translate-y-1.25' : 'translate-y-0'
                                         }`}
                                 />
                                 <span
-                                    className={`absolute top-1.25 left-0 w-full h-0.5 bg-current transition-all duration-500 ease-in-out ${isMobileMenuOpen ? 'opacity-0' : 'opacity-100'
+                                    className={`absolute top-1.25 left-0 w-full h-0.5 bg-current transition-all duration-300 ease-in-out ${isMobileMenuOpen ? 'opacity-0' : 'opacity-100'
                                         }`}
                                 />
                                 <span
-                                    className={`absolute top-2.5 left-0 w-full h-0.5 bg-current transition-all duration-500 ease-in-out ${isMobileMenuOpen ? '-rotate-45 -translate-y-1.25' : 'translate-y-0'
+                                    className={`absolute top-2.5 left-0 w-full h-0.5 bg-current transition-all duration-300 ease-in-out ${isMobileMenuOpen ? '-rotate-45 -translate-y-1.25' : 'translate-y-0'
                                         }`}
                                 />
                             </div>
@@ -187,19 +181,21 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
             </nav>
 
             {/* Mobile Menu Overlay - Always in DOM for smooth animations */}
-            <div className={`fixed inset-0 z-40 sm:hidden ${isMobileMenuOpen || isAnimating ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
+            <div className={`fixed inset-0 z-40 sm:hidden ${isMobileMenuOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}>
                 <div
-                    className={`fixed inset-0 bg-background/80 backdrop-blur-sm transition-theme ${isMobileMenuOpen ? 'opacity-100' : 'opacity-0'
+                    className={`fixed inset-0 bg-background/80 backdrop-blur-sm transition-opacity duration-300 ease-in-out ${isMobileMenuOpen ? 'opacity-100' : 'opacity-0'
                         }`}
+                    style={{
+                        transition: `opacity 300ms ease-in-out, background-color 300ms ease-in-out, backdrop-filter 300ms ease-in-out`
+                    }}
                     onClick={closeMobileMenu}
                 />
                 <div
-                    className={`fixed top-16 left-4 right-4 bg-background/95 backdrop-blur-md border border-border rounded-2xl shadow-2xl transition-theme ${isMobileMenuOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-100'
+                    className={`fixed top-16 left-4 right-4 bg-background/95 backdrop-blur-md border border-border rounded-2xl shadow-2xl transition-all duration-300 ease-in-out ${isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
                         }`}
                     style={{
-                        transitionProperty: 'transform, opacity, color, background-color, border-color, box-shadow',
-                        transitionDuration: '300ms, 300ms, 1000ms, 1000ms, 1000ms, 1000ms',
-                        transitionTimingFunction: 'ease-in-out, ease-in-out, cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1)'
+                        transform: isMobileMenuOpen ? 'translateY(0)' : 'translateY(-1rem)',
+                        transition: `opacity 300ms ease-in-out, transform 300ms ease-in-out, background-color 300ms ease-in-out, border-color 300ms ease-in-out, box-shadow 300ms ease-in-out, backdrop-filter 300ms ease-in-out`
                     }}
                 >
                     <div className="p-4 space-y-2">
