@@ -76,16 +76,25 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
                         >
                             <div className="relative w-3.5 h-3.5 translate-y-[0.06rem]">
                                 <span
-                                    className={`absolute top-0 left-0 w-full h-0.5 bg-current transition-all duration-300 ease-in-out ${isMobileMenuOpen ? 'rotate-45 translate-y-1.25' : 'translate-y-0'
+                                    className={`absolute top-0 left-0 w-full h-0.5 bg-current ${isMobileMenuOpen ? 'rotate-45 translate-y-1.25' : 'translate-y-0'
                                         }`}
+                                    style={{
+                                        transition: 'color 1000ms cubic-bezier(0.4, 0, 0.2, 1), transform 300ms ease-in-out'
+                                    }}
                                 />
                                 <span
-                                    className={`absolute top-1.25 left-0 w-full h-0.5 bg-current transition-all duration-300 ease-in-out ${isMobileMenuOpen ? 'opacity-0' : 'opacity-100'
+                                    className={`absolute top-1.25 left-0 w-full h-0.5 bg-current ${isMobileMenuOpen ? 'opacity-0' : 'opacity-100'
                                         }`}
+                                    style={{
+                                        transition: 'color 1000ms cubic-bezier(0.4, 0, 0.2, 1), opacity 300ms ease-in-out, transform 300ms ease-in-out'
+                                    }}
                                 />
                                 <span
-                                    className={`absolute top-2.5 left-0 w-full h-0.5 bg-current transition-all duration-300 ease-in-out ${isMobileMenuOpen ? '-rotate-45 -translate-y-1.25' : 'translate-y-0'
+                                    className={`absolute top-2.5 left-0 w-full h-0.5 bg-current ${isMobileMenuOpen ? '-rotate-45 -translate-y-1.25' : 'translate-y-0'
                                         }`}
+                                    style={{
+                                        transition: 'color 1000ms cubic-bezier(0.4, 0, 0.2, 1), transform 300ms ease-in-out'
+                                    }}
                                 />
                             </div>
                         </button>
