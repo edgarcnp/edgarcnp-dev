@@ -44,6 +44,7 @@
 
     /* Transition progress for smooth theme changes */
     --transition-progress: 0;
+    --active-section-light-bg: oklch(0.85 0 0);
     color-scheme: light;
 }
 
@@ -88,6 +89,7 @@
     --gradient-bottom-middle: oklch(0.145 0 0 / 0.8);
 
     /* Add smooth transition for theme changes */
+    --active-section-light-bg: var(--muted);
     color-scheme: dark;
 }
 
@@ -179,18 +181,8 @@
     }
 
     .active-section-light {
-        background-color: var(--color-muted);
-    }
-
-    .light .active-section-light,
-    :not(.dark) .active-section-light {
-        background-color: oklch(0.85 0 0);
-        /* Slightly darker for better contrast in light mode */
-    }
-
-    .dark .active-section-light {
-        background-color: var(--color-muted);
-        /* Keep the original dark mode color */
+        background-color: var(--active-section-light-bg);
+        transition: background-color 1s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .animate-fade-out-down {
@@ -204,6 +196,20 @@
             border-color 1s cubic-bezier(0.4, 0, 0.2, 1),
             box-shadow 1s cubic-bezier(0.4, 0, 0.2, 1),
             transform 1s cubic-bezier(0.4, 0, 0.2, 1),
+            backdrop-filter 1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Mobile menu specific transition with fast opacity but smooth theme transitions for content */
+    .transition-mobile-menu {
+        transition: opacity 300ms ease-in-out, transform 300ms ease-in-out,
+            background-color 1s cubic-bezier(0.4, 0, 0.2, 1),
+            border-color 1s cubic-bezier(0.4, 0, 0.2, 1),
+            backdrop-filter 1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .transition-mobile-menu-bg {
+        transition: opacity 300ms ease-in-out,
+            background-color 1s cubic-bezier(0.4, 0, 0.2, 1),
             backdrop-filter 1s cubic-bezier(0.4, 0, 0.2, 1);
     }
 

@@ -41,7 +41,7 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
             window.removeEventListener("scroll", handleScroll)
             if (throttleTimer) clearTimeout(throttleTimer)
         }
-    }, []) // Dependency array is correct as no dependencies change
+    }, [])
 
     const handleMobileNavigation = (sectionId: SectionName) => {
         onNavigate(sectionId)
@@ -60,21 +60,11 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
         <>
             <nav className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-2 pointer-events-none transition-theme">
                 <div
-                    className={`pointer-events-auto transition-theme ${isScrolled ? "backdrop-blur-sm bg-background/50 shadow-lg" : "backdrop-blur bg-background/40 shadow-md"
-                        } rounded-full px-2 py-2`}
+                    className={`pointer-events-auto transition-theme ${isScrolled ? "backdrop-blur-sm bg-background/30 shadow-lg" : "backdrop-blur bg-background/20 shadow-md"
+                        } rounded-full px-2 py-2 border border-border`}
                     style={{
-                        // Gradient border effect using background with padding-box
-                        border: `1px solid transparent`,
-                        background: isDark
-                            ? `linear-gradient(white, white) padding-box, linear-gradient(to center, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1)) border-box`
-                            : `linear-gradient(black, black) padding-box, linear-gradient(to center, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.1)) border-box`,
-                        // Dark mode/light mode backgrounds per previous accepted settings
-                        backgroundColor: isDark ? "rgba(255, 255, 255, 0.01)" : "rgba(0, 0, 0, 0.05)",
                         backdropFilter: "blur(4px)",
                         WebkitBackdropFilter: "blur(4px)",
-                        boxShadow: isDark
-                            ? "0 0 4px rgba(255, 255, 255, 0.025), inset 0 0 1px 2.5px rgba(255, 255, 255, 0.075)"
-                            : "0 0 4px rgba(0, 0, 0, 0.025), inset 0 0 1px 2.5px rgba(0, 0, 0, 0.075)",
                     }}
                 >
                     <div className="flex items-center gap-1 sm:gap-2">
@@ -140,12 +130,7 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
                         </div>
 
                         {/* Divider - Made visible in both light and dark modes */}
-                        <div
-                            className="block w-px h-6"
-                            style={{
-                                backgroundColor: isDark ? "rgba(255, 255, 255, 0.15)" : "rgba(0, 0, 0, 0.15)",
-                            }}
-                        />
+                        <div className="block w-px h-6 bg-border" />
 
                         {/* Theme Toggle Button */}
                         <button
@@ -183,20 +168,13 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
             {/* Mobile Menu Overlay - Always in DOM for smooth animations */}
             <div className={`fixed inset-0 z-40 sm:hidden ${isMobileMenuOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}>
                 <div
-                    className={`fixed inset-0 bg-background/80 backdrop-blur-sm transition-opacity duration-300 ease-in-out ${isMobileMenuOpen ? 'opacity-100' : 'opacity-0'
+                    className={`fixed inset-0 bg-background/80 backdrop-blur-sm transition-mobile-menu-bg ${isMobileMenuOpen ? 'opacity-100' : 'opacity-0'
                         }`}
-                    style={{
-                        transition: `opacity 300ms ease-in-out, background-color 300ms ease-in-out, backdrop-filter 300ms ease-in-out`
-                    }}
                     onClick={closeMobileMenu}
                 />
                 <div
-                    className={`fixed top-16 left-4 right-4 bg-background/95 backdrop-blur-md border border-border rounded-2xl shadow-2xl transition-all duration-300 ease-in-out ${isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+                    className={`fixed top-16 left-4 right-4 bg-background/95 backdrop-blur-md border border-border rounded-2xl shadow-2xl transition-mobile-menu ${isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
                         }`}
-                    style={{
-                        transform: isMobileMenuOpen ? 'translateY(0)' : 'translateY(-1rem)',
-                        transition: `opacity 300ms ease-in-out, transform 300ms ease-in-out, background-color 300ms ease-in-out, border-color 300ms ease-in-out, box-shadow 300ms ease-in-out, backdrop-filter 300ms ease-in-out`
-                    }}
                 >
                     <div className="p-4 space-y-2">
                         {NAVBAR_SECTIONS.map((section, index) => (
