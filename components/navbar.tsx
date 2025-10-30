@@ -147,7 +147,7 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
 
                         {/* Divider - Made visible in both light and dark modes */}
                         <div
-                            className="hidden sm:block w-px h-6"
+                            className="block w-px h-6"
                             style={{
                                 backgroundColor: isDark ? "rgba(255, 255, 255, 0.15)" : "rgba(0, 0, 0, 0.15)",
                             }}
@@ -187,7 +187,7 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
             </nav>
 
             {/* Mobile Menu Overlay - Always in DOM for smooth animations */}
-            <div className={`fixed inset-0 z-40 sm:hidden ${isMobileMenuOpen || isAnimating ? 'opacity-100' : 'opacity-0 pointer-events-none'}`} style={{ visibility: isMobileMenuOpen || isAnimating ? 'visible' : 'hidden' }}>
+            <div className={`fixed inset-0 z-40 sm:hidden ${isMobileMenuOpen || isAnimating ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
                 <div
                     className={`fixed inset-0 bg-background/80 backdrop-blur-sm transition-theme ${isMobileMenuOpen ? 'opacity-100' : 'opacity-0'
                         }`}
@@ -196,6 +196,11 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
                 <div
                     className={`fixed top-16 left-4 right-4 bg-background/95 backdrop-blur-md border border-border rounded-2xl shadow-2xl transition-theme ${isMobileMenuOpen ? 'translate-y-0 opacity-100 scale-100' : '-translate-y-2 opacity-0 scale-95'
                         }`}
+                    style={{
+                        transitionProperty: 'transform, opacity, color, background-color, border-color, box-shadow',
+                        transitionDuration: '300ms, 300ms, 1000ms, 1000ms, 1000ms, 1000ms',
+                        transitionTimingFunction: 'ease-in-out, ease-in-out, cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1), cubic-bezier(0.4, 0, 0.2, 1)'
+                    }}
                 >
                     <div className="p-4 space-y-2">
                         {NAVBAR_SECTIONS.map((section, index) => (
