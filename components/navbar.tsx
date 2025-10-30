@@ -84,7 +84,7 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
                         {/* Mobile Menu Button */}
                         <button
                             onClick={() => isMobileMenuOpen ? closeMobileMenu() : openMobileMenu()}
-                            className="sm:hidden flex-shrink-0 px-2 py-1 rounded-full hover:bg-white/10 transition-theme flex items-center justify-center group text-foreground"
+                            className="sm:hidden shrink-0 px-2 py-1 rounded-full hover:bg-white/10 transition-theme flex items-center justify-center group text-foreground"
                             aria-label="Toggle mobile menu"
                         >
                             <div className="relative w-3.5 h-3.5 translate-y-[0.06rem]">
@@ -126,7 +126,7 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
                             >
                                 Status
                                 <svg
-                                    className="w-3 h-3 flex-shrink-0 translate-y-[0.1rem]"
+                                    className="w-3 h-3 shrink-0 translate-y-[0.1rem]"
                                     fill="none"
                                     stroke="currentColor"
                                     viewBox="0 0 24 24"
@@ -153,22 +153,29 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
                         {/* Theme Toggle Button */}
                         <button
                             onClick={onThemeToggle}
-                            className="flex-shrink-0 px-2 py-1 rounded-full hover:bg-white/10 transition-theme flex items-center justify-center group text-foreground"
+                            className="shrink-0 px-2 py-1 rounded-full hover:bg-white/10 transition-theme flex items-center justify-center group text-foreground"
                             aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
                         >
                             <svg
-                                className="w-4 h-4 transition-colors duration-1000 ease-in-out"
-                                fill="currentColor"
-                                viewBox="0 0 24 24"
+                                className="w-4 h-4"
+                                viewBox="0 0 32 32"
                             >
                                 {/* Sun rays that rotate and scale to form moon */}
                                 <g className={`transition-all duration-1000 ease-in-out origin-center ${isDark ? 'opacity-0 scale-0 rotate-180' : 'opacity-100 scale-100 rotate-0'}`}>
-                                    <circle cx="12" cy="12" r="3" />
-                                    <path d="M12 5L12 3M12 21L12 19M5 12L3 12M21 12L19 12M16.95 7.05L18.36 5.64M18.36 18.36L16.95 16.95M7.05 16.95L5.64 18.36M5.64 5.64L7.05 7.05" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                                    <circle cx="16" cy="16" r="4" className="text-foreground" fill="currentColor" />
+                                    <path d="M16 6L16 4M16 28L16 26M6 16L4 16M28 16L26 16M22.6 9.4L24.48 7.52M24.48 24.48L22.6 22.6M9.4 22.6L7.52 24.48M7.52 7.52L9.4 9.4" className="text-foreground" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                                 </g>
                                 {/* Moon shape that appears when sun rays disappear */}
                                 <g className={`transition-all duration-1000 ease-in-out origin-center ${isDark ? 'opacity-100 scale-100 rotate-0' : 'opacity-0 scale-0 -rotate-180'}`}>
-                                    <path d="M9.5 5a7.5 7.5 0 0 0 8.5 8.5A7.5 7.5 0 1 1 9.5 5z" />
+                                    <defs>
+                                        <mask id="moon-mask">
+                                            <g transform="rotate(-30, 16, 16)">
+                                                <rect width="32" height="32" fill="white" />
+                                                <ellipse cx="22" cy="16" rx="10" ry="14" fill="black" />
+                                            </g>
+                                        </mask>
+                                    </defs>
+                                    <circle cx="16" cy="16" r="14" className="text-foreground" fill="currentColor" mask="url(#moon-mask)" />
                                 </g>
                             </svg>
                         </button>
