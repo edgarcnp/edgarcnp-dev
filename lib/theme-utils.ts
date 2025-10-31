@@ -13,7 +13,7 @@ interface UseThemeDetectionReturn {
 export const useThemeDetection = (defaultTheme: 'dark' | 'light' = 'dark'): UseThemeDetectionReturn => {
     const { resolvedTheme } = useTheme();
     const [mounted, setMounted] = useState(false);
-    const [isDark, setIsDark] = useState(false);
+    const [isDark, setIsDark] = useState(defaultTheme === 'dark');
 
     useEffect(() => {
         setMounted(true);
