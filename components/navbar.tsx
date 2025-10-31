@@ -67,7 +67,7 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
                         {/* Mobile Menu Button */}
                         <button
                             onClick={() => isMobileMenuOpen ? closeMobileMenu() : openMobileMenu()}
-                            className="sm:hidden shrink-0 px-2 py-1 rounded-full hover:bg-white/10 transition-theme flex items-center justify-center group text-foreground"
+                            className="sm:hidden shrink-0 px-2 py-1 rounded-full transition-theme flex items-center justify-center group text-foreground"
                             aria-label="Toggle mobile menu"
                         >
                             <div className="relative w-3.5 h-3.5 translate-y-[0.06rem]">
@@ -92,7 +92,7 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
                                 <button
                                     key={section.id}
                                     onClick={() => onNavigate(section.id)}
-                                    className={`px-3 py-0 rounded-full text-xs sm:text-sm font-semibold transition-theme leading-none -translate-y-[0.05rem] ${activeSection === section.id ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+                                    className={`px-3 py-0 rounded-full text-xs sm:text-sm font-semibold transition-theme leading-none -translate-y-[0.05rem] ${activeSection === section.id ? "text-foreground" : "text-muted-foreground"
                                         }`}
                                     aria-label={`Navigate to ${section.label}`}
                                 >
@@ -104,7 +104,7 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
                                 href="https://status.edgarcnp.dev"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="px-3 py-0 rounded-full text-xs sm:text-sm font-semibold text-muted-foreground hover:text-foreground transition-theme flex items-center gap-0.5 leading-none -translate-y-[0.05rem]"
+                                className="px-3 py-0 rounded-full text-xs sm:text-sm font-semibold text-muted-foreground transition-theme flex items-center gap-0.5 leading-none -translate-y-[0.05rem]"
                                 aria-label="Open status page in new window"
                             >
                                 Status
@@ -131,7 +131,7 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
                         {/* Theme Toggle Button */}
                         <button
                             onClick={onThemeToggle}
-                            className="shrink-0 px-2 py-1 rounded-full hover:bg-white/10 transition-theme flex items-center justify-center group text-foreground"
+                            className="shrink-0 px-2 py-1 rounded-full transition-theme flex items-center justify-center group text-foreground"
                             aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
                         >
                             <svg
@@ -180,7 +180,7 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
                                 onClick={() => handleMobileNavigation(section.id)}
                                 className={`w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-theme ${activeSection === section.id
                                     ? "text-foreground bg-muted font-semibold active-section-light"
-                                    : "text-muted-foreground hover:text-foreground"
+                                    : "text-muted-foreground"
                                     }`}
                             >
                                 {section.label}
@@ -190,7 +190,7 @@ export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: Nav
                             href="https://status.edgarcnp.dev"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center gap-2 w-full text-left px-4 py-3 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-theme"
+                            className="flex items-center gap-2 w-full text-left px-4 py-3 rounded-lg text-sm font-medium text-muted-foreground transition-theme"
                         >
                             Status
                             <svg
