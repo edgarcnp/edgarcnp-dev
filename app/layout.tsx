@@ -2,6 +2,7 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Geist } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
+import Loader from "@/components/loader"
 import "./globals.css"
 
 const geist = Geist({
@@ -34,6 +35,7 @@ export default function RootLayout({
                     disableTransitionOnChange={false}
                     storageKey="edgarcnp-theme"
                 >
+                    <Loader />
                     {children}
                 </ThemeProvider>
             </body>

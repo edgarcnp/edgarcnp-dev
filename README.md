@@ -1,8 +1,8 @@
 ## 🚀 Built With
 
-- [Next.js](https://nextjs.org/) - React Framework
-- [TypeScript](https://www.typescriptlang.org/) - Type Safety
-- [Tailwind CSS](https://tailwindcss.com/) - Styling
+- [Next.js](https://nextjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
 
 ## 📦 Getting Started
 
