@@ -43,7 +43,7 @@ const Loader = () => {
 
     return (
         <div
-            className="fixed inset-0 z-[9999] flex items-center justify-center bg-background transition-opacity duration-300"
+            className="fixed inset-0 z-9999 flex items-center justify-center bg-background transition-opacity duration-300"
             style={{ opacity }}
         >
             {/* Fixed-position grid that never moves */}
@@ -99,7 +99,7 @@ const Loader = () => {
             <div className="flex flex-col items-center pointer-events-auto">
                 <div className="h-40 flex items-end justify-center"> {/* Spacer to push text below fixed grid */}
                     <div className="flex flex-col items-center">
-                        <p className="text-xl font-medium text-foreground tracking-wide w-[80px] text-center">
+                        <p className="text-xl font-medium text-foreground tracking-wide w-20 text-center">
                             {loadingText}
                         </p>
                         <p className="mt-1 text-sm text-muted-foreground h-4 flex items-center justify-center">
