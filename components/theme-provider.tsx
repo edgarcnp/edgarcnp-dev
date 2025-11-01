@@ -1,10 +1,10 @@
 'use client'
 
 import {
-  ThemeProvider as NextThemesProvider,
-  type ThemeProviderProps,
+    ThemeProvider as NextThemesProvider,
+    type ThemeProviderProps,
 } from 'next-themes'
 
-export async function ThemeProvider({ children, ...props }: ThemeProviderProps) {
-  return <NextThemesProvider {...props}>{children}</NextThemesProvider>
+export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
+    return <NextThemesProvider {...props}>{children}</NextThemesProvider>
 }
