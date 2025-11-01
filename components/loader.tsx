@@ -9,17 +9,18 @@ const Loader = () => {
 
     useEffect(() => {
         const handleDOMReady = () => {
-            setLoadingText('Ready');
-
-            // Wait 500ms before starting the transition
             setTimeout(() => {
-                // Start fade out transition
-                setOpacity(0);
+                setLoadingText('Ready');
 
-                // Remove loader from DOM after transition completes (300ms)
                 setTimeout(() => {
-                    setShow(false);
-                }, 300);
+                    // Start fade out transition
+                    setOpacity(0);
+
+                    // Remove loader from DOM after transition completes (300ms)
+                    setTimeout(() => {
+                        setShow(false);
+                    }, 300);
+                }, 500);
             }, 500);
         };
 
