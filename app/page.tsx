@@ -11,7 +11,7 @@ import { NAVIGATION, STATUS_CONFIG, type SectionName } from "@/lib/constants"
 // Availability status - change this to switch status indicators
 const CURRENT_AVAILABILITY_STATUS: keyof typeof STATUS_CONFIG = "busy" // Options: "available" | "busy" | "dnd"
 
-export default function Home() {
+export default async function Home() {
     const { setTheme, resolvedTheme } = useTheme()
     const [activeSection, setActiveSection] = useState<SectionName>("intro")
     const lastScrollTimeRef = useRef(0)

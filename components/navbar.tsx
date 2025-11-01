@@ -17,7 +17,7 @@ const NAVBAR_SECTIONS = [
     { id: "footer", label: "Contact" },
 ] as const
 
-export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: NavbarProps) {
+export async function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: NavbarProps) {
     const [isScrolled, setIsScrolled] = useState(false)
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
