@@ -730,18 +730,6 @@
         animation-delay: 0.3s;
     }
 
-    .animation-delay-0 {
-        animation-delay: 0ms;
-    }
-
-    .animation-delay-200 {
-        animation-delay: 0.2s;
-    }
-
-    .animation-delay-300 {
-        animation-delay: 0.3s;
-    }
-
     .animation-delay-400 {
         animation-delay: 0.4s;
     }
@@ -750,8 +738,8 @@
         animation-delay: 0.5s;
     }
 
-    .animation-delay-600 {
-        animation-delay: 0.6s;
+    .animation-delay-1000 {
+        animation-delay: 1s;
     }
 
     .animation-delay-1000 {
@@ -818,7 +806,7 @@
         }
     }
 
-    @keyframes ping-slow {
+    @keyframes ping-slow-alt {
         0% {
             transform: scale(0.8);
             opacity: 0.7;
@@ -858,7 +846,7 @@
     }
 
     .animate-ping-slow {
-        animation: ping-slow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        animation: ping-slow-alt 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     }
 
     @keyframes line-morph {
@@ -903,7 +891,7 @@
         animation: line-morph 3s ease-in-out infinite;
     }
 
-    @keyframes ripple {
+    @keyframes ripple-centered {
         0% {
             transform: translate(-50%, -50%) scale(0.5);
             opacity: 1;
@@ -931,8 +919,8 @@
         }
     }
 
-    .animate-ripple {
-        animation: ripple 2s infinite ease-in-out;
+    .animate-ripple-alt {
+        animation: ripple-centered 2s infinite ease-in-out;
     }
 
     @keyframes orbit-trail {
@@ -1001,7 +989,7 @@
         animation: shimmer 1.5s ease-in-out infinite;
     }
 
-    @keyframes spin-slow-alt {
+    @keyframes spin-slow-alt3 {
         from {
             transform: rotate(0deg);
         }
@@ -1015,7 +1003,7 @@
         animation: breathing-dot 2s ease-in-out infinite;
     }
 
-    @keyframes spin-slow {
+    @keyframes spin-slow-alt2 {
         from {
             transform: rotate(0deg);
         }
@@ -1035,12 +1023,12 @@
         }
     }
 
-    .animate-spin-slow-alt {
-        animation: spin-slow-alt 1.2s linear infinite;
+    .animate-spin-slow-alt-fast {
+        animation: spin-slow-alt3 1.2s linear infinite;
     }
 
     .animate-spin-slow {
-        animation: spin-slow 2s linear infinite;
+        animation: spin-slow-alt2 2s linear infinite;
     }
 
     @keyframes wave-expand {
