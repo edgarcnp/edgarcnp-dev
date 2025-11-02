@@ -20,11 +20,11 @@ const FooterSection = forwardRef<HTMLDivElement, { currentYear: number; classNam
                                 <div className="space-y-4">
                                     <a
                                         href="mailto:me@edgarcnp.dev"
-                                        className="group flex items-center gap-3 text-foreground hover:text-muted-foreground transition-theme"
+                                        className="group flex items-center gap-3 text-foreground hover:text-muted-foreground transition-all duration-300"
                                     >
                                         <span className="text-base sm:text-lg">me@edgarcnp.dev</span>
                                         <svg
-                                            className="w-5 h-5 transform group-hover:translate-x-1 transition-theme"
+                                            className="w-5 h-5 transform translate-x-0 group-hover:translate-x-2 transition-transform duration-300 ease-out"
                                             fill="none"
                                             stroke="currentColor"
                                             viewBox="0 0 24 24"
