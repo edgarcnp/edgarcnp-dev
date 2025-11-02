@@ -20,7 +20,7 @@ const FooterSection = forwardRef<HTMLDivElement, { currentYear: number; classNam
                                 <div className="space-y-4">
                                     <a
                                         href="mailto:me@edgarcnp.dev"
-                                        className="group flex items-center gap-3 text-foreground hover:text-muted-foreground transition-all duration-300"
+                                        className="group flex items-center gap-1 text-foreground hover:text-muted-foreground transition-all duration-300"
                                     >
                                         <span className="text-base sm:text-lg">me@edgarcnp.dev</span>
                                         <svg
@@ -33,7 +33,7 @@ const FooterSection = forwardRef<HTMLDivElement, { currentYear: number; classNam
                                                 strokeLinecap="round"
                                                 strokeLinejoin="round"
                                                 strokeWidth={2}
-                                                d="M17 8l4 4m0 0l-4 4m4-4H3"
+                                                d="M9 5l7 7-7 7"
                                             />
                                         </svg>
                                     </a>
