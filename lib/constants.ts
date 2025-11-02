@@ -7,8 +7,6 @@ export const NAVIGATION = {
         thoughts: "Thoughts",
         footer: "Contact",
     } as const,
-    SCROLL_DELAY: 300,
-    SCROLL_DURATION: 600,
 } as const;
 
 // Availability status constants
