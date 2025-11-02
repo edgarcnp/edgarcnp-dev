@@ -145,14 +145,14 @@
             border-color 1s cubic-bezier(0.4, 0, 0.2, 1);
         /* Ensure smooth touch scrolling on mobile */
         -webkit-overflow-scrolling: touch;
-        overscroll-behavior: none;
+        overscroll-behavior: contain;
     }
 
     body {
         @apply bg-background text-foreground;
         /* Ensure smooth touch scrolling on mobile */
         -webkit-overflow-scrolling: touch;
-        overscroll-behavior: none;
+        overscroll-behavior: contain;
     }
 
     /* Simple universal transitions for smooth theme changes */
@@ -168,7 +168,7 @@
         html,
         body {
             -webkit-overflow-scrolling: touch;
-            overscroll-behavior: none;
+            overscroll-behavior: contain;
             scroll-behavior: smooth;
         }
     }
