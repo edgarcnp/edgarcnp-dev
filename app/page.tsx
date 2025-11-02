@@ -195,8 +195,8 @@ export default function Home() {
                 </div>
             </nav>
 
-            <main className="max-w-4xl mx-auto px-6 sm:px-8 lg:px-16 space-y-6 sm:space-y-16 pt-8 sm:pt-16 pb-16 sm:pb-24">
-                <IntroSection ref={setSectionRef("intro")} currentYear={currentYear} className="animate-fade-in-up opacity-100 pt-16 sm:pt-24" />
+            <main className="max-w-4xl mx-auto px-6 sm:px-8 lg:px-16 space-y-6 sm:space-y-12 pt-8 sm:pt-0 pb-8 sm:pb-4">
+                <IntroSection ref={setSectionRef("intro")} currentYear={currentYear} className="animate-fade-in-up opacity-100 pt-16 sm:pt-12" />
                 <WorkSection ref={setSectionRef("work")} className="animate-fade-in-up opacity-100" />
                 <ThoughtsSection ref={setSectionRef("thoughts")} className="animate-fade-in-up opacity-100" />
                 <FooterSection ref={setSectionRef("footer")} currentYear={currentYear} className="animate-fade-in-up opacity-100" />
