@@ -56,7 +56,7 @@ export default function ThoughtsSection({ className = "" }: ThoughtsSectionProps
                                     <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">{post.excerpt}</p>
                                 </div>
 
-                                <div className="flex items-center gap-1 text-sm text-muted-foreground group-hover:text-foreground transition-all duration-300 mt-4 sm:mt-6">
+                                <div className="flex items-center gap-1 text-sm text-muted-foreground group-hover:text-foreground transition-all duration-300 mt-4 sm:mt-6 pt-2 sm:pt-3">
                                     <span>Read more</span>
                                     <svg
                                         className="w-4 h-4 transform translate-x-0 group-hover:translate-x-2 transition-transform duration-300 ease-out"
