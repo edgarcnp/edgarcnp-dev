@@ -6,7 +6,7 @@ export default function ThoughtsSection({ className = "" }: ThoughtsSectionProps
     return (
         <section
             id="thoughts"
-            className={`min-h-screen flex items-center scroll-mt-20 py-12 sm:py-16 ${className}`}
+            className={`min-h-screen flex items-center py-12 sm:py-16 ${className}`}
         >
             <div className="w-full space-y-8 sm:space-y-12 lg:space-y-16">
                 <h2 className="text-2xl sm:text-3xl md:text-4xl font-light">Recent Thoughts</h2>

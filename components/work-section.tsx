@@ -4,7 +4,7 @@ interface WorkSectionProps {
 
 export default function WorkSection({ className = "" }: WorkSectionProps) {
     return (
-        <section id="work" className={`min-h-screen flex items-center scroll-mt-20 py-12 sm:py-16 ${className}`}>
+        <section id="work" className={`min-h-screen flex items-center py-12 sm:py-16 ${className}`}>
             <div className="w-full space-y-8 sm:space-y-12 lg:space-y-16">
                 <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
                     <h2 className="text-2xl sm:text-3xl md:text-4xl font-light">The Work Log</h2>

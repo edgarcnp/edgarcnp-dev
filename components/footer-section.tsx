@@ -5,7 +5,7 @@ interface FooterSectionProps {
 
 export default function FooterSection({ currentYear, className = "" }: FooterSectionProps) {
     return (
-        <footer id="footer" className={`min-h-screen flex items-center scroll-mt-20 py-12 sm:py-16 ${className}`}>
+        <footer id="footer" className={`min-h-screen flex items-center py-12 sm:py-16 ${className}`}>
             <div className="w-full space-y-12 sm:space-y-16">
                 <div className="grid lg:grid-cols-2 gap-12 sm:gap-16">
                     <div className="space-y-6 sm:space-y-8">
