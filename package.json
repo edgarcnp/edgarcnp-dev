@@ -9,7 +9,7 @@
         "start": "next start"
     },
     "dependencies": {
-        "@hookform/resolvers": "^3.10.0",
+        "@hookform/resolvers": "^5.2.2",
         "@radix-ui/react-accordion": "latest",
         "@radix-ui/react-alert-dialog": "latest",
         "@radix-ui/react-aspect-ratio": "latest",
@@ -45,7 +45,7 @@
         "date-fns": "^4.1.0",
         "embla-carousel-react": "latest",
         "input-otp": "latest",
-        "lucide-react": "^0.454.0",
+        "lucide-react": "^0.552.0",
         "next": "^16.0.1",
         "next-themes": "latest",
         "react": "^19",
