@@ -129,7 +129,7 @@ export default function Home() {
                 </div>
             </nav>
 
-            <main className="max-w-4xl mx-auto px-6 sm:px-8 lg:px-16 space-y-6 sm:space-y-12 pt-8 sm:pt-0 pb-8 sm:pb-4">
+            <main className="max-w-4xl mx-auto px-6 sm:px-8 lg:px-16 space-y-6 sm:space-y-12 pt-8 sm:pt-0 pb-8 sm:pb-0">
                 <IntroSection currentYear={currentYear} className="animate-fade-in-up opacity-100 pt-16 sm:pt-12" />
                 <WorkSection className="animate-fade-in-up opacity-100" />
                 <ThoughtsSection className="animate-fade-in-up opacity-100" />
