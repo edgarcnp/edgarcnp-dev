@@ -48,7 +48,7 @@ export default function ThoughtsSection({ className = "" }: ThoughtsSectionProps
                                     <span>{post.readTime}</span>
                                 </div>
 
-                                <h3 className="text-base sm:text-lg lg:text-xl font-medium group-hover:text-muted-foreground transition-theme">
+                                <h3 className="text-base sm:text-lg lg:text-xl font-medium group-hover:text-foreground transition-theme">
                                     {post.title}
                                 </h3>
 

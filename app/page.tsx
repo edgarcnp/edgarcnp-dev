@@ -13,7 +13,7 @@ import FooterSection from "@/components/footer-section";
 export default function Home() {
     const { setTheme, resolvedTheme } = useTheme()
     const [activeSection, setActiveSection] = useState<SectionName>("intro")
-    const [currentYear, setCurrentYear] = useState<number>(new Date().getFullYear())
+    const [currentYear] = useState<number>(new Date().getFullYear())
 
     // Use custom hook for theme detection
     const { isDark } = useThemeDetection('dark') // Default to dark during SSR
