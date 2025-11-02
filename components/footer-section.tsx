@@ -2,10 +2,10 @@
 
 import { forwardRef } from 'react';
 
-const FooterSection = forwardRef<HTMLDivElement, { currentYear: number }>(
-    ({ currentYear }, ref) => {
+const FooterSection = forwardRef<HTMLDivElement, { currentYear: number; className?: string }>(
+    ({ currentYear, className = "" }, ref) => {
         return (
-            <footer ref={ref} id="footer" className="h-screen flex items-center scroll-mt-20 py-16 sm:py-20 opacity-0">
+            <footer ref={ref} id="footer" className={`min-h-screen flex items-center scroll-mt-20 py-12 sm:py-16 ${className}`}>
                 <div className="w-full space-y-12 sm:space-y-16">
                     <div className="grid lg:grid-cols-2 gap-12 sm:gap-16">
                         <div className="space-y-6 sm:space-y-8">

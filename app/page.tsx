@@ -85,7 +85,7 @@ export default function Home() {
     }, [])
 
     useEffect(() => {
-        // Set the active section based on current scroll position
+        // Set the active section based on current scroll position and add animations to all sections
         const timeoutId = setTimeout(() => {
             const sections = getNavigationSections()
             const scrollPosition = window.scrollY + (window.innerHeight / 2)
@@ -101,28 +101,21 @@ export default function Home() {
                 }
             }
 
-            const firstSection = document.getElementById("intro")
-            if (firstSection) {
-                if (isTouchDevice) {
-                    // For touch devices, set the current section based on scroll position
-                    if (NAVIGATION.SECTIONS.includes(currentSectionId as SectionName)) {
-                        setActiveSection(currentSectionId as SectionName)
-                    }
-                } else {
-                    // For desktop, add animation classes to the first section if it's in view
-                    if (currentSectionId === "intro") {
-                        firstSection.classList.add("animate-fade-in-up")
-                        firstSection.classList.remove("opacity-0")
-                    }
-                    if (NAVIGATION.SECTIONS.includes(currentSectionId as SectionName)) {
-                        setActiveSection(currentSectionId as SectionName)
-                    }
-                }
+            if (NAVIGATION.SECTIONS.includes(currentSectionId as SectionName)) {
+                setActiveSection(currentSectionId as SectionName)
             }
+
+            // Add animation classes to all sections to make them visible
+            NAVIGATION.SECTIONS.forEach((sectionId) => {
+                const sectionElement = document.getElementById(sectionId);
+                if (sectionElement) {
+                    sectionElement.classList.add("animate-fade-in-up", "opacity-100");
+                }
+            });
         }, 200)
 
         return () => clearTimeout(timeoutId)
-    }, [getNavigationSections, isTouchDevice])
+    }, [getNavigationSections])
 
     useEffect(() => {
         // Set the title to "edgarcnp.dev | *Section*"
@@ -131,99 +124,29 @@ export default function Home() {
     }, [activeSection])
 
     useEffect(() => {
-        // For mobile/tablet devices, use simple scroll-based section detection
-        if (isTouchDevice) {
-            const handleScroll = () => {
-                const sections = getNavigationSections()
-                const scrollPosition = window.scrollY + window.innerHeight / 2
-
-                for (let i = sections.length - 1; i >= 0; i--) {
-                    const section = sections[i]
-                    if (section && section.offsetTop <= scrollPosition) {
-                        if (NAVIGATION.SECTIONS.includes(section.id as SectionName)) {
-                            setActiveSection(section.id as SectionName)
-                        }
-                        break
-                    }
-                }
-            }
-
-            window.addEventListener('scroll', handleScroll)
-            handleScroll() // Initial call
-
-            return () => {
-                window.removeEventListener('scroll', handleScroll)
-            }
-        }
-
-        const fadeInObserver = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add("animate-fade-in-up")
-                        entry.target.classList.remove("animate-fade-out-down")
-                        if (NAVIGATION.SECTIONS.includes(entry.target.id as SectionName)) {
-                            setActiveSection(entry.target.id as SectionName)
-                        }
-                    }
-                })
-            },
-            { threshold: 0.1, rootMargin: "-10% 0px -10% 0px" },
-        )
-
-        const fadeOutObserver = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (!entry.isIntersecting) {
-                        entry.target.classList.remove("animate-fade-in-up")
-                        entry.target.classList.add("animate-fade-out-down")
-                    }
-                })
-            },
-            { threshold: 0.1, rootMargin: "10% 0px 10% 0px" },
-        )
-
-        // Use a timeout to ensure DOM elements are ready
-        const timeoutId = setTimeout(() => {
-            // First, determine the current section based on scroll position
+        // Universal scroll-based section detection for all devices
+        const handleScroll = () => {
             const sections = getNavigationSections()
-            const scrollPosition = window.scrollY + (window.innerHeight / 2)
-
-            // Find which section is currently in view
-            let currentSectionId = "intro" // Default to intro if no section is found
+            const scrollPosition = window.scrollY + window.innerHeight / 2
 
             for (let i = sections.length - 1; i >= 0; i--) {
                 const section = sections[i]
                 if (section && section.offsetTop <= scrollPosition) {
-                    currentSectionId = section.id
+                    if (NAVIGATION.SECTIONS.includes(section.id as SectionName)) {
+                        setActiveSection(section.id as SectionName)
+                    }
                     break
                 }
             }
-            if (NAVIGATION.SECTIONS.includes(currentSectionId as SectionName)) {
-                setActiveSection(currentSectionId as SectionName)
-            }
+        }
 
-            // Then set up the observers for each section element
-            NAVIGATION.SECTIONS.forEach((sectionId) => {
-                const sectionElement = document.getElementById(sectionId);
-                if (sectionElement) {
-                    // Add animation classes to the current section if it's already in view
-                    if (sectionId === currentSectionId) {
-                        sectionElement.classList.add("animate-fade-in-up")
-                        sectionElement.classList.remove("opacity-0")
-                    }
-                    fadeInObserver.observe(sectionElement)
-                    fadeOutObserver.observe(sectionElement)
-                }
-            });
-        }, 100)
+        window.addEventListener('scroll', handleScroll)
+        handleScroll() // Initial call
 
         return () => {
-            clearTimeout(timeoutId)
-            fadeInObserver.disconnect()
-            fadeOutObserver.disconnect()
+            window.removeEventListener('scroll', handleScroll)
         }
-    }, [getNavigationSections, isTouchDevice])
+    }, [getNavigationSections])
 
     useEffect(() => {
         // Only enable magnetic scroll on desktop devices (non-touch)
@@ -335,7 +258,7 @@ export default function Home() {
     }
 
     return (
-        <div className="min-h-screen bg-background text-foreground relative overflow-x-hidden transition-theme main-background-container">
+        <div className="min-h-fit bg-background text-foreground relative overflow-x-hidden transition-theme main-background-container">
             <Navbar activeSection={activeSection} isDark={isDark} onThemeToggle={toggleTheme} onNavigate={handleNavigation} />
 
             <nav className="fixed left-8 top-1/2 -translate-y-1/2 z-10 hidden lg:block">
@@ -352,11 +275,11 @@ export default function Home() {
                 </div>
             </nav>
 
-            <main className="max-w-4xl mx-auto px-6 sm:px-8 lg:px-16">
-                <IntroSection ref={setSectionRef("intro")} currentYear={currentYear} />
-                <WorkSection ref={setSectionRef("work")} />
-                <ThoughtsSection ref={setSectionRef("thoughts")} />
-                <FooterSection ref={setSectionRef("footer")} currentYear={currentYear} />
+            <main className="max-w-4xl mx-auto px-6 sm:px-8 lg:px-16 space-y-6 sm:space-y-16 pt-8 sm:pt-16 pb-16 sm:pb-24">
+                <IntroSection ref={setSectionRef("intro")} currentYear={currentYear} className="animate-fade-in-up opacity-100 pt-16 sm:pt-24" />
+                <WorkSection ref={setSectionRef("work")} className="animate-fade-in-up opacity-100" />
+                <ThoughtsSection ref={setSectionRef("thoughts")} className="animate-fade-in-up opacity-100" />
+                <FooterSection ref={setSectionRef("footer")} currentYear={currentYear} className="animate-fade-in-up opacity-100" />
             </main>
 
             <div className="fixed top-0 left-0 right-0 h-24 gradient-overlay-top pointer-events-none"></div>

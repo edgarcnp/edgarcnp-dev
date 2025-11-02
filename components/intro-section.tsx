@@ -6,10 +6,10 @@ import { STATUS_CONFIG } from "@/lib/constants";
 // Availability status - change this to switch status indicators
 const CURRENT_AVAILABILITY_STATUS = "busy" as const; // Options: "available" | "dnd"
 
-const IntroSection = forwardRef<HTMLHeadElement, { currentYear: number }>(
-    ({ currentYear }, ref) => {
+const IntroSection = forwardRef<HTMLHeadElement, { currentYear: number; className?: string }>(
+    ({ currentYear, className = "" }, ref) => {
         return (
-            <header ref={ref} id="intro" className="h-screen flex items-center scroll-mt-20 py-24 sm:py-20 opacity-0">
+            <header ref={ref} id="intro" className={`min-h-screen flex items-center scroll-mt-20 py-16 sm:py-12 ${className}`}>
                 <div className="grid lg:grid-cols-5 gap-8 sm:gap-12 lg:gap-16 w-full">
                     <div className="lg:col-span-3 space-y-6 sm:space-y-8">
                         <div className="space-y-3 sm:space-y-2">
