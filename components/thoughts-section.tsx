@@ -2,13 +2,13 @@
 
 import { forwardRef } from 'react';
 
-const ThoughtsSection = forwardRef<HTMLDivElement, {}>(
-    (_, ref) => {
+const ThoughtsSection = forwardRef<HTMLDivElement, { className?: string }>(
+    ({ className = "" }, ref) => {
         return (
             <section
                 ref={ref}
                 id="thoughts"
-                className="h-screen flex items-center scroll-mt-20 py-16 sm:py-20 opacity-0 mt-4"
+                className={`min-h-screen flex items-center scroll-mt-20 py-12 sm:py-16 ${className}`}
             >
                 <div className="w-full space-y-8 sm:space-y-12 lg:space-y-16">
                     <h2 className="text-2xl sm:text-3xl md:text-4xl font-light">Recent Thoughts</h2>
