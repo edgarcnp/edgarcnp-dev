@@ -2,6 +2,59 @@
 
 import { useEffect, useState } from 'react';
 
+// AnimationGrid component to prevent re-rendering of animations
+const AnimationGrid = () => {
+    return (
+        <div className="fixed inset-0 flex items-center justify-center pointer-events-none">
+            <div className="relative w-16 h-16 flex items-center justify-center">
+                <div className="grid grid-cols-5 grid-rows-7 w-10 h-14 gap-0.5">
+                    <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing"></div>
+                    <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-100"></div>
+                    <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-200"></div>
+                    <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-300"></div>
+                    <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-400"></div>
+
+                    <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-100"></div>
+                    <div className="w-1 h-1 bg-primary rounded-full animate-breathing-stars animation-delay-100"></div>
+                    <div className="w-1 h-1 bg-primary rounded-full animate-breathing-stars animation-delay-200"></div>
+                    <div className="w-1 h-1 bg-primary rounded-full animate-breathing-stars animation-delay-300"></div>
+                    <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-500"></div>
+
+                    <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-200"></div>
+                    <div className="w-1 h-1 bg-primary rounded-full animate-breathing-stars animation-delay-200"></div>
+                    <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-300"></div>
+                    <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-400"></div>
+                    <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-600"></div>
+
+                    <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-300"></div>
+                    <div className="w-1 h-1 bg-primary rounded-full animate-breathing-stars animation-delay-300"></div>
+                    <div className="w-1 h-1 bg-primary rounded-full animate-breathing-stars animation-delay-400"></div>
+                    <div className="w-1 h-1 bg-primary rounded-full animate-breathing-stars animation-delay-500"></div>
+                    <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-700"></div>
+
+                    <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-400"></div>
+                    <div className="w-1 h-1 bg-primary rounded-full animate-breathing-stars animation-delay-400"></div>
+                    <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-500"></div>
+                    <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-600"></div>
+                    <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-800"></div>
+
+                    <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-500"></div>
+                    <div className="w-1 h-1 bg-primary rounded-full animate-breathing-stars animation-delay-500"></div>
+                    <div className="w-1 h-1 bg-primary rounded-full animate-breathing-stars animation-delay-600"></div>
+                    <div className="w-1 h-1 bg-primary rounded-full animate-breathing-stars animation-delay-700"></div>
+                    <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-900"></div>
+
+                    <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-600"></div>
+                    <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-700"></div>
+                    <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-800"></div>
+                    <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-900"></div>
+                    <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-1000"></div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 const Loader = () => {
     const [loadingText, setLoadingText] = useState('Loading');
     const [show, setShow] = useState(true);
@@ -47,54 +100,8 @@ const Loader = () => {
             className="fixed inset-0 z-9999 flex items-center justify-center bg-background transition-opacity duration-300"
             style={{ opacity }}
         >
-            {/* Fixed-position grid that never moves */}
-            <div className="fixed inset-0 flex items-center justify-center pointer-events-none">
-                <div className="relative w-16 h-16 flex items-center justify-center">
-                    <div className="grid grid-cols-5 grid-rows-7 w-10 h-14 gap-0.5">
-                        <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing"></div>
-                        <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-100"></div>
-                        <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-200"></div>
-                        <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-300"></div>
-                        <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-400"></div>
-
-                        <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-100"></div>
-                        <div className="w-1 h-1 bg-primary rounded-full animate-breathing-stars animation-delay-100"></div>
-                        <div className="w-1 h-1 bg-primary rounded-full animate-breathing-stars animation-delay-200"></div>
-                        <div className="w-1 h-1 bg-primary rounded-full animate-breathing-stars animation-delay-300"></div>
-                        <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-500"></div>
-
-                        <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-200"></div>
-                        <div className="w-1 h-1 bg-primary rounded-full animate-breathing-stars animation-delay-200"></div>
-                        <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-300"></div>
-                        <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-400"></div>
-                        <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-600"></div>
-
-                        <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-300"></div>
-                        <div className="w-1 h-1 bg-primary rounded-full animate-breathing-stars animation-delay-300"></div>
-                        <div className="w-1 h-1 bg-primary rounded-full animate-breathing-stars animation-delay-400"></div>
-                        <div className="w-1 h-1 bg-primary rounded-full animate-breathing-stars animation-delay-500"></div>
-                        <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-700"></div>
-
-                        <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-400"></div>
-                        <div className="w-1 h-1 bg-primary rounded-full animate-breathing-stars animation-delay-400"></div>
-                        <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-500"></div>
-                        <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-600"></div>
-                        <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-800"></div>
-
-                        <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-500"></div>
-                        <div className="w-1 h-1 bg-primary rounded-full animate-breathing-stars animation-delay-500"></div>
-                        <div className="w-1 h-1 bg-primary rounded-full animate-breathing-stars animation-delay-600"></div>
-                        <div className="w-1 h-1 bg-primary rounded-full animate-breathing-stars animation-delay-700"></div>
-                        <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-900"></div>
-
-                        <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-600"></div>
-                        <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-700"></div>
-                        <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-800"></div>
-                        <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-900"></div>
-                        <div className="w-1 h-1 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-1000"></div>
-                    </div>
-                </div>
-            </div>
+            {/* Animation grid that doesn't re-render when text changes */}
+            <AnimationGrid />
 
             {/* Separate flex container for text that doesn't affect grid */}
             <div className="flex flex-col items-center pointer-events-auto">
