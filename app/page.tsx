@@ -1,9 +1,8 @@
 "use client"
 
-import { useEffect, useRef, useState, useCallback } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { useTheme } from "next-themes"
 import { Navbar } from "@/components/navbar"
-import { smoothScrollTo } from "@/lib/scroll-utils"
 import { useThemeDetection } from "@/lib/theme-utils"
 import { NAVIGATION, type SectionName } from "@/lib/constants"
 import IntroSection from "@/components/intro-section";
@@ -14,14 +13,10 @@ import FooterSection from "@/components/footer-section";
 export default function Home() {
     const { setTheme, resolvedTheme } = useTheme()
     const [activeSection, setActiveSection] = useState<SectionName>("intro")
-    const lastScrollTimeRef = useRef(0)
-    const sectionsRef = useRef<Map<string, HTMLElement | null>>(new Map())
-    const [currentYear, setCurrentYear] = useState<number | null>(null)
-    const [isTouchDevice, setIsTouchDevice] = useState(false)
+    const [currentYear, setCurrentYear] = useState<number>(new Date().getFullYear())
 
     // Use custom hook for theme detection
     const { isDark } = useThemeDetection('dark') // Default to dark during SSR
-
 
     // Helper function to get all valid navigation sections
     const getNavigationSections = useCallback((): HTMLElement[] => {
@@ -29,64 +24,30 @@ export default function Home() {
     }, []);
 
     useEffect(() => {
-        // Set current year after mount to ensure consistency
-        setCurrentYear(new Date().getFullYear())
+        // Global smooth scroll handler for all anchor links
+        const handleAnchorClick = (e: Event) => {
+            const target = e.target as HTMLElement
+            const link = target.closest('a[href^="#"]') as HTMLAnchorElement
 
-        // Detect if device supports touch (mobile/tablet)
-        const touchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
-        setIsTouchDevice(touchDevice)
-
-        // Determine initial active section based on current scroll position
-        const updateActiveSectionOnLoad = () => {
-            const sections = getNavigationSections()
-            const scrollPosition = window.scrollY + window.innerHeight / 2
-
-            for (let i = sections.length - 1; i >= 0; i--) {
-                const section = sections[i]
-                if (section && section.offsetTop <= scrollPosition) {
-                    if (NAVIGATION.SECTIONS.includes(section.id as SectionName)) {
-                        setActiveSection(section.id as SectionName)
+            if (link && link.getAttribute('href') !== '#') {
+                e.preventDefault()
+                const targetId = link.getAttribute('href')?.substring(1)
+                if (targetId) {
+                    const targetElement = document.getElementById(targetId)
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth' })
                     }
-                    break
                 }
             }
         }
 
-        // Update active section after a short delay to ensure DOM is ready
-        const timer = setTimeout(updateActiveSectionOnLoad, 100)
-
-        return () => clearTimeout(timer)
-
-    }, [getNavigationSections])
-
-
-    // Global smooth scroll handler for all anchor links
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            const handleAnchorClick = (e: Event) => {
-                const target = e.target as HTMLElement
-                const link = target.closest('a[href^="#"]') as HTMLAnchorElement
-
-                if (link && link.getAttribute('href') !== '#') {
-                    e.preventDefault()
-                    const targetId = link.getAttribute('href')?.substring(1)
-                    if (targetId) {
-                        const targetElement = document.getElementById(targetId)
-                        if (targetElement) {
-                            targetElement.scrollIntoView({ behavior: 'smooth' })
-                        }
-                    }
-                }
-            }
-
-            document.addEventListener('click', handleAnchorClick)
-            return () => document.removeEventListener('click', handleAnchorClick)
-        }
+        document.addEventListener('click', handleAnchorClick)
+        return () => document.removeEventListener('click', handleAnchorClick)
     }, [])
 
     useEffect(() => {
         // Set the active section based on current scroll position and add animations to all sections
-        const timeoutId = setTimeout(() => {
+        const updateSectionOnScroll = () => {
             const sections = getNavigationSections()
             const scrollPosition = window.scrollY + (window.innerHeight / 2)
 
@@ -112,9 +73,21 @@ export default function Home() {
                     sectionElement.classList.add("animate-fade-in-up", "opacity-100");
                 }
             });
-        }, 200)
+        }
 
-        return () => clearTimeout(timeoutId)
+        // Initial call to set up animations
+        updateSectionOnScroll()
+
+        // Universal scroll-based section detection for all devices
+        const handleScroll = () => {
+            updateSectionOnScroll()
+        }
+
+        window.addEventListener('scroll', handleScroll)
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll)
+        }
     }, [getNavigationSections])
 
     useEffect(() => {
@@ -123,41 +96,10 @@ export default function Home() {
         document.title = `edgarcnp.dev | ${sectionName}`
     }, [activeSection])
 
-    useEffect(() => {
-        // Universal scroll-based section detection for all devices
-        const handleScroll = () => {
-            const sections = getNavigationSections()
-            const scrollPosition = window.scrollY + window.innerHeight / 2
-
-            for (let i = sections.length - 1; i >= 0; i--) {
-                const section = sections[i]
-                if (section && section.offsetTop <= scrollPosition) {
-                    if (NAVIGATION.SECTIONS.includes(section.id as SectionName)) {
-                        setActiveSection(section.id as SectionName)
-                    }
-                    break
-                }
-            }
-        }
-
-        window.addEventListener('scroll', handleScroll)
-        handleScroll() // Initial call
-
-        return () => {
-            window.removeEventListener('scroll', handleScroll)
-        }
-    }, [getNavigationSections])
-
     const toggleTheme = useCallback(() => {
         // Set the new theme - transitions are handled by explicit CSS rules
         setTheme(resolvedTheme === "dark" ? "light" : "dark")
     }, [resolvedTheme, setTheme])
-
-    const setSectionRef = (id: string) => (el: HTMLElement | null) => {
-        if (el) {
-            sectionsRef.current.set(id, el)
-        }
-    }
 
     const handleNavigation = (sectionId: string) => {
         if (typeof window !== 'undefined') {
@@ -167,14 +109,6 @@ export default function Home() {
                 targetSection.scrollIntoView({ behavior: 'smooth' })
             }
         }
-    }
-
-    if (currentYear === null) {
-        return (
-            <div className="min-h-screen bg-background text-foreground relative overflow-x-hidden transition-theme main-background-container">
-                {/* Placeholder content while loading */}
-            </div>
-        );
     }
 
     return (
@@ -196,10 +130,10 @@ export default function Home() {
             </nav>
 
             <main className="max-w-4xl mx-auto px-6 sm:px-8 lg:px-16 space-y-6 sm:space-y-12 pt-8 sm:pt-0 pb-8 sm:pb-4">
-                <IntroSection ref={setSectionRef("intro")} currentYear={currentYear} className="animate-fade-in-up opacity-100 pt-16 sm:pt-12" />
-                <WorkSection ref={setSectionRef("work")} className="animate-fade-in-up opacity-100" />
-                <ThoughtsSection ref={setSectionRef("thoughts")} className="animate-fade-in-up opacity-100" />
-                <FooterSection ref={setSectionRef("footer")} currentYear={currentYear} className="animate-fade-in-up opacity-100" />
+                <IntroSection currentYear={currentYear} className="animate-fade-in-up opacity-100 pt-16 sm:pt-12" />
+                <WorkSection className="animate-fade-in-up opacity-100" />
+                <ThoughtsSection className="animate-fade-in-up opacity-100" />
+                <FooterSection currentYear={currentYear} className="animate-fade-in-up opacity-100" />
             </main>
 
             <div className="fixed top-0 left-0 right-0 h-24 gradient-overlay-top pointer-events-none"></div>
