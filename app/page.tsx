@@ -148,80 +148,6 @@ export default function Home() {
         }
     }, [getNavigationSections])
 
-    useEffect(() => {
-        // Only enable magnetic scroll on desktop devices (non-touch)
-        if (isTouchDevice) {
-            return
-        }
-
-        const handleWheel = (e: WheelEvent) => {
-            const now = Date.now()
-
-            if (now - lastScrollTimeRef.current < NAVIGATION.SCROLL_DELAY) {
-                e.preventDefault()
-                return
-            }
-
-            const currentIndex = NAVIGATION.SECTIONS.indexOf(activeSection)
-            let nextIndex = currentIndex
-
-            if (e.deltaY > 0) {
-                nextIndex = Math.min(currentIndex + 1, NAVIGATION.SECTIONS.length - 1)
-            } else {
-                nextIndex = Math.max(currentIndex - 1, 0)
-            }
-
-            if (nextIndex !== currentIndex) {
-                e.preventDefault()
-                lastScrollTimeRef.current = now
-
-                const targetSection = document.getElementById(NAVIGATION.SECTIONS[nextIndex])
-                if (targetSection) {
-                    smoothScrollTo(targetSection, { duration: NAVIGATION.SCROLL_DURATION })
-                }
-            }
-        }
-
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key !== "PageUp" && e.key !== "PageDown") {
-                return
-            }
-
-            const now = Date.now()
-
-            if (now - lastScrollTimeRef.current < NAVIGATION.SCROLL_DELAY) {
-                e.preventDefault()
-                return
-            }
-
-            const currentIndex = NAVIGATION.SECTIONS.indexOf(activeSection)
-            let nextIndex = currentIndex
-
-            if (e.key === "PageDown") {
-                nextIndex = Math.min(currentIndex + 1, NAVIGATION.SECTIONS.length - 1)
-            } else if (e.key === "PageUp") {
-                nextIndex = Math.max(currentIndex - 1, 0)
-            }
-
-            if (nextIndex !== currentIndex) {
-                e.preventDefault()
-                lastScrollTimeRef.current = now
-
-                const targetSection = document.getElementById(NAVIGATION.SECTIONS[nextIndex])
-                if (targetSection) {
-                    smoothScrollTo(targetSection, { duration: NAVIGATION.SCROLL_DURATION })
-                }
-            }
-        }
-
-        window.addEventListener("wheel", handleWheel, { passive: false })
-        window.addEventListener("keydown", handleKeyDown)
-        return () => {
-            window.removeEventListener("wheel", handleWheel)
-            window.removeEventListener("keydown", handleKeyDown)
-        }
-    }, [activeSection, isTouchDevice])  // Note: No need to add getNavigationSections here since it's not used in this effect
-
     const toggleTheme = useCallback(() => {
         // Set the new theme - transitions are handled by explicit CSS rules
         setTheme(resolvedTheme === "dark" ? "light" : "dark")
@@ -237,14 +163,8 @@ export default function Home() {
         if (typeof window !== 'undefined') {
             const targetSection = document.getElementById(sectionId)
             if (targetSection) {
-                if (isTouchDevice) {
-                    // Use native smooth scrolling for mobile/tablet
-                    targetSection.scrollIntoView({ behavior: 'smooth' })
-                } else {
-                    // Use custom smooth scrolling for desktop
-                    lastScrollTimeRef.current = Date.now()
-                    smoothScrollTo(targetSection, { duration: NAVIGATION.SCROLL_DURATION })
-                }
+                // Use native smooth scrolling for all devices to ensure consistent momentum behavior
+                targetSection.scrollIntoView({ behavior: 'smooth' })
             }
         }
     }
