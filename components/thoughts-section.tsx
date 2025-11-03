@@ -1,6 +1,40 @@
+interface Post {
+    readonly title: string;
+    readonly excerpt: string;
+    readonly date: string;
+    readonly readTime: string;
+}
+
 interface ThoughtsSectionProps {
     className?: string;
 }
+
+const POSTS: readonly Post[] = [
+    {
+        title: "The Future of Web Development",
+        excerpt: "Exploring how AI and automation are reshaping the way we build for the web.",
+        date: "Dec 2024",
+        readTime: "5 min",
+    },
+    {
+        title: "Design Systems at Scale",
+        excerpt: "Lessons learned from building and maintaining design systems across multiple products.",
+        date: "Nov 2024",
+        readTime: "8 min",
+    },
+    {
+        title: "Performance-First Development",
+        excerpt: "Why performance should be a first-class citizen in your development workflow.",
+        date: "Oct 2024",
+        readTime: "6 min",
+    },
+    {
+        title: "The Art of Code Review",
+        excerpt: "Building better software through thoughtful and constructive code reviews.",
+        date: "Sep 2024",
+        readTime: "4 min",
+    },
+] as const;
 
 export default function ThoughtsSection({ className = "" }: ThoughtsSectionProps) {
     return (
@@ -12,32 +46,7 @@ export default function ThoughtsSection({ className = "" }: ThoughtsSectionProps
                 <h2 className="text-2xl sm:text-3xl md:text-4xl font-light">Recent Thoughts</h2>
 
                 <div className="grid gap-4 sm:gap-6 lg:gap-8 lg:grid-cols-2">
-                    {([
-                        {
-                            title: "The Future of Web Development",
-                            excerpt: "Exploring how AI and automation are reshaping the way we build for the web.",
-                            date: "Dec 2024",
-                            readTime: "5 min",
-                        },
-                        {
-                            title: "Design Systems at Scale",
-                            excerpt: "Lessons learned from building and maintaining design systems across multiple products.",
-                            date: "Nov 2024",
-                            readTime: "8 min",
-                        },
-                        {
-                            title: "Performance-First Development",
-                            excerpt: "Why performance should be a first-class citizen in your development workflow.",
-                            date: "Oct 2024",
-                            readTime: "6 min",
-                        },
-                        {
-                            title: "The Art of Code Review",
-                            excerpt: "Building better software through thoughtful and constructive code reviews.",
-                            date: "Sep 2024",
-                            readTime: "4 min",
-                        },
-                    ] as const).map((post, index) => (
+                    {POSTS.map((post) => (
                         <article
                             key={`${post.date}-${post.title}`}
                             className="group p-4 sm:p-6 lg:p-8 border border-border rounded-lg hover:border-muted-foreground/50 transition-theme hover:shadow-lg cursor-pointer"

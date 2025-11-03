@@ -10,7 +10,7 @@ interface NavbarProps {
     onNavigate: (section: SectionName) => void
 }
 
-const NAVBAR_SECTIONS = [
+const NAVBAR_SECTIONS: readonly { id: SectionName; label: string }[] = [
     { id: "intro", label: "Home" },
     { id: "work", label: "Work" },
     { id: "thoughts", label: "Thoughts" },

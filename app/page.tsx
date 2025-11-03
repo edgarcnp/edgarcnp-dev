@@ -16,16 +16,19 @@ export default function Home() {
     const [currentYear] = useState<number>(new Date().getFullYear())
 
     // Use custom hook for theme detection
-    const { isDark } = useThemeDetection('dark') // Default to dark during SSR
+    const { isDark, mounted } = useThemeDetection('dark') // Default to dark during SSR
 
     // Helper function to get all valid navigation sections
     const getNavigationSections = useCallback((): HTMLElement[] => {
-        return NAVIGATION.SECTIONS.map(id => document.getElementById(id)).filter(Boolean) as HTMLElement[]
+        return NAVIGATION.SECTIONS.map((id: SectionName) => {
+            const element = document.getElementById(id);
+            return element as HTMLElement | null;
+        }).filter((element): element is HTMLElement => element !== null);
     }, []);
 
     useEffect(() => {
         // Global smooth scroll handler for all anchor links
-        const handleAnchorClick = (e: Event) => {
+        const handleAnchorClick = (e: MouseEvent) => {
             const target = e.target as HTMLElement
             const link = target.closest('a[href^="#"]') as HTMLAnchorElement
 
@@ -52,22 +55,22 @@ export default function Home() {
             const scrollPosition = window.scrollY + (window.innerHeight / 2)
 
             // Find which section is currently in view
-            let currentSectionId = "intro" // Default to intro if no section is found
+            let currentSectionId: SectionName = "intro" // Default to intro if no section is found
 
             for (let i = sections.length - 1; i >= 0; i--) {
                 const section = sections[i]
                 if (section && section.offsetTop <= scrollPosition) {
-                    currentSectionId = section.id
+                    currentSectionId = section.id as SectionName
                     break
                 }
             }
 
-            if (NAVIGATION.SECTIONS.includes(currentSectionId as SectionName)) {
-                setActiveSection(currentSectionId as SectionName)
+            if (NAVIGATION.SECTIONS.includes(currentSectionId)) {
+                setActiveSection(currentSectionId)
             }
 
             // Add animation classes to all sections to make them visible
-            NAVIGATION.SECTIONS.forEach((sectionId) => {
+            NAVIGATION.SECTIONS.forEach((sectionId: SectionName) => {
                 const sectionElement = document.getElementById(sectionId);
                 if (sectionElement) {
                     sectionElement.classList.add("animate-fade-in-up", "opacity-100");
@@ -92,7 +95,7 @@ export default function Home() {
 
     useEffect(() => {
         // Set the title to "edgarcnp.dev | *Section*"
-        const sectionName = NAVIGATION.SECTION_NAMES[activeSection as keyof typeof NAVIGATION.SECTION_NAMES] || "Home"
+        const sectionName = NAVIGATION.SECTION_NAMES[activeSection] || "Home"
         document.title = `edgarcnp.dev | ${sectionName}`
     }, [activeSection])
 
@@ -101,9 +104,9 @@ export default function Home() {
         setTheme(resolvedTheme === "dark" ? "light" : "dark")
     }, [resolvedTheme, setTheme])
 
-    const handleNavigation = (sectionId: string) => {
+    const handleNavigation = (sectionId: SectionName) => {
         if (typeof window !== 'undefined') {
-            const targetSection = document.getElementById(sectionId)
+            const targetSection = document.getElementById(sectionId) as HTMLElement | null
             if (targetSection) {
                 // Use native smooth scrolling for all devices to ensure consistent momentum behavior
                 targetSection.scrollIntoView({ behavior: 'smooth' })
