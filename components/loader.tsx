@@ -105,7 +105,7 @@ const Loader = () => {
 
             {/* Separate flex container for text that doesn't affect grid */}
             <div className="flex flex-col items-center pointer-events-auto">
-                <div className="h-40 flex items-end justify-center"> {/* Spacer to push text below fixed grid */}
+                <div className="h-40 flex items-end justify-center">
                     <div className="flex flex-col items-center">
                         <p className="text-xl font-medium text-foreground tracking-wide w-20 text-center">
                             {loadingText}
