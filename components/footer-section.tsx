@@ -75,11 +75,12 @@ export default function FooterSection({ currentYear, className = "" }: FooterSec
                     </div>
                 </div>
 
-                <div className="space-y-6 sm:space-y-8 pt-12 sm:pt-16 border-t border-border">
-                    <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 sm:gap-8">
+                <div className="pt-3 sm:pt-3 border-t border-border">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 sm:gap-8">
                         <div className="space-y-2">
-                            <div className="text-xs text-muted-foreground/70 font-mono">
-                                Version: {process.env.NEXT_PUBLIC_APP_VERSION || 'VERSION_NOT_FOUND'} | Commit: {process.env.NEXT_PUBLIC_COMMIT_HASH || 'COMMIT_NOT_FOUND'}
+                            <div className="text-xs text-muted-foreground/70 font-mono space-y-1">
+                                <div>Version: {process.env.NEXT_PUBLIC_APP_VERSION || 'VERSION_NOT_FOUND'}</div>
+                                <div>Commit: {process.env.NEXT_PUBLIC_COMMIT_HASH || 'COMMIT_NOT_FOUND'}</div>
                             </div>
                             <div className="text-sm text-muted-foreground">
                                 © {currentYear} Edgar Christian. All rights reserved.
@@ -88,7 +89,7 @@ export default function FooterSection({ currentYear, className = "" }: FooterSec
 
                         <div className="flex items-center gap-4">
                             <a
-                                href="mailto:me@edgarcnp.dev"
+                                href="mailto:edgarcnp@proton.me"
                                 className="group p-3 rounded-lg border border-border hover:border-muted-foreground/50 transition-all duration-300"
                                 aria-label="Open chat"
                             >
