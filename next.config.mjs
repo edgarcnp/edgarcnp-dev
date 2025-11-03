@@ -21,13 +21,8 @@ try {
     console.error('Could not get git commit hash:', error);
 }
 
-// Get git branch name
-let gitBranch = 'unknown';
-try {
-    gitBranch = execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
-} catch (error) {
-    console.error('Could not get git branch name:', error);
-}
+// Get git branch name from Cloudflare environment variable
+let gitBranch = process.env.CF_DEPLOY_GIT_BRANCH || 'unknown';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
