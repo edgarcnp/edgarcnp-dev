@@ -78,11 +78,11 @@ export default function FooterSection({ currentYear, className = "" }: FooterSec
                 <div className="pt-3 sm:pt-3 border-t border-border">
                     <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 sm:gap-8">
                         <div className="space-y-2">
-                            <div className="text-xs text-muted-foreground/70 font-mono space-y-1">
+                            <div className="text-xs text-muted-foreground/85 font-mono space-y-1">
                                 <div>Version: {process.env.NEXT_PUBLIC_APP_VERSION || 'VERSION_NOT_FOUND'}</div>
                                 <div>Commit: {process.env.NEXT_PUBLIC_COMMIT_HASH || 'COMMIT_NOT_FOUND'}</div>
                             </div>
-                            <div className="text-sm text-muted-foreground">
+                            <div className="text-sm text-foreground">
                                 © {currentYear} Edgar Christian. All rights reserved.
                             </div>
                         </div>
@@ -90,11 +90,11 @@ export default function FooterSection({ currentYear, className = "" }: FooterSec
                         <div className="flex items-center gap-4">
                             <a
                                 href="mailto:edgarcnp@proton.me"
-                                className="group p-3 rounded-lg border border-border hover:border-muted-foreground/50 transition-all duration-300"
+                                className="group p-3 rounded-lg border border-border hover:border-muted-foreground/50 transition-theme"
                                 aria-label="Open chat"
                             >
                                 <svg
-                                    className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors duration-300"
+                                    className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-theme"
                                     fill="none"
                                     stroke="currentColor"
                                     viewBox="0 0 24 24"
