@@ -9,13 +9,17 @@ import { getStoredTheme } from '@/lib/theme-utils';
  */
 export const ThemeDetector = () => {
     useEffect(() => {
-        // Apply theme class immediately when component mounts
-        const storedTheme = getStoredTheme() || 'dark';
+        // Remove any existing theme classes to ensure clean state
+        document.documentElement.classList.remove('dark', 'light');
 
-        if (storedTheme === 'dark') {
+        // Apply theme class immediately when component mounts
+        const storedTheme = getStoredTheme();
+        const themeToApply = storedTheme || 'dark';
+
+        if (themeToApply === 'dark') {
             document.documentElement.classList.add('dark');
         } else {
-            document.documentElement.classList.remove('dark');
+            document.documentElement.classList.remove('dark'); // 'light' is default with no class
         }
     }, []);
 

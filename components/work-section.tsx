@@ -1,6 +1,39 @@
+interface Job {
+    readonly year: string;
+    readonly role: string;
+    readonly company: string;
+    readonly description: string;
+    readonly tech: readonly string[];
+}
+
 interface WorkSectionProps {
     className?: string;
 }
+
+const JOBS: readonly Job[] = [
+    {
+        year: "2023 - Present",
+        role: "Freelance Software Engineer",
+        company: "Self-Employed",
+        description: "Built performant dashboard websites for project management and team collaboration.",
+        tech: ["Python", "GraphQL", "Django", "Rust", "Axum", "Dioxus"],
+    },
+    {
+        year: "2022 - 2025",
+        role: "Network Engineer",
+        company: "PT. Efrat Sinergi Indonesia",
+        description:
+            "Designed and implemented robust, fault-tolerant, and highly available network infrastructure supporting mission-critical systems and services, ensuring scalability, reliability, and maximum uptime.",
+        tech: ["Cisco", "Cisco IOS", "Python"],
+    },
+    {
+        year: "2021",
+        role: "Associate Network Engineer (Internship)",
+        company: "PT. Efrat Sinergi Indonesia",
+        description: "Helping a team of network engineers designing internal networks for small businesses.",
+        tech: ["Cisco", "Cisco IOS", "Python"],
+    },
+] as const;
 
 export default function WorkSection({ className = "" }: WorkSectionProps) {
     return (
@@ -12,30 +45,7 @@ export default function WorkSection({ className = "" }: WorkSectionProps) {
                 </div>
 
                 <div className="space-y-6 sm:space-y-8 lg:space-y-12">
-                    {([
-                        {
-                            year: "2023 - Present",
-                            role: "Freelance Software Engineer",
-                            company: "Self-Employed",
-                            description: "Built performant dashboard websites for project management and team collaboration.",
-                            tech: ["Python", "GraphQL", "Django", "Rust", "Axum", "Dioxus"],
-                        },
-                        {
-                            year: "2022 - 2025",
-                            role: "Network Engineer",
-                            company: "PT. Efrat Sinergi Indonesia",
-                            description:
-                                "Designed and implemented robust, fault-tolerant, and highly available network infrastructure supporting mission-critical systems and services, ensuring scalability, reliability, and maximum uptime.",
-                            tech: ["Cisco", "Cisco IOS", "Python"],
-                        },
-                        {
-                            year: "2021",
-                            role: "Associate Network Engineer (Internship)",
-                            company: "PT. Efrat Sinergi Indonesia",
-                            description: "Helping a team of network engineers designing internal networks for small businesses.",
-                            tech: ["Cisco", "Cisco IOS", "Python"],
-                        },
-                    ] as const).map((job, index) => (
+                    {JOBS.map((job) => (
                         <div
                             key={`${job.year}-${job.role}`}
                             className="group grid lg:grid-cols-12 gap-4 sm:gap-6 lg:gap-8 py-4 sm:py-6 lg:py-8 border-b border-border transition-theme"

@@ -1,7 +1,20 @@
+interface SocialLink {
+    readonly name: string;
+    readonly handle: string;
+    readonly url: string;
+}
+
 interface FooterSectionProps {
     currentYear: number;
     className?: string;
 }
+
+const SOCIAL_LINKS: readonly SocialLink[] = [
+    { name: "GitHub", handle: "@edgarcnp", url: "https://github.com/edgarcnp" },
+    { name: "Codeberg", handle: "@edgarcnp", url: "https://codeberg.org/edgarcnp" },
+    { name: "𝕏", handle: "@edgarcnp", url: "https://x.com/edgarcnp" },
+    { name: "LinkedIn", handle: "Edgar Christian", url: "#" },
+] as const;
 
 export default function FooterSection({ currentYear, className = "" }: FooterSectionProps) {
     return (
@@ -44,12 +57,7 @@ export default function FooterSection({ currentYear, className = "" }: FooterSec
                         <div className="text-sm text-muted-foreground font-mono">ELSEWHERE</div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            {([
-                                { name: "GitHub", handle: "@edgarcnp", url: "https://github.com/edgarcnp" },
-                                { name: "Codeberg", handle: "@edgarcnp", url: "https://codeberg.org/edgarcnp" },
-                                { name: "𝕏", handle: "@edgarcnp", url: "https://x.com/edgarcnp" },
-                                { name: "LinkedIn", handle: "Edgar Christian", url: "#" },
-                            ] as const).map((social) => (
+                            {SOCIAL_LINKS.map((social) => (
                                 <a
                                     key={social.name}
                                     href={social.url}
