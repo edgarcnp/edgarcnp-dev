@@ -79,8 +79,8 @@ export default function FooterSection({ currentYear, className = "" }: FooterSec
                     <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 sm:gap-8">
                         <div className="space-y-2">
                             <div className="text-xs text-muted-foreground/85 font-mono space-y-1">
-                                <div>Version: {process.env.NEXT_PUBLIC_APP_VERSION || 'VERSION_NOT_FOUND'} ({process.env.NEXT_PUBLIC_GIT_BRANCH || 'BRANCH_NOT_FOUND'})</div>
                                 <div>Commit: {process.env.NEXT_PUBLIC_COMMIT_HASH || 'COMMIT_NOT_FOUND'}</div>
+                                <div>Version: {process.env.NEXT_PUBLIC_APP_VERSION || 'VERSION_NOT_FOUND'} ({process.env.NEXT_PUBLIC_GIT_BRANCH || 'BRANCH_NOT_FOUND'})</div>
                             </div>
                             <div className="text-sm text-foreground">
                                 © {currentYear} Edgar Christian. All rights reserved.
