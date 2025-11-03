@@ -18,10 +18,10 @@ export default function FooterSection({ currentYear, className = "" }: FooterSec
 
                             <div className="space-y-4">
                                 <a
-                                    href="mailto:me@edgarcnp.dev"
+                                    href="mailto:edgarcnp@proton.me"
                                     className="group flex items-center gap-1 text-foreground hover:text-muted-foreground transition-all duration-300"
                                 >
-                                    <span className="text-base sm:text-lg">me@edgarcnp.dev</span>
+                                    <span className="text-base sm:text-lg">edgarcnp@proton.me</span>
                                     <svg
                                         className="w-5 h-5 transform translate-x-0 group-hover:translate-x-2 transition-transform duration-300 ease-out"
                                         fill="none"
