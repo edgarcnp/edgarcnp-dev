@@ -1,7 +1,7 @@
-import { STATUS_CONFIG } from "@/lib/constants";
+import { STATUS_CONFIG, type AvailabilityStatus } from "@/lib/constants";
 
 // Availability status - change this to switch status indicators
-const CURRENT_AVAILABILITY_STATUS = "busy" as const; // Options: "available" | "dnd"
+const CURRENT_AVAILABILITY_STATUS: AvailabilityStatus = "busy"; // Options: "available" | "busy" | "dnd"
 
 interface IntroSectionProps {
     currentYear: number;

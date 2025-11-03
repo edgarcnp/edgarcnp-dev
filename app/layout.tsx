@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { Geist } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
 import Loader from "@/components/loader"
+import ThemeDetector from "@/components/theme-detector"
 import "./globals.css"
 
 const geist = Geist({
@@ -26,8 +27,10 @@ export default function RootLayout({
     children: React.ReactNode
 }>) {
     return (
-        <html lang="en" className={geist.variable} suppressHydrationWarning>
+        <html lang="en" className={geist.variable} data-scroll-behavior="smooth" suppressHydrationWarning>
             <body className="font-sans antialiased" suppressHydrationWarning>
+                <ThemeDetector />
+                <Loader />
                 <ThemeProvider
                     attribute="class"
                     defaultTheme="dark"
@@ -35,7 +38,6 @@ export default function RootLayout({
                     disableTransitionOnChange={false}
                     storageKey="edgarcnp-theme"
                 >
-                    <Loader />
                     {children}
                 </ThemeProvider>
             </body>

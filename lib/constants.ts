@@ -1,6 +1,17 @@
-// Navigation constants
-export const NAVIGATION = {
-    SECTIONS: ["intro", "work", "thoughts", "footer"] as const,
+// Navigation constants with proper typing
+export const NAVIGATION_SECTIONS = ["intro", "work", "thoughts", "footer"] as const;
+
+export type SectionName = typeof NAVIGATION_SECTIONS[number];
+
+export interface NavigationConfig {
+    readonly SECTIONS: readonly SectionName[];
+    readonly SECTION_NAMES: {
+        readonly [K in SectionName]: string;
+    };
+}
+
+export const NAVIGATION: NavigationConfig = {
+    SECTIONS: NAVIGATION_SECTIONS,
     SECTION_NAMES: {
         intro: "Home",
         work: "Work",
@@ -16,21 +27,27 @@ export const AVAILABILITY_STATUS = {
     DND: "dnd",
 } as const;
 
-export type AvailabilityStatus = keyof typeof AVAILABILITY_STATUS;
-export type SectionName = typeof NAVIGATION.SECTIONS[number];
+export type AvailabilityStatus = typeof AVAILABILITY_STATUS[keyof typeof AVAILABILITY_STATUS];
 
-// Status configuration
-export const STATUS_CONFIG = {
-    [AVAILABILITY_STATUS.AVAILABLE]: {
+// Status configuration with proper typing
+export type StatusConfig = {
+    readonly [K in AvailabilityStatus]: {
+        readonly color: string;
+        readonly text: string;
+    };
+};
+
+export const STATUS_CONFIG: StatusConfig = {
+    available: {
         color: "bg-green-500",
         text: "Available for work"
     },
-    [AVAILABILITY_STATUS.BUSY]: {
+    busy: {
         color: "bg-yellow-500",
         text: "Busy with projects"
     },
-    [AVAILABILITY_STATUS.DND]: {
+    dnd: {
         color: "bg-red-500",
         text: "Not available"
     }
-} as const;
+};
