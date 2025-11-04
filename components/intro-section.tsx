@@ -1,3 +1,4 @@
+import type { FC } from 'react';
 import { STATUS_CONFIG, type AvailabilityStatus } from "@/lib/constants";
 
 // Availability status - change this to switch status indicators
@@ -8,7 +9,7 @@ interface IntroSectionProps {
     className?: string;
 }
 
-export default function IntroSection({ currentYear, className = "" }: IntroSectionProps) {
+const IntroSection: FC<IntroSectionProps> = ({ currentYear, className = "" }) => {
     return (
         <header id="intro" className={`min-h-screen flex items-center py-16 sm:py-12 ${className}`}>
             <div className="grid lg:grid-cols-5 gap-8 sm:gap-12 lg:gap-16 w-full">
@@ -81,3 +82,5 @@ export default function IntroSection({ currentYear, className = "" }: IntroSecti
         </header>
     );
 }
+
+export default IntroSection;

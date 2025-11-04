@@ -3,7 +3,6 @@ import type { Metadata } from "next"
 import { Geist } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
 import Loader from "@/components/loader"
-import ThemeDetector from "@/components/theme-detector"
 import "./globals.css"
 
 const geist = Geist({
@@ -29,7 +28,36 @@ export default function RootLayout({
     return (
         <html lang="en" className={geist.variable} data-scroll-behavior="smooth" suppressHydrationWarning>
             <body className="font-sans antialiased" suppressHydrationWarning>
-                <ThemeDetector />
+                <script
+                    dangerouslySetInnerHTML={{
+                        __html: `
+                          (function() {
+                            try {
+                              // Get the stored theme from localStorage
+                              const storedTheme = localStorage.getItem('edgarcnp-theme');
+
+                              if (storedTheme === 'dark') {
+                                // If dark theme is stored, immediately add the dark class to the html element
+                                document.documentElement.classList.add('dark');
+                              } else if (storedTheme === 'light') {
+                                // If light theme is stored, ensure dark class is removed
+                                document.documentElement.classList.remove('dark');
+                              } else {
+                                // If no theme is stored, check system preference
+                                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                                  document.documentElement.classList.add('dark');
+                                } else {
+                                  document.documentElement.classList.remove('dark');
+                                }
+                              }
+                            } catch (e) {
+                              // If there's an error (e.g., localStorage not available), default to dark
+                              document.documentElement.classList.add('dark');
+                            }
+                          })();
+                        `
+                    }}
+                />
                 <Loader />
                 <ThemeProvider
                     attribute="class"

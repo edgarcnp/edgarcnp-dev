@@ -1,5 +1,6 @@
 'use client'
 
+import type { FC } from "react"
 import { useEffect, useState } from "react"
 import { type SectionName } from "@/lib/constants"
 
@@ -17,7 +18,7 @@ const NAVBAR_SECTIONS: readonly { id: SectionName; label: string }[] = [
     { id: "footer", label: "Contact" },
 ] as const
 
-export function Navbar({ activeSection, isDark, onThemeToggle, onNavigate }: NavbarProps) {
+export const Navbar: FC<NavbarProps> = ({ activeSection, isDark, onThemeToggle, onNavigate }) => {
     const [isScrolled, setIsScrolled] = useState(false)
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
