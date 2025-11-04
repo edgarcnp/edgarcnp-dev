@@ -5,6 +5,8 @@ interface Post {
     readonly readTime: string;
 }
 
+import type { FC } from 'react';
+
 interface ThoughtsSectionProps {
     className?: string;
 }
@@ -36,7 +38,7 @@ const POSTS: readonly Post[] = [
     },
 ] as const;
 
-export default function ThoughtsSection({ className = "" }: ThoughtsSectionProps) {
+const ThoughtsSection: FC<ThoughtsSectionProps> = ({ className = "" }) => {
     return (
         <section
             id="thoughts"
@@ -89,3 +91,5 @@ export default function ThoughtsSection({ className = "" }: ThoughtsSectionProps
         </section>
     );
 }
+
+export default ThoughtsSection;

@@ -1,9 +1,10 @@
 'use client';
 
+import type { ReactElement, FC } from 'react';
 import { useEffect, useState, memo, useRef } from 'react';
 
 // AnimationGrid component to prevent re-rendering of animations
-const AnimationGrid = memo(() => {
+const AnimationGrid = memo((): ReactElement => {
     return (
         <div className="fixed inset-0 flex items-center justify-center pointer-events-none">
             <div className="relative w-24 h-24 flex items-center justify-center">
@@ -57,7 +58,7 @@ const AnimationGrid = memo(() => {
 
 AnimationGrid.displayName = 'AnimationGrid';
 
-const Loader = () => {
+const Loader: FC = () => {
     const [show, setShow] = useState(true);
     const [opacity, setOpacity] = useState(1);
     const fadeOutTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -73,7 +74,7 @@ const Loader = () => {
                 removeTimerRef.current = setTimeout(() => {
                     setShow(false);
                 }, 500);
-            }, 5000);
+            }, 500);
         };
 
         const checkReadyState = () => {
