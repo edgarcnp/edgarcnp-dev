@@ -1,88 +1,106 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, memo, useRef } from 'react';
 
 // AnimationGrid component to prevent re-rendering of animations
-const AnimationGrid = () => {
+const AnimationGrid = memo(() => {
     return (
         <div className="fixed inset-0 flex items-center justify-center pointer-events-none">
             <div className="relative w-24 h-24 flex items-center justify-center">
                 <div className="grid grid-cols-5 grid-rows-7 w-16 h-20 gap-1">
                     <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing"></div>
-                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-100"></div>
-                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-200"></div>
-                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-300"></div>
-                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-400"></div>
+                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing"></div>
+                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing"></div>
+                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing"></div>
+                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing"></div>
 
-                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-100"></div>
-                    <div className="w-2 h-2 bg-primary rounded-full animate-breathing-stars animation-delay-100"></div>
-                    <div className="w-2 h-2 bg-primary rounded-full animate-breathing-stars animation-delay-200"></div>
-                    <div className="w-2 h-2 bg-primary rounded-full animate-breathing-stars animation-delay-300"></div>
-                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-500"></div>
+                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing"></div>
+                    <div className="w-2 h-2 bg-primary rounded-full animate-breathing-stars"></div>
+                    <div className="w-2 h-2 bg-primary rounded-full animate-breathing-stars"></div>
+                    <div className="w-2 h-2 bg-primary rounded-full animate-breathing-stars"></div>
+                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing"></div>
 
-                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-200"></div>
-                    <div className="w-2 h-2 bg-primary rounded-full animate-breathing-stars animation-delay-200"></div>
-                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-300"></div>
-                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-400"></div>
-                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-600"></div>
+                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing"></div>
+                    <div className="w-2 h-2 bg-primary rounded-full animate-breathing-stars"></div>
+                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing"></div>
+                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing"></div>
+                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing"></div>
 
-                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-300"></div>
-                    <div className="w-2 h-2 bg-primary rounded-full animate-breathing-stars animation-delay-300"></div>
-                    <div className="w-2 h-2 bg-primary rounded-full animate-breathing-stars animation-delay-400"></div>
-                    <div className="w-2 h-2 bg-primary rounded-full animate-breathing-stars animation-delay-500"></div>
-                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-700"></div>
+                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing 300"></div>
+                    <div className="w-2 h-2 bg-primary rounded-full animate-breathing-stars"></div>
+                    <div className="w-2 h-2 bg-primary rounded-full animate-breathing-stars"></div>
+                    <div className="w-2 h-2 bg-primary rounded-full animate-breathing-stars"></div>
+                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing"></div>
 
-                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-400"></div>
-                    <div className="w-2 h-2 bg-primary rounded-full animate-breathing-stars animation-delay-400"></div>
-                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-500"></div>
-                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-600"></div>
-                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-800"></div>
+                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing"></div>
+                    <div className="w-2 h-2 bg-primary rounded-full animate-breathing-stars"></div>
+                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing"></div>
+                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing"></div>
+                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing"></div>
 
-                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-500"></div>
-                    <div className="w-2 h-2 bg-primary rounded-full animate-breathing-stars animation-delay-500"></div>
-                    <div className="w-2 h-2 bg-primary rounded-full animate-breathing-stars animation-delay-600"></div>
-                    <div className="w-2 h-2 bg-primary rounded-full animate-breathing-stars animation-delay-700"></div>
-                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-900"></div>
+                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing"></div>
+                    <div className="w-2 h-2 bg-primary rounded-full animate-breathing-stars"></div>
+                    <div className="w-2 h-2 bg-primary rounded-full animate-breathing-stars"></div>
+                    <div className="w-2 h-2 bg-primary rounded-full animate-breathing-stars"></div>
+                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing"></div>
 
-                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-600"></div>
-                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-700"></div>
-                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-800"></div>
-                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-900"></div>
-                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing animation-delay-1000"></div>
+                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing"></div>
+                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing"></div>
+                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing"></div>
+                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing"></div>
+                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing"></div>
                 </div>
             </div>
         </div>
     );
-};
+});
+
+AnimationGrid.displayName = 'AnimationGrid';
 
 const Loader = () => {
     const [show, setShow] = useState(true);
     const [opacity, setOpacity] = useState(1);
+    const fadeOutTimerRef = useRef<NodeJS.Timeout | null>(null);
+    const removeTimerRef = useRef<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
-        const handleDOMReady = () => {
-            setTimeout(() => {
-                // Start fade out transition
+        const handlePageInteractive = () => {
+            // Start fade out transition after a delay
+            fadeOutTimerRef.current = setTimeout(() => {
                 setOpacity(0);
 
                 // Remove loader from DOM after transition completes (500ms)
-                setTimeout(() => {
+                removeTimerRef.current = setTimeout(() => {
                     setShow(false);
                 }, 500);
-            }, 500);
+            }, 5000);
+        };
+
+        const checkReadyState = () => {
+            if (document.readyState === 'complete') {
+                handlePageInteractive();
+            }
         };
 
         if (document.readyState === 'loading') {
-            // DOM is still loading
-            document.addEventListener('DOMContentLoaded', handleDOMReady);
+            // Page is still loading, add event listener
+            document.addEventListener('readystatechange', checkReadyState);
         } else {
-            // DOM is already ready
-            handleDOMReady();
+            // Page is already interactive or complete
+            handlePageInteractive();
         }
 
         // Cleanup event listener
         return () => {
-            document.removeEventListener('DOMContentLoaded', handleDOMReady);
+            document.removeEventListener('readystatechange', checkReadyState);
+
+            // Clear any pending timeouts to prevent state updates after unmounting
+            if (fadeOutTimerRef.current) {
+                clearTimeout(fadeOutTimerRef.current);
+            }
+            if (removeTimerRef.current) {
+                clearTimeout(removeTimerRef.current);
+            }
         };
     }, []);
 
