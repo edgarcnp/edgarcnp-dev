@@ -78,9 +78,8 @@ export default function FooterSection({ currentYear, className = "" }: FooterSec
                 <div className="pt-3 sm:pt-3 border-t border-border">
                     <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 sm:gap-8">
                         <div className="space-y-2">
-                            <div className="text-xs text-muted-foreground/85 font-mono space-y-1">
-                                <div>Commit: {process.env.NEXT_PUBLIC_COMMIT_HASH || 'COMMIT_NOT_FOUND'}</div>
-                                <div>Version: {process.env.NEXT_PUBLIC_APP_VERSION || 'VERSION_NOT_FOUND'} ({process.env.NEXT_PUBLIC_GIT_BRANCH || 'BRANCH_NOT_FOUND'})</div>
+                            <div className="text-xs text-muted-foreground font-mono space-y-1">
+                                <div>Version: {process.env.NEXT_PUBLIC_APP_VERSION || 'VERSION_NOT_FOUND'}-{process.env.NEXT_PUBLIC_COMMIT_HASH || 'COMMIT_NOT_FOUND'} ({process.env.NEXT_PUBLIC_GIT_BRANCH || 'BRANCH_NOT_FOUND'})</div>
                             </div>
                             <div className="text-sm text-foreground">
                                 © {currentYear} Edgar Christian. All rights reserved.
@@ -107,26 +106,6 @@ export default function FooterSection({ currentYear, className = "" }: FooterSec
                                     />
                                 </svg>
                             </a>
-
-                            {/* Button Template */}
-                            {/* <button
-                            className="group p-3 rounded-lg border border-border hover:border-muted-foreground/50 transition-all duration-300"
-                            aria-label="Open chat"
-                            >
-                            <svg
-                            className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors duration-300"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                            >
-                            <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                            />
-                            </svg>
-                            </button> */}
                         </div>
                     </div>
                 </div>
