@@ -27,7 +27,7 @@ const AnimationGrid = memo((): ReactElement => {
                     <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing"></div>
                     <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing"></div>
 
-                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing 300"></div>
+                    <div className="w-2 h-2 bg-primary/30 rounded-full animate-subtle-breathing"></div>
                     <div className="w-2 h-2 bg-primary rounded-full animate-breathing-stars"></div>
                     <div className="w-2 h-2 bg-primary rounded-full animate-breathing-stars"></div>
                     <div className="w-2 h-2 bg-primary rounded-full animate-breathing-stars"></div>
@@ -97,24 +97,7 @@ const Loader: FC = () => {
             checkReadyState();
         }
 
-        // Listen to custom events for route changes (these can be triggered by your routing system)
-        const handleRouteChangeStart = () => {
-            setShow(true);
-            setOpacity(1);
-        };
 
-        const handleRouteChangeComplete = () => {
-            setTimeout(() => {
-                setOpacity(0);
-                removeTimerRef.current = setTimeout(() => {
-                    setShow(false);
-                }, 500);
-            }, 300);
-        };
-
-        // For non-Next.js router environments or as additional trigger
-        window.addEventListener('routeChangeStart', handleRouteChangeStart);
-        window.addEventListener('routeChangeComplete', handleRouteChangeComplete);
 
         // Cleanup event listeners
         return () => {
@@ -127,9 +110,6 @@ const Loader: FC = () => {
             if (removeTimerRef.current) {
                 clearTimeout(removeTimerRef.current);
             }
-
-            window.removeEventListener('routeChangeStart', handleRouteChangeStart);
-            window.removeEventListener('routeChangeComplete', handleRouteChangeComplete);
         };
     }, []);
 

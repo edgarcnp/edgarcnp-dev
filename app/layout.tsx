@@ -76,7 +76,7 @@ export default function RootLayout({
                               background-color: var(--background, white);
                               z-index: 9999;
                               opacity: 1;
-                              transition: opacity 0.3s ease;
+                              transition: opacity 0.5s ease;
                             }
                             #loader-root.hidden {
                               opacity: 0;
