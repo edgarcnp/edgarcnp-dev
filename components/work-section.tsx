@@ -6,6 +6,8 @@ interface Job {
     readonly tech: readonly string[];
 }
 
+import type { FC } from 'react';
+
 interface WorkSectionProps {
     className?: string;
 }
@@ -35,7 +37,7 @@ const JOBS: readonly Job[] = [
     },
 ] as const;
 
-export default function WorkSection({ className = "" }: WorkSectionProps) {
+const WorkSection: FC<WorkSectionProps> = ({ className = "" }) => {
     return (
         <section id="work" className={`min-h-screen flex items-center py-12 sm:py-16 ${className}`}>
             <div className="w-full space-y-6 sm:space-y-8 lg:space-y-12">
@@ -81,3 +83,5 @@ export default function WorkSection({ className = "" }: WorkSectionProps) {
         </section>
     );
 }
+
+export default WorkSection;

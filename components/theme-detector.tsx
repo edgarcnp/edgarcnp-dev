@@ -1,5 +1,6 @@
 'use client';
 
+import type { FC } from 'react';
 import { useEffect } from 'react';
 import { getStoredTheme } from '@/lib/theme-utils';
 
@@ -7,7 +8,7 @@ import { getStoredTheme } from '@/lib/theme-utils';
  * Component that detects and applies the theme before React hydration
  * This helps prevent flash of incorrect theme (FOIT)
  */
-export const ThemeDetector = () => {
+export const ThemeDetector: FC = () => {
     useEffect(() => {
         // Remove any existing theme classes to ensure clean state
         document.documentElement.classList.remove('dark', 'light');
