@@ -1,18 +1,37 @@
-## 🚀 Built With
+# edgarcnp.dev - Leptos Port
 
-- [Next.js](https://nextjs.org/)
-- [TypeScript](https://www.typescriptlang.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
+This is the Leptos version of the edgarcnp.dev website, migrated from Next.js to Rust + Leptos.
 
-## 📦 Getting Started
+## Features
 
-# Install dependencies
-pnpm install
+- Full-stack Rust application using Leptos framework
+- Server-Side Rendering (SSR) with hydration
+- Smooth animations and theme switching
+- Responsive design with Tailwind CSS
+- Client-side navigation
 
-# Run development server
-pnpm dev
+## Development
 
-Open [http://localhost:3000](http://localhost:3000) to view the portfolio.
+To run the project in development mode:
+
+```bash
+# Install cargo-leptos if you haven't already
+cargo install cargo-leptos
+
+# Install dependencies for CSS processing
+cd frontend
+npm install
+
+# Run the project
+cargo leptos watch
+```
+
+## Production Build
+
+```bash
+# Build for production
+cargo leptos build --release
+```
 
 ## 📄 License
 

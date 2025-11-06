@@ -1,5 +1,5 @@
 {
-    "name": "edgarcnp-dev-leptos",
+    "name": "edgarcnp-dev",
     "version": "1.4.4",
     "private": true,
     "scripts": {

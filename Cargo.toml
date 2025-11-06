@@ -1,0 +1,109 @@
+[package]
+name = "edgarcnp-dev"
+version = "1.4.4"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+leptos = { version = "0.8.2", features = ["nightly"] }
+leptos_meta = { version = "0.8.2", features = ["nightly"] }
+leptos_router = { version = "0.8.2", features = ["nightly"] }
+console_error_panic_hook = "0.1.7"
+console_log = "1.0"
+log = "0.4"
+wasm-bindgen = "=0.2.100"
+chrono = { version = "0.4", features = ["js-sys"] }
+web-sys = { version = "0.3", features = [
+  "console",
+  "Document",
+  "Element",
+  "HtmlElement",
+  "Node",
+  "Window",
+  "Location",
+  "Storage",
+  "StorageManager",
+  "Navigator",
+  "MediaQueryList",
+  "ScrollBehavior",
+  "ScrollIntoViewOptions",
+  "Element",
+  "ScrollIntoViewOptions",
+  "HtmlDocument",
+  "Document",
+  "DomRect",
+  "MouseEvent",
+  "Event",
+  "EventTarget",
+  "AddEventListenerOptions",
+] }
+
+[dependencies.leptos_axum]
+version = "0.8.2"
+optional = true
+
+[features]
+csr = ["leptos/csr", "leptos_meta/csr", "leptos_router/csr"]
+hydrate = ["leptos/hydrate", "leptos_meta/hydrate", "leptos_router/hydrate"]
+ssr = [
+    "dep:axum",
+    "leptos/ssr",
+    "leptos_meta/ssr",
+    "leptos_router/ssr",
+    "dep:leptos-axum",
+]
+
+[dependencies.axum]
+version = "0.8.4"
+optional = true
+
+[dependencies.leptos-axum]
+version = "0.8.2"
+optional = true
+
+[package.metadata.leptos]
+# The name of the WASM binary
+output-name = "edgarcnp-dev"
+# The site root folder is where the build artifacts are placed
+site-root = "target/site"
+# The site-root relative folder containing the asset outputs after a build
+site-pkg-dir = "pkg"
+# The assets dir is where all your static assets exist that you want to be served
+# as part of the application
+assets-dir = "assets"
+# The IP and port where the application should serve requests in development
+site-addr = "127.0.0.1:3000"
+# The port to use for livereload
+reload-port = 3001
+# Whether to enable file watching or not in dev (wasm is recompiled for every change)
+watch = true
+# Whether to minify the HTML output (defaults to false)
+# minify-output = true
+# Whether to add the hash to the name of the assets (defaults to true)
+# hashed-assets = false
+# Additional files to watch during development
+watch-additional-files = ["static"]
+
+# Features to use during `cargo leptos watch` or `cargo leptos build --release`
+# The --features flag is used to select which features to use
+# This will enable the `ssr` feature for the server, and the `csr` feature for the client
+# The server will be built with the `ssr` feature, and the client will be built with the `csr` feature
+# The server will be built with the `ssr` feature, and the client will be built with the `csr` feature
+bin-features = ["ssr"]
+bin-default-features = false
+lib-features = ["hydrate"]
+lib-default-features = false
+
+# The browser query string that will be used by the `leptos` tool to optimize the WASM
+browserquery = "defaults"
+env = "DEV"
+
+# The framework uses `console_error_panic_hook` to give better error messages in development
+# By default, it is only enabled in debug mode
+# If you want to enable it in release mode as well, set this to true
+# This will add the hook to the WASM binary, which will make it slightly larger
+# but will provide better error messages in production
+[profile.dev.package."*"]
+opt-level = 3
